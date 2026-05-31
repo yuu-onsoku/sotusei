@@ -348,3 +348,9 @@ JavaScriptとRailsの連携<br>
 例えば、最近注目されているReactやNextについて。
 Reactについては**本リリース後に組み込む方向で検討**するのが良いかと考えています。
 その後、React単体のキャッチアップを行い、アプリに組み込む技術的な検証をした上で、組み込むかどうかを判断する形が理想かもしれません。
+
+---
+
+## 画面遷移図
+Figma:<BR>
+https://www.figma.com/design/5i9Xnp0VTWW1m2OvhbDRQr/%E7%84%A1%E9%A1%8C?node-id=0-1&t=2pTguVCSqRdiInxP-1
