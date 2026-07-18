@@ -1,1 +1,129 @@
 @import "tailwindcss";
+
+/* ねこの集会場 — Material 3 デザイントークン（モックの tailwind.config を移植） */
+@theme {
+  /* ---- Colors ---- */
+  --color-primary: #795900;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #f9c54e;
+  --color-on-primary-container: #6f5200;
+  --color-primary-fixed: #ffdf9f;
+  --color-primary-fixed-dim: #f2bf49;
+  --color-on-primary-fixed: #261a00;
+  --color-on-primary-fixed-variant: #5c4300;
+  --color-inverse-primary: #f2bf49;
+
+  --color-secondary: #904858;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fca2b4;
+  --color-on-secondary-container: #793545;
+  --color-secondary-fixed: #ffd9df;
+  --color-secondary-fixed-dim: #ffb1c0;
+  --color-on-secondary-fixed: #3c0517;
+  --color-on-secondary-fixed-variant: #733141;
+
+  --color-tertiary: #874f45;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #ffbdb1;
+  --color-on-tertiary-container: #7e483e;
+  --color-tertiary-fixed: #ffdad4;
+  --color-tertiary-fixed-dim: #fdb5a8;
+  --color-on-tertiary-fixed: #360f08;
+  --color-on-tertiary-fixed-variant: #6b3930;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-background: #fff8f3;
+  --color-on-background: #211b12;
+  --color-surface: #fff8f3;
+  --color-on-surface: #211b12;
+  --color-surface-variant: #eee0d2;
+  --color-on-surface-variant: #4f4635;
+  --color-surface-tint: #795900;
+  --color-surface-dim: #e5d8ca;
+  --color-surface-bright: #fff8f3;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff1e3;
+  --color-surface-container: #f9ecde;
+  --color-surface-container-high: #f3e6d8;
+  --color-surface-container-highest: #eee0d2;
+
+  --color-outline: #807663;
+  --color-outline-variant: #d2c5af;
+  --color-inverse-surface: #362f26;
+  --color-inverse-on-surface: #fcefe0;
+
+  /* ---- Spacing ---- */
+  --spacing-xs: 4px;
+  --spacing-sm: 12px;
+  --spacing-base: 8px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 64px;
+  --spacing-gutter: 16px;
+  --spacing-margin-mobile: 20px;
+
+  /* ---- Font families ---- */
+  --font-body-md: "Plus Jakarta Sans", sans-serif;
+  --font-body-lg: "Plus Jakarta Sans", sans-serif;
+  --font-label-sm: "Plus Jakarta Sans", sans-serif;
+  --font-label-md: "Plus Jakarta Sans", sans-serif;
+  --font-headline-sm: "Plus Jakarta Sans", sans-serif;
+  --font-headline-md: "Plus Jakarta Sans", sans-serif;
+  --font-headline-lg: "Plus Jakarta Sans", sans-serif;
+  --font-headline-lg-mobile: "Plus Jakarta Sans", sans-serif;
+
+  /* ---- Font sizes (size / line-height / weight / tracking) ---- */
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--font-weight: 500;
+
+  --text-label-md: 14px;
+  --text-label-md--line-height: 20px;
+  --text-label-md--letter-spacing: 0.01em;
+  --text-label-md--font-weight: 600;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 400;
+
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 26px;
+  --text-headline-sm--font-weight: 600;
+
+  --text-headline-md: 28px;
+  --text-headline-md--line-height: 34px;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-lg: 40px;
+  --text-headline-lg--line-height: 48px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-lg-mobile: 32px;
+  --text-headline-lg-mobile--line-height: 38px;
+  --text-headline-lg-mobile--letter-spacing: -0.02em;
+  --text-headline-lg-mobile--font-weight: 700;
+}
+
+/* ---- コンポーネント/ユーティリティ（モックの <style> を移植） ---- */
+.auth-card-shadow {
+  box-shadow: 0 20px 40px rgba(121, 89, 0, 0.06);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.input-focus-ring:focus {
+  outline: none;
+  border-color: #795900;
+  box-shadow: 0 0 0 2px rgba(121, 89, 0, 0.1);
+}
