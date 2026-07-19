@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+# username・email は NOT NULL / unique のため、空フィクスチャ（one: {} / two: {}）は
+# 挿入時にエラーになる。実際に使うテストを追加する際に、有効な値を持つ fixture を定義すること。
+# 例:
+# taro:
+#   username: taro
+#   name: 山田太郎
+#   email: taro@example.com
+#   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
