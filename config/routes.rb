@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+  # 新規登録ページ（UIのみ。認証は Devise 導入後に配線予定）
+  get "signup", to: "home#signup", as: :signup
+
   # Defines the root path route ("/")
   root "home#index"
 end
