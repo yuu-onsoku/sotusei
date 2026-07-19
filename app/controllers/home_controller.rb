@@ -1,9 +1,7 @@
 class HomeController < ApplicationController
-  # トップページ（ログイン）
-  def index
-  end
+  before_action :authenticate_user!
 
-  # 新規登録ページ
-  def signup
+  # ログイン後のトップページ
+  def index
   end
 end

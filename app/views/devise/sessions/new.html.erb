@@ -1,0 +1,76 @@
+<% content_for :title, "ログイン - ねこの集会場" %>
+
+<div class="min-h-screen flex flex-col items-center justify-center">
+  <!-- Header / Brand Section -->
+  <header class="mb-lg text-center px-gutter">
+    <h1 class="font-headline-lg text-headline-lg text-primary mb-xs">ねこの集会場</h1>
+    <p class="font-label-md text-label-md text-on-surface-variant tracking-widest uppercase">Empathetic Responsibility</p>
+  </header>
+
+  <main class="w-full max-w-[480px] px-margin-mobile md:px-0">
+    <!-- Auth Container -->
+    <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30">
+      <div class="mb-md text-center">
+        <h2 class="font-headline-md text-headline-md text-on-surface">ログイン</h2>
+      </div>
+
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-md" }) do |f| %>
+        <div class="space-y-xs">
+          <%= f.label :email, "メールアドレス", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "example@email.com",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
+        <div class="space-y-xs">
+          <div class="flex justify-between items-center">
+            <%= f.label :password, "パスワード", class: "font-label-md text-label-md text-on-surface-variant" %>
+            <% if devise_mapping.recoverable? %>
+              <%= link_to "パスワードを忘れた場合", new_password_path(resource_name), class: "font-label-sm text-label-sm text-primary hover:underline" %>
+            <% end %>
+          </div>
+          <%= f.password_field :password, autocomplete: "current-password", placeholder: "••••••••",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center gap-sm">
+            <%= f.check_box :remember_me, class: "rounded border-outline-variant accent-primary focus:ring-primary h-4 w-4" %>
+            <%= f.label :remember_me, "ログイン状態を保持する", class: "font-body-md text-body-md text-on-surface-variant" %>
+          </div>
+        <% end %>
+
+        <%= f.submit "ログイン",
+              class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
+      <% end %>
+
+      <div class="mt-md text-center">
+        <p class="font-body-md text-body-md text-on-surface-variant">
+          アカウントをお持ちでないですか？
+          <%= link_to "新規登録はこちら", new_registration_path(resource_name), class: "text-primary font-semibold hover:underline" %>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-xl py-lg w-full max-w-[1200px] flex flex-col items-center px-gutter gap-md text-center justify-center">
+    <p class="font-label-sm text-label-sm text-on-surface-variant/60">© 2026 ねこの集会場. Empathetic Responsibility for Feline Life.</p>
+    <div class="flex gap-lg justify-center">
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">利用規約</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">プライバシー</a>
+      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">お問い合わせ</a>
+    </div>
+  </footer>
+
+  <!-- Decorative Elements (Atmospheric) -->
+  <div class="fixed top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
+  <div class="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-tertiary/5 rounded-full blur-[100px] -z-10"></div>
+
+  <!-- Decorative Paw Prints -->
+  <div class="fixed top-[15%] left-[10%] -z-10 text-[#f9c54e]/20 rotate-[-15deg] select-none pointer-events-none"><span class="material-symbols-outlined !text-6xl">pets</span></div>
+  <div class="fixed top-[40%] right-[12%] -z-10 text-[#f9c54e]/20 rotate-[20deg] select-none pointer-events-none"><span class="material-symbols-outlined !text-4xl">pets</span></div>
+  <div class="fixed bottom-[20%] left-[15%] -z-10 text-[#f9c54e]/20 rotate-[45deg] select-none pointer-events-none"><span class="material-symbols-outlined !text-5xl">pets</span></div>
+  <div class="fixed bottom-[10%] right-[5%] -z-10 text-[#f9c54e]/20 rotate-[-30deg] select-none pointer-events-none"><span class="material-symbols-outlined !text-7xl">pets</span></div>
+  <div class="fixed top-[60%] left-[5%] -z-10 text-[#f9c54e]/20 rotate-[10deg] select-none pointer-events-none"><span class="material-symbols-outlined !text-3xl">pets</span></div>
+</div>

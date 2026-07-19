@@ -12,37 +12,46 @@
     <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30">
       <h2 class="font-headline-md text-headline-md text-on-surface mb-md text-center">新規登録</h2>
 
-      <!-- Signup Form -->
-      <form class="space-y-md" id="signupForm">
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-md" }) do |f| %>
         <div class="space-y-xs">
-          <label class="font-label-md text-label-md text-on-surface-variant" for="signup-username">ユーザー名（ニックネーム）</label>
-          <input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" id="signup-username" placeholder="にゃん太郎" required type="text"/>
+          <%= f.label :username, "ユーザー名（ニックネーム）", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.text_field :username, autofocus: true, placeholder: "にゃん太郎",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
         </div>
         <div class="space-y-xs">
-          <label class="font-label-md text-label-md text-on-surface-variant" for="signup-name">お名前</label>
-          <input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" id="signup-name" placeholder="山田 太郎" required type="text"/>
+          <%= f.label :name, "お名前", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.text_field :name, placeholder: "山田 太郎",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
         </div>
         <div class="space-y-xs">
-          <label class="font-label-md text-label-md text-on-surface-variant" for="signup-email">メールアドレス</label>
-          <input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" id="signup-email" placeholder="example@email.com" required type="email"/>
+          <%= f.label :email, "メールアドレス", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.email_field :email, autocomplete: "email", placeholder: "example@email.com",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
         </div>
         <div class="space-y-xs">
-          <label class="font-label-md text-label-md text-on-surface-variant" for="signup-password">パスワード</label>
-          <input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" id="signup-password" placeholder="8文字以上の英数字" required type="password"/>
+          <%= f.label :password, "パスワード", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.password_field :password, autocomplete: "new-password",
+                placeholder: "#{@minimum_password_length}文字以上",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
         </div>
+
         <div class="flex items-start gap-sm py-xs">
-          <input class="mt-1 rounded border-outline-variant text-primary accent-primary focus:ring-primary h-4 w-4" id="terms" required type="checkbox"/>
+          <%= check_box_tag "terms", "1", false, required: true,
+                id: "terms", class: "mt-1 rounded border-outline-variant text-primary accent-primary focus:ring-primary h-4 w-4" %>
           <label class="font-body-md text-body-md text-on-surface-variant" for="terms">
             <a class="text-primary hover:underline font-semibold" href="#">利用規約</a>と<a class="text-primary hover:underline font-semibold" href="#">プライバシーポリシー</a>に同意します。猫の生涯に責任を持つことを誓います。
           </label>
         </div>
-        <button class="w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm" type="submit">
-          アカウントを作成
-        </button>
+
+        <%= f.submit "アカウントを作成",
+              class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
+
         <div class="text-center mt-md">
-          <%= link_to "すでにアカウントをお持ちの方はこちら（ログイン）", root_path, class: "font-label-md text-label-md text-primary hover:underline" %>
+          <%= link_to "すでにアカウントをお持ちの方はこちら（ログイン）", new_session_path(resource_name), class: "font-label-md text-label-md text-primary hover:underline" %>
         </div>
-      </form>
+      <% end %>
     </div>
   </main>
 
@@ -67,21 +76,3 @@
   <span class="material-symbols-outlined fixed bottom-[15%] right-[20%] text-[56px] -rotate-[30deg] -z-10 select-none text-[#f9c54e]/20">pets</span>
   <span class="material-symbols-outlined fixed bottom-[20%] left-[15%] text-[44px] rotate-[15deg] -z-10 select-none text-[#f9c54e]/20">pets</span>
 </div>
-
-<script>
-  // 送信時の簡易フィードバック（新規登録機能は未実装のためUIデモ）
-  document.querySelectorAll("#signupForm").forEach((form) => {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('button[type="submit"]');
-      btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
-      btn.disabled = true;
-
-      setTimeout(() => {
-        btn.innerText = "完了しました";
-        btn.classList.replace("bg-primary-container", "bg-tertiary");
-        btn.classList.replace("text-on-primary-container", "text-on-tertiary");
-      }, 1500);
-    });
-  });
-</script>
