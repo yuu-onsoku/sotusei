@@ -1,13 +1,7 @@
 <% content_for :title, "マイページ - ねこの集会場" %>
 
-<div class="min-h-screen flex flex-col items-center justify-center">
-  <!-- Header / Brand Section -->
-  <header class="mb-lg text-center px-gutter">
-    <h1 class="font-headline-lg text-headline-lg text-primary mb-xs">ねこの集会場</h1>
-    <p class="font-label-md text-label-md text-on-surface-variant tracking-widest uppercase">Empathetic Responsibility</p>
-  </header>
-
-  <main class="w-full max-w-[480px] px-margin-mobile md:px-0">
+<div class="px-margin-mobile py-xl flex flex-col items-center">
+  <main class="w-full max-w-[480px]">
     <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30 text-center space-y-md">
       <span class="material-symbols-outlined !text-6xl text-primary">pets</span>
       <h2 class="font-headline-md text-headline-md text-on-surface">
@@ -21,16 +15,8 @@
         <p class="font-label-md text-label-md text-on-surface-variant">お名前：<span class="text-on-surface"><%= current_user.name.presence || "（未設定）" %></span></p>
         <p class="font-label-md text-label-md text-on-surface-variant">メール：<span class="text-on-surface"><%= current_user.email %></span></p>
       </div>
-
-      <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
-            class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
     </div>
   </main>
-
-  <!-- Footer -->
-  <footer class="mt-xl py-lg w-full max-w-[1200px] flex flex-col items-center px-gutter gap-md text-center justify-center">
-    <p class="font-label-sm text-label-sm text-on-surface-variant/60">© 2026 ねこの集会場. Empathetic Responsibility for Feline Life.</p>
-  </footer>
 
   <!-- Decorative Elements (Atmospheric) -->
   <div class="fixed top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
