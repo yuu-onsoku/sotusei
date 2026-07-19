@@ -1,60 +1,67 @@
 @import "tailwindcss";
 
-/* ねこの集会場 — Material 3 デザイントークン（モックの tailwind.config を移植） */
+/* ねこの集会場 — アプリ共通デザイントークン（Material 3 + ブランドカラー） */
 @theme {
   /* ---- Colors ---- */
-  --color-primary: #795900;
-  --color-on-primary: #ffffff;
+  --color-primary: #f9c54e;
+  --color-on-primary: #281b00;
   --color-primary-container: #f9c54e;
-  --color-on-primary-container: #6f5200;
-  --color-primary-fixed: #ffdf9f;
-  --color-primary-fixed-dim: #f2bf49;
-  --color-on-primary-fixed: #261a00;
-  --color-on-primary-fixed-variant: #5c4300;
-  --color-inverse-primary: #f2bf49;
+  --color-on-primary-container: #4a3300;
+  --color-primary-fixed: #f9e29f;
+  --color-primary-fixed-dim: #f9d55d;
+  --color-on-primary-fixed: #281b00;
+  --color-on-primary-fixed-variant: #5a4300;
+  --color-inverse-primary: #f9e29f;
 
-  --color-secondary: #904858;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #fca2b4;
-  --color-on-secondary-container: #793545;
-  --color-secondary-fixed: #ffd9df;
-  --color-secondary-fixed-dim: #ffb1c0;
-  --color-on-secondary-fixed: #3c0517;
-  --color-on-secondary-fixed-variant: #733141;
+  --color-secondary: #f9d55d;
+  --color-on-secondary: #241a00;
+  --color-secondary-container: #f9d55d;
+  --color-on-secondary-container: #4e3b00;
+  --color-secondary-fixed: #f9e29f;
+  --color-secondary-fixed-dim: #f9e29f;
+  --color-on-secondary-fixed: #241a00;
+  --color-on-secondary-fixed-variant: #392a00;
 
-  --color-tertiary: #874f45;
+  --color-tertiary: #f99fb1;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #ffbdb1;
-  --color-on-tertiary-container: #7e483e;
-  --color-tertiary-fixed: #ffdad4;
-  --color-tertiary-fixed-dim: #fdb5a8;
-  --color-on-tertiary-fixed: #360f08;
-  --color-on-tertiary-fixed-variant: #6b3930;
+  --color-tertiary-container: #f99fb1;
+  --color-on-tertiary-container: #3f0012;
+  --color-tertiary-fixed: #f9e29f;
+  --color-tertiary-fixed-dim: #f99fb1;
+  --color-on-tertiary-fixed: #310d14;
+  --color-on-tertiary-fixed-variant: #601426;
 
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-error-container: #f9b1a4;
+  --color-on-error-container: #410006;
 
   --color-background: #fff8f3;
-  --color-on-background: #211b12;
+  --color-on-background: #201a14;
   --color-surface: #fff8f3;
-  --color-on-surface: #211b12;
-  --color-surface-variant: #eee0d2;
-  --color-on-surface-variant: #4f4635;
-  --color-surface-tint: #795900;
+  --color-on-surface: #201a14;
+  --color-surface-variant: #eee1d6;
+  --color-on-surface-variant: #504539;
+  --color-surface-tint: #f9c54e;
   --color-surface-dim: #e5d8ca;
   --color-surface-bright: #fff8f3;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-low: #fff1e3;
-  --color-surface-container: #f9ecde;
-  --color-surface-container-high: #f3e6d8;
-  --color-surface-container-highest: #eee0d2;
+  --color-surface-container: #f6e9dc;
+  --color-surface-container-high: #f0e2d5;
+  --color-surface-container-highest: #e9dbcd;
 
-  --color-outline: #807663;
-  --color-outline-variant: #d2c5af;
-  --color-inverse-surface: #362f26;
-  --color-inverse-on-surface: #fcefe0;
+  --color-outline: #827568;
+  --color-outline-variant: #d2c4b7;
+  --color-inverse-surface: #362f28;
+  --color-inverse-on-surface: #fbeeeb;
+
+  /* ブランドアクセント */
+  --color-brand-1: #f9c54e;
+  --color-brand-2: #f9d55d;
+  --color-brand-3: #f9e29f;
+  --color-brand-4: #f9b1a4;
+  --color-brand-5: #f99fb1;
 
   /* ---- Spacing ---- */
   --spacing-xs: 4px;
@@ -66,25 +73,35 @@
   --spacing-gutter: 16px;
   --spacing-margin-mobile: 20px;
 
+  /* ---- Border radius ---- */
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
   /* ---- Font families ---- */
-  --font-body-md: "Plus Jakarta Sans", sans-serif;
-  --font-body-lg: "Plus Jakarta Sans", sans-serif;
-  --font-label-sm: "Plus Jakarta Sans", sans-serif;
-  --font-label-md: "Plus Jakarta Sans", sans-serif;
+  /* 本文・ラベルは Be Vietnam Pro、見出しは Plus Jakarta Sans */
+  --font-body-md: "Be Vietnam Pro", sans-serif;
+  --font-body-lg: "Be Vietnam Pro", sans-serif;
+  --font-body-sm: "Be Vietnam Pro", sans-serif;
+  --font-label-md: "Be Vietnam Pro", sans-serif;
+  --font-label-sm: "Be Vietnam Pro", sans-serif;
   --font-headline-sm: "Plus Jakarta Sans", sans-serif;
   --font-headline-md: "Plus Jakarta Sans", sans-serif;
   --font-headline-lg: "Plus Jakarta Sans", sans-serif;
-  --font-headline-lg-mobile: "Plus Jakarta Sans", sans-serif;
+  --font-headline-xl: "Plus Jakarta Sans", sans-serif;
 
   /* ---- Font sizes (size / line-height / weight / tracking) ---- */
   --text-label-sm: 12px;
-  --text-label-sm--line-height: 16px;
+  --text-label-sm--line-height: 14px;
   --text-label-sm--font-weight: 500;
 
   --text-label-md: 14px;
-  --text-label-md--line-height: 20px;
-  --text-label-md--letter-spacing: 0.01em;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.05em;
   --text-label-md--font-weight: 600;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
 
   --text-body-md: 16px;
   --text-body-md--line-height: 24px;
@@ -95,35 +112,39 @@
   --text-body-lg--font-weight: 400;
 
   --text-headline-sm: 20px;
-  --text-headline-sm--line-height: 26px;
+  --text-headline-sm--line-height: 28px;
   --text-headline-sm--font-weight: 600;
 
-  --text-headline-md: 28px;
-  --text-headline-md--line-height: 34px;
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
   --text-headline-md--font-weight: 600;
 
-  --text-headline-lg: 40px;
-  --text-headline-lg--line-height: 48px;
-  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.01em;
   --text-headline-lg--font-weight: 700;
 
-  --text-headline-lg-mobile: 32px;
-  --text-headline-lg-mobile--line-height: 38px;
-  --text-headline-lg-mobile--letter-spacing: -0.02em;
-  --text-headline-lg-mobile--font-weight: 700;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 700;
 }
 
-/* ---- コンポーネント/ユーティリティ（モックの <style> を移植） ---- */
-.auth-card-shadow {
-  box-shadow: 0 20px 40px rgba(121, 89, 0, 0.06);
-}
-
+/* ---- コンポーネント/ユーティリティ ---- */
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
+.ambient-shadow {
+  box-shadow: 0 4px 20px rgba(249, 197, 78, 0.1);
+}
+
+.auth-card-shadow {
+  box-shadow: 0 20px 40px rgba(249, 197, 78, 0.12);
+}
+
 .input-focus-ring:focus {
   outline: none;
-  border-color: #795900;
-  box-shadow: 0 0 0 2px rgba(121, 89, 0, 0.1);
+  border-color: #f9c54e;
+  box-shadow: 0 0 0 2px rgba(249, 197, 78, 0.25);
 }

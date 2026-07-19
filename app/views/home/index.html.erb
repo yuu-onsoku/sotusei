@@ -1,24 +1,227 @@
-<% content_for :title, "マイページ - ねこの集会場" %>
+<% content_for :title, "ねこの集会場 - Empathetic Responsibility for Feline Life" %>
 
-<div class="px-margin-mobile py-xl flex flex-col items-center">
-  <main class="w-full max-w-[480px]">
-    <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30 text-center space-y-md">
-      <span class="material-symbols-outlined !text-6xl text-primary">pets</span>
-      <h2 class="font-headline-md text-headline-md text-on-surface">
-        ようこそ、<%= current_user.username %> さん
-      </h2>
-      <p class="font-body-md text-body-md text-on-surface-variant">
-        ログインに成功しました。ここから猫好きの仲間とつながりましょう。
-      </p>
-
-      <div class="rounded-lg bg-surface-container-low p-md text-left space-y-xs">
-        <p class="font-label-md text-label-md text-on-surface-variant">お名前：<span class="text-on-surface"><%= current_user.name.presence || "（未設定）" %></span></p>
-        <p class="font-label-md text-label-md text-on-surface-variant">メール：<span class="text-on-surface"><%= current_user.email %></span></p>
-      </div>
+<div class="pb-[80px] md:pb-0">
+  <!-- TopAppBar -->
+  <header id="top-nav" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface shadow-sm transition-all duration-300">
+    <div class="max-w-[1200px] w-full mx-auto flex justify-between items-center px-4 md:px-0">
+      <!-- Brand Logo -->
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight" %>
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">お迎え診断</a>
+        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">ねこの相談室</a>
+        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">にゃんスタ</a>
+        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">マイページ</a>
+      </nav>
+      <!-- Trailing Action -->
+      <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+            class: "font-label-md text-label-md bg-brand-1 text-on-primary px-6 py-2 rounded-full hover:bg-brand-2 transition-all duration-200 hidden md:block" %>
     </div>
+  </header>
+
+  <!-- Main Content Canvas -->
+  <main class="pt-[80px] md:pt-[100px] flex flex-col gap-xl">
+    <!-- Hero Section -->
+    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter relative">
+      <div class="absolute top-0 left-0 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-6xl rotate-[-15deg]">pets</span></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <!-- Typography & Action (Left) -->
+        <div class="lg:col-span-6 flex flex-col justify-center order-2 lg:order-1 relative z-10">
+          <h1 class="font-headline-xl text-headline-xl text-on-background mb-6 leading-tight tracking-tight text-balance">
+            可愛い、だけでは<br class="hidden md:block"/>飼えないから。<br/>
+            <span class="text-brand-1 block mt-2">一生のパートナーになる<br class="hidden md:block"/>ための準備を始めよう</span>
+          </h1>
+          <div class="absolute -left-12 top-1/2 -z-10 text-[#f9c54e]/20 select-none pointer-events-none hidden lg:block"><span class="material-symbols-outlined text-5xl rotate-[45deg]">pets</span></div>
+          <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-[90%]">
+            猫との暮らしは、毎日の癒しであると同時に、15年以上続くひとつの「命」への大きな責任を伴います。環境、費用、そしてあなたの覚悟。本当に迎える準備ができているか、まずは客観的に確認してみませんか？
+          </p>
+          <!-- Primary CTA -->
+          <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <button class="bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 group w-full sm:w-auto">
+              お迎え診断を始める
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </button>
+            <span class="font-label-sm text-label-sm text-on-surface-variant/70">所要時間: 約3分</span>
+          </div>
+        </div>
+        <!-- Hero Image (Right) -->
+        <div class="lg:col-span-6 order-1 lg:order-2 relative">
+          <div class="absolute inset-0 bg-brand-3/50 rounded-[32px] transform translate-x-4 translate-y-4 -z-10"></div>
+          <div class="aspect-[4/3] md:aspect-square w-full rounded-[24px] overflow-hidden shadow-lg relative group">
+            <img alt="猫と暮らすイメージ" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyxX__zKvuZRDg_-BmYNMP-GZpJX3deiu55rNIkqlsAlfh2wyMs8Ou0VV-oAbcDSfG4rpHgxSusgaN_4KLzNGsiDPugcjHXZEW0I7Ww9i_ltus9v3oh0GQk-pCfPm_fLm7AV0HdQ1AwXKOBLTGSjPs6KETosr6vI0U9-HuL4InIIZLVmbWdCdgs3uOkRPkFdE3yRoDj28AWXV3mg7iorJvSalYUtHttvFZsb3p1v1NTk67a_eAR37VE6_3GPLAK-Dfj9HiacCUb5U6"/>
+            <div class="absolute bottom-6 right-6 backdrop-blur-md bg-surface/80 border border-white/20 p-4 rounded-2xl shadow-sm hidden md:flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-brand-3 flex items-center justify-center text-on-secondary-container">
+                <span class="material-symbols-outlined">favorite</span>
+              </div>
+              <div>
+                <p class="font-label-sm text-label-sm text-on-surface">Empathetic</p>
+                <p class="font-label-md text-label-md text-on-surface-variant">Responsibility</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-10 right-10 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-4xl rotate-[20deg]">pets</span></div>
+    </section>
+
+    <!-- Concept Section -->
+    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter">
+      <div class="bg-brand-3 rounded-[32px] p-8 md:p-12 relative overflow-hidden flex flex-col lg:flex-row gap-10 items-center">
+        <!-- Abstract pattern overlay -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-2/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div class="flex-1 min-w-0 z-10">
+          <h2 class="font-headline-lg text-headline-lg text-on-background mb-6">なぜ、このアプリが<br class="hidden md:block"/>必要なのか</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed">
+            「可愛いから」という純粋な気持ちは、一緒に暮らすための第一歩です。しかし、それだけでは命を預かることはできません。<br/><br/>
+            ねこの集会場は、安易な飼育による不幸な結末（飼育放棄など）を未然に防ぐために生まれました。理想と現実のギャップを埋め、飼い主となる方へ「適切な知識」と「必要な覚悟」を提示することで、猫と人が共に幸せに暮らせる社会を目指しています。
+          </p>
+          <!-- Warning / Resolution Callout -->
+          <div class="bg-inverse-surface rounded-2xl p-6 shadow-md border-l-4 border-brand-1 mt-8 relative overflow-hidden">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-brand-1">warning</span>
+              <span class="font-label-md text-label-md text-brand-3 tracking-wider uppercase">Resolution - 必要な覚悟</span>
+            </div>
+            <p class="font-body-sm text-body-sm text-inverse-on-surface/90 leading-relaxed relative z-10">
+              猫の平均寿命は約15年。その間、毎日の食事やトイレの世話はもちろん、高齢になれば介護が必要になることもあります。また、病気やケガによる治療費は数十万円に及ぶことも珍しくありません。最期の日まで、愛情を持って寄り添い続ける覚悟が問われます。
+            </p>
+          </div>
+        </div>
+        <div class="w-full lg:w-96 lg:shrink-0 z-10 flex justify-center">
+          <div class="bg-surface rounded-2xl p-6 shadow-lg border border-outline-variant/30 w-full rotate-2 hover:rotate-0 transition-transform duration-300">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-surface-variant">
+              <span class="material-symbols-outlined text-brand-1">fact_check</span>
+              <span class="font-headline-sm text-headline-sm text-on-surface">事前確認リスト</span>
+            </div>
+            <ul class="flex flex-col gap-4">
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded bg-brand-1 text-on-primary flex items-center justify-center shrink-0 mt-0.5">
+                  <span class="material-symbols-outlined text-[16px]">check</span>
+                </div>
+                <span class="font-body-sm text-body-sm text-on-surface">ペット可の住居である</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded bg-brand-1 text-on-primary flex items-center justify-center shrink-0 mt-0.5">
+                  <span class="material-symbols-outlined text-[16px]">check</span>
+                </div>
+                <span class="font-body-sm text-body-sm text-on-surface">家族全員の同意が得られている</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded border-2 border-outline flex items-center justify-center shrink-0 mt-0.5"></div>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">十分な経済的余裕がある</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consultation Sneak Peek -->
+    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter mb-xl relative">
+      <div class="absolute -top-10 -right-4 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-7xl rotate-[10deg]">pets</span></div>
+      <div class="flex justify-between items-end mb-8">
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-on-background">相談室の最新トピック</h2>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-2">先輩飼い主や専門家からのアドバイス</p>
+        </div>
+        <a class="hidden md:flex items-center gap-1 font-label-sm text-label-sm text-brand-1 hover:underline" href="#">
+          すべて見る
+          <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
+          <div class="flex justify-between items-start mb-4">
+            <span class="bg-brand-2/40 text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">食事・栄養</span>
+            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">初めてのフード選び、何から始めればいい？</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            子猫を迎えたばかりです。総合栄養食と一般食の違いや、年齢に合わせた切り替えのタイミングについて教えてください。
+          </p>
+        </a>
+        <!-- Card 2 -->
+        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
+          <div class="flex justify-between items-start mb-4">
+            <span class="bg-brand-3/50 text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">室内環境</span>
+            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">脱走防止策、どこまでやれば安心ですか</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            賃貸マンションに住んでいます。玄関や網戸の対策として、壁に穴を開けずに設置できる効果的なフェンスなどはありますか？
+          </p>
+        </a>
+        <!-- Card 3 -->
+        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
+          <div class="flex justify-between items-start mb-4">
+            <span class="bg-brand-4/40 text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">健康管理</span>
+            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">ワクチン接種のスケジュールと副作用</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            来週初めてのワクチン接種を予定していますが、接種後の体調変化で気をつけるべきサインを教えてください。
+          </p>
+        </a>
+      </div>
+      <div class="mt-8 flex justify-center md:hidden">
+        <a class="inline-flex items-center justify-center h-10 px-6 rounded-full border border-brand-1 font-label-sm text-label-sm text-brand-1 hover:bg-brand-3 transition-colors" href="#">
+          相談室を見る
+        </a>
+      </div>
+      <div class="absolute -bottom-8 left-1/4 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-5xl rotate-[-30deg]">pets</span></div>
+    </section>
   </main>
 
-  <!-- Decorative Elements (Atmospheric) -->
-  <div class="fixed top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
-  <div class="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-tertiary/5 rounded-full blur-[100px] -z-10"></div>
+  <!-- BottomNavBar (Mobile Only) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl">
+    <a class="flex flex-col items-center justify-center bg-brand-2 text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150" href="#">
+      <span class="material-symbols-outlined">home</span>
+      <span class="font-label-sm text-label-sm mt-1">ホーム</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">forum</span>
+      <span class="font-label-sm text-label-sm mt-1">相談室</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">camera</span>
+      <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">person</span>
+      <span class="font-label-sm text-label-sm mt-1">マイページ</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="w-full py-lg px-margin-mobile flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">
+    <div class="flex flex-col items-center md:items-start gap-xs">
+      <div class="text-headline-sm font-headline-sm text-primary">ねこの集会場</div>
+      <p class="text-label-sm font-label-sm text-on-surface-variant">© 2026 ねこの集会場. 全著作権所有</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-md">
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">利用規約</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">プライバシーポリシー</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">お問い合わせ</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">ブランドメッセージ</a>
+    </div>
+  </footer>
 </div>
+
+<script>
+  // スクロールでヘッダーの影を強調
+  window.addEventListener("scroll", () => {
+    const header = document.getElementById("top-nav");
+    if (!header) return;
+    if (window.scrollY > 10) {
+      header.classList.add("shadow-md");
+      header.classList.remove("shadow-sm");
+    } else {
+      header.classList.remove("shadow-md");
+      header.classList.add("shadow-sm");
+    }
+  });
+</script>
