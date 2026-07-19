@@ -49,6 +49,9 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # Render などのリバースプロキシがSSLを終端する前提（X-Forwarded-Proto を信頼）。
+  config.assume_ssl = true
+
   config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.

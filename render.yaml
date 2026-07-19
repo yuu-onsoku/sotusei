@@ -1,0 +1,28 @@
+# Render Blueprint（https://render.com/docs/blueprint-spec）
+# DBは Neon（外部サーバーレスPostgres）を使うため、Render側のマネージドDB（databases:）は定義しない。
+# Neon の接続文字列は DATABASE_URL 環境変数として Render ダッシュボードで設定する。
+services:
+  - type: web
+    name: neko-syukaijo
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free            # 無料プラン（一定時間アクセスが無いとスリープ）。必要に応じて starter 等へ。
+    region: singapore     # 日本に最も近いリージョン。必要なら変更可。
+    branch: main          # デプロイ対象ブランチ。
+    healthCheckPath: /up  # Rails 8 のヘルスチェックエンドポイント。
+    autoDeploy: true
+    envVars:
+      # config/master.key の中身を Render ダッシュボードで設定する（sync:false = 手動設定）。
+      - key: RAILS_MASTER_KEY
+        sync: false
+      # Neon の接続文字列を Render ダッシュボードで設定する（sslmode=require 付き）。
+      - key: DATABASE_URL
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      # Puma のスレッド数（config/puma.rb が参照）。無料プランのメモリに合わせて控えめに。
+      # ※ puma.rb に workers 指定は無いため単一プロセスで動作する。
+      - key: RAILS_MAX_THREADS
+        value: "3"
