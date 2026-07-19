@@ -1,0 +1,17 @@
+<%# ログイン中の全ページで表示される共通ヘッダー（ブランド名＋ログアウト） %>
+<header class="sticky top-0 z-40 w-full border-b border-outline-variant/40 bg-surface-container-lowest/90 backdrop-blur">
+  <div class="max-w-[1200px] mx-auto px-gutter h-[64px] flex items-center justify-between gap-md">
+    <%= link_to root_path, class: "flex items-center gap-sm" do %>
+      <span class="material-symbols-outlined text-primary">pets</span>
+      <span class="font-headline-sm text-headline-sm text-primary">ねこの集会場</span>
+    <% end %>
+
+    <div class="flex items-center gap-md">
+      <span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline">
+        <%= current_user.username %> さん
+      </span>
+      <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+            class: "h-[40px] px-md rounded-lg border border-outline-variant bg-surface-bright text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors cursor-pointer" %>
+    </div>
+  </div>
+</header>
