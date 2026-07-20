@@ -1,6 +1,26 @@
 <% content_for :title, "ねこの集会場 - Empathetic Responsibility for Feline Life" %>
 
-<div class="pb-[80px] md:pb-0">
+<div class="relative pb-[80px] md:pb-0">
+  <!-- 背景の装飾肉球（余白にバラバラに散らす。カード背後では隠れる） -->
+  <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none select-none text-[#f9c54e]/20" aria-hidden="true">
+    <span class="material-symbols-outlined absolute top-[8%] left-[6%] text-5xl rotate-[-20deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[15%] left-[89%] text-4xl rotate-[25deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[27%] left-[44%] text-6xl rotate-[12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[41%] left-[13%] text-4xl rotate-[-35deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[52%] left-[82%] text-7xl rotate-[15deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[61%] left-[33%] text-5xl rotate-[40deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[74%] left-[9%] text-6xl rotate-[-15deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[80%] left-[63%] text-4xl rotate-[30deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[90%] left-[88%] text-5xl rotate-[-25deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[68%] left-[51%] text-4xl rotate-[8deg]">pets</span>
+    <!-- 右側に追加 -->
+    <span class="material-symbols-outlined absolute top-[5%] left-[73%] text-4xl rotate-[18deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[23%] left-[94%] text-5xl rotate-[-28deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[38%] left-[70%] text-6xl rotate-[33deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[57%] left-[93%] text-4xl rotate-[-12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[85%] left-[76%] text-5xl rotate-[22deg]">pets</span>
+  </div>
+
   <!-- TopAppBar -->
   <header id="top-nav" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface shadow-sm transition-all duration-300">
     <div class="max-w-[1200px] w-full mx-auto flex justify-between items-center px-4 md:px-0">
@@ -65,7 +85,7 @@
     </section>
 
     <!-- Concept Section -->
-    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter">
+    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter mb-48">
       <div class="bg-brand-3 rounded-[32px] p-8 md:p-12 relative overflow-hidden flex flex-col lg:flex-row gap-10 items-center">
         <!-- Abstract pattern overlay -->
         <div class="absolute top-0 right-0 w-64 h-64 bg-brand-2/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -113,62 +133,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Consultation Sneak Peek -->
-    <section class="max-w-[1200px] w-full mx-auto px-margin-mobile md:px-gutter mb-xl relative">
-      <div class="absolute -top-10 -right-4 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-7xl rotate-[10deg]">pets</span></div>
-      <div class="flex justify-between items-end mb-8">
-        <div>
-          <h2 class="font-headline-lg text-headline-lg text-on-background">相談室の最新トピック</h2>
-          <p class="font-body-sm text-body-sm text-on-surface-variant mt-2">先輩飼い主や専門家からのアドバイス</p>
-        </div>
-        <a class="hidden md:flex items-center gap-1 font-label-sm text-label-sm text-brand-1 hover:underline" href="#">
-          すべて見る
-          <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-        </a>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card 1 -->
-        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
-          <div class="flex justify-between items-start mb-4">
-            <span class="bg-brand-2/40 text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm">食事・栄養</span>
-            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
-          </div>
-          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">初めてのフード選び、何から始めればいい？</h3>
-          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-            子猫を迎えたばかりです。総合栄養食と一般食の違いや、年齢に合わせた切り替えのタイミングについて教えてください。
-          </p>
-        </a>
-        <!-- Card 2 -->
-        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
-          <div class="flex justify-between items-start mb-4">
-            <span class="bg-brand-3/50 text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">室内環境</span>
-            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
-          </div>
-          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">脱走防止策、どこまでやれば安心ですか</h3>
-          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-            賃貸マンションに住んでいます。玄関や網戸の対策として、壁に穴を開けずに設置できる効果的なフェンスなどはありますか？
-          </p>
-        </a>
-        <!-- Card 3 -->
-        <a class="group block bg-surface-container-low rounded-[20px] p-6 ambient-shadow border border-outline-variant/30 hover:border-brand-1/50 transition-all duration-300" href="#">
-          <div class="flex justify-between items-start mb-4">
-            <span class="bg-brand-4/40 text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">健康管理</span>
-            <span class="material-symbols-outlined text-outline-variant group-hover:text-brand-1 transition-colors">forum</span>
-          </div>
-          <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3 group-hover:text-brand-1 transition-colors">ワクチン接種のスケジュールと副作用</h3>
-          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-            来週初めてのワクチン接種を予定していますが、接種後の体調変化で気をつけるべきサインを教えてください。
-          </p>
-        </a>
-      </div>
-      <div class="mt-8 flex justify-center md:hidden">
-        <a class="inline-flex items-center justify-center h-10 px-6 rounded-full border border-brand-1 font-label-sm text-label-sm text-brand-1 hover:bg-brand-3 transition-colors" href="#">
-          相談室を見る
-        </a>
-      </div>
-      <div class="absolute -bottom-8 left-1/4 -z-10 text-[#f9c54e]/20 select-none pointer-events-none"><span class="material-symbols-outlined text-5xl rotate-[-30deg]">pets</span></div>
     </section>
   </main>
 
