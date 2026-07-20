@@ -29,7 +29,7 @@
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-8">
         <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">お迎え診断</a>
-        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">ねこの相談室</a>
+        <%= link_to "ねこの相談室", questions_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
         <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">にゃんスタ</a>
         <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">マイページ</a>
       </nav>
@@ -146,10 +146,10 @@
       <span class="material-symbols-outlined">fact_check</span>
       <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
     </a>
-    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+    <%= link_to questions_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">forum</span>
       <span class="font-label-sm text-label-sm mt-1">相談室</span>
-    </a>
+    <% end %>
     <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
       <span class="material-symbols-outlined">camera</span>
       <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
