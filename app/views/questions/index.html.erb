@@ -1,0 +1,236 @@
+<% content_for :title, "ねこの相談室 - ねこの集会場" %>
+
+<div class="pt-16 pb-20 md:pb-0">
+  <!-- 背景の装飾肉球 -->
+  <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden" aria-hidden="true">
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-4xl rotate-12 top-[5%] left-[10%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-6xl -rotate-12 top-[15%] right-[15%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-2xl rotate-45 top-[40%] left-[2%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-5xl -rotate-45 top-[60%] right-[5%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-3xl rotate-[30deg] bottom-[20%] left-[15%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-4xl -rotate-[20deg] bottom-[10%] right-[20%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-2xl rotate-12 top-[30%] left-[25%]">pets</span>
+    <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-5xl rotate-[15deg] top-[75%] left-[5%]">pets</span>
+  </div>
+
+  <!-- TopAppBar -->
+  <header class="hidden md:flex fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 justify-between items-center px-margin-mobile md:px-lg h-16 max-w-[1200px] bg-surface/80 backdrop-blur-md shadow-sm">
+    <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight" %>
+    <nav class="flex space-x-6 font-label-md text-label-md">
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">お迎え診断</a>
+      <%= link_to "ねこの相談室", questions_path, class: "text-primary border-b-2 border-primary pb-1 transition-opacity" %>
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">にゃんスタ</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">マイページ</a>
+    </nav>
+    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+          class: "bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:brightness-95 transition-all shadow-sm inline-block" %>
+  </header>
+
+  <!-- BottomNavBar (Mobile) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface-container-low border-t border-outline-variant shadow-lg rounded-t-xl">
+    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
+      <span class="material-symbols-outlined">home</span>
+      <span class="font-label-sm text-label-sm mt-1">ホーム</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" href="#">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
+    </a>
+    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-4 py-1 scale-95 transition-transform duration-150" do %>
+      <span class="material-symbols-outlined fill">forum</span>
+      <span class="font-label-sm text-label-sm mt-1">相談室</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" href="#">
+      <span class="material-symbols-outlined">photo_library</span>
+      <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" href="#">
+      <span class="material-symbols-outlined">person</span>
+      <span class="font-label-sm text-label-sm mt-1">マイページ</span>
+    </a>
+  </nav>
+
+  <!-- Main Content Canvas -->
+  <main class="max-w-[1200px] mx-auto px-margin-mobile md:px-lg py-lg md:py-xl space-y-xl">
+    <!-- Header Section -->
+    <section class="text-center space-y-sm">
+      <h1 class="font-headline-lg text-headline-lg text-on-surface">ねこの相談室</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">先輩飼い主に聞く、初めての不安。みんなで支え合う温かいコミュニティです。</p>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="space-y-md">
+      <div class="relative max-w-xl mx-auto">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+        <input class="w-full pl-12 pr-4 py-3 rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline-variant shadow-sm" placeholder="質問を検索..." type="text"/>
+      </div>
+      <div class="flex flex-wrap justify-center gap-sm">
+        <button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:brightness-95 transition-colors border border-transparent shadow-sm">すべて</button>
+        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">食事</button>
+        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">健康</button>
+        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">しつけ</button>
+        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">費用</button>
+        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">お迎え前</button>
+      </div>
+    </section>
+
+    <!-- Questions Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+      <!-- Card 1 -->
+      <article class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md hover:border-primary-container transition-all duration-300">
+        <div class="space-y-sm mb-lg">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-1 -mr-1 order-last"><button class="p-1 text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></div>
+            <span class="inline-block px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">お迎え前</span>
+            <span class="font-label-sm text-label-sm text-outline">1時間前</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">初めて猫を飼うのですが、初期費用はどれくらい見ておけばいいですか？</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">来月から一人暮らしを始めるタイミングで保護猫をお迎えしたいと考えています。ケージやトイレなど、最低限必要なものと、その大体の費用感を教えていただきたいです。</p>
+        </div>
+        <div class="flex items-center justify-between border-t border-outline-variant pt-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md">T</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">検討中さん</span>
+          </div>
+          <div class="flex items-center gap-4 text-on-surface-variant">
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">forum</span>
+              <span class="font-label-md text-label-md">5</span>
+            </div>
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">pets</span>
+              <span class="font-label-md text-label-md">12</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Card 2 -->
+      <article class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md hover:border-primary-container transition-all duration-300">
+        <div class="space-y-sm mb-lg">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-1 -mr-1 order-last"><button class="p-1 text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></div>
+            <span class="inline-block px-2 py-1 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm">食事</span>
+            <span class="font-label-sm text-label-sm text-outline">3時間前</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">カリカリをあまり食べてくれません。おすすめのウェットフードはありますか？</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">最近お迎えした1歳のオスの保護猫です。ドライフードをあまり好まず、少し残してしまいます。水分補給も兼ねてウェットフードを混ぜてみようかと思うのですが...</p>
+        </div>
+        <div class="flex items-center justify-between border-t border-outline-variant pt-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md">M</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">飼育中さん</span>
+          </div>
+          <div class="flex items-center gap-4 text-on-surface-variant">
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">forum</span>
+              <span class="font-label-md text-label-md">8</span>
+            </div>
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">pets</span>
+              <span class="font-label-md text-label-md">24</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Card 3 -->
+      <article class="bg-surface-container-low rounded-xl p-md shadow-sm border border-primary-container/30 flex flex-col justify-between hover:shadow-md hover:border-primary-container transition-all duration-300">
+        <div class="space-y-sm mb-lg">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-1 -mr-1 order-last"><button class="p-1 text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></div>
+            <span class="inline-block px-2 py-1 rounded bg-tertiary text-on-tertiary font-label-sm text-label-sm">しつけ</span>
+            <span class="font-label-sm text-label-sm text-outline">昨夜</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">夜鳴きがひどくて寝不足です。何か対策はありますか？</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">お迎えして1週間になりますが、夜中になると部屋をウロウロしながら大きな声で鳴き続けます。日中遊ばせているつもりなのですが足りないのでしょうか。</p>
+        </div>
+        <div class="flex items-center justify-between border-t border-outline-variant pt-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-label-md">S</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">飼育中さん</span>
+          </div>
+          <div class="flex items-center gap-4 text-on-surface-variant">
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">forum</span>
+              <span class="font-label-md text-label-md">15</span>
+            </div>
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer text-primary">
+              <span class="material-symbols-outlined fill text-sm">pets</span>
+              <span class="font-label-md text-label-md">42</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- CTA Banner -->
+      <div class="lg:col-span-2 bg-primary text-on-primary rounded-xl p-md flex flex-col md:flex-row items-center justify-between gap-md shadow-md relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-container opacity-50 z-0"></div>
+        <div class="relative z-10 space-y-2 flex-1 min-w-0">
+          <h3 class="font-headline-md text-headline-md">悩みを抱え込まないで。</h3>
+          <p class="font-body-md text-body-md opacity-90 ">どんな小さなことでも大丈夫。先輩飼い主さんたちがあなたの不安に寄り添います。</p>
+        </div>
+        <button class="relative z-10 flex-shrink-0 bg-white text-primary font-label-md text-label-md px-8 py-3 rounded-full hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-2 h-12">
+          <span class="material-symbols-outlined">edit</span>
+          質問を投稿する
+        </button>
+      </div>
+
+      <!-- Card 4 -->
+      <article class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md hover:border-primary-container transition-all duration-300">
+        <div class="space-y-sm mb-lg">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-1 -mr-1 order-last"><button class="p-1 text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button></div>
+            <span class="inline-block px-2 py-1 rounded bg-secondary text-on-secondary font-label-sm text-label-sm">健康</span>
+            <span class="font-label-sm text-label-sm text-outline">2日前</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">ワクチンのスケジュールについて教えてください。</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">完全室内飼い予定ですが、3種混合ワクチンは毎年打つべきでしょうか？獣医さんによって意見が違うようで迷っています。</p>
+        </div>
+        <div class="flex items-center justify-between border-t border-outline-variant pt-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md">K</div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">飼育中さん</span>
+          </div>
+          <div class="flex items-center gap-4 text-on-surface-variant">
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">forum</span>
+              <span class="font-label-md text-label-md">3</span>
+            </div>
+            <div class="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-sm">pets</span>
+              <span class="font-label-md text-label-md">18</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Pagination -->
+    <div class="flex justify-center items-center space-x-4 pt-lg">
+      <button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+      <button class="w-10 h-10 rounded-full flex items-center justify-center bg-primary text-on-primary font-label-md shadow-sm">1</button>
+      <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md">2</button>
+      <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md">3</button>
+      <span class="text-outline">...</span>
+      <button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+    </div>
+  </main>
+
+  <!-- Floating Action Button (Mobile Only) -->
+  <button class="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40">
+    <span class="material-symbols-outlined">edit</span>
+  </button>
+
+  <!-- Footer -->
+  <footer class="w-full py-lg px-margin-mobile md:px-lg flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">
+    <div class="flex flex-col items-center md:items-start gap-xs">
+      <div class="text-headline-sm font-headline-sm text-primary">ねこの集会場</div>
+      <p class="text-label-sm font-label-sm text-on-surface-variant">© 2026 ねこの集会場. 全著作権所有</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-md">
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">利用規約</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">プライバシーポリシー</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">お問い合わせ</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">ブランドメッセージ</a>
+    </div>
+  </footer>
+</div>
