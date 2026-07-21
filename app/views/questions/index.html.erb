@@ -60,10 +60,18 @@
 
     <!-- Search & Filter Section -->
     <section class="space-y-md">
-      <div class="relative max-w-xl mx-auto">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-        <input class="w-full pl-12 pr-4 py-3 rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline-variant shadow-sm" placeholder="質問を検索..." type="text"/>
-      </div>
+      <%# max-w-xl はテーマの --spacing-xl(64px) を拾ってしまうため、見出しと同じ max-w-2xl を使う %>
+      <%= form_with url: questions_path, method: :get, class: "relative max-w-2xl mx-auto" do %>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">search</span>
+        <%= search_field_tag :q, params[:q], placeholder: "質問を検索...",
+              class: "w-full pl-12 #{params[:q].present? ? 'pr-14' : 'pr-4'} py-3 rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline-variant shadow-sm" %>
+        <% if params[:q].present? %>
+          <%= link_to questions_path, aria: { label: "検索条件をクリア" },
+                class: "absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" do %>
+            <span class="material-symbols-outlined">close</span>
+          <% end %>
+        <% end %>
+      <% end %>
       <div class="flex flex-wrap justify-center gap-sm">
         <button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:brightness-95 transition-colors border border-transparent shadow-sm">すべて</button>
         <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">食事</button>
@@ -115,15 +123,20 @@
                   <span class="material-symbols-outlined text-sm">forum</span>
                   <span class="font-label-md text-label-md"><%= question.answers.size %></span>
                 <% end %>
-                <div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">pets</span><span class="font-label-md text-label-md">0</span></div>
+                <%= render "likes/button", question: question, variant: "card" %>
               </div>
             </div>
           </article>
         <% end %>
       <% else %>
         <div class="md:col-span-2 lg:col-span-3 text-center py-xl">
-          <span class="material-symbols-outlined text-[48px] text-outline-variant">forum</span>
-          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ質問がありません。最初の質問を投稿してみましょう。</p>
+          <span class="material-symbols-outlined text-[48px] text-outline-variant"><%= params[:q].present? ? "search_off" : "forum" %></span>
+          <% if params[:q].present? %>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-sm">「<%= params[:q] %>」に一致する質問は見つかりませんでした。</p>
+            <%= link_to "すべての質問を見る", questions_path, class: "inline-block mt-sm font-label-md text-label-md text-primary underline underline-offset-4" %>
+          <% else %>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ質問がありません。最初の質問を投稿してみましょう。</p>
+          <% end %>
         </div>
       <% end %>
     </section>

@@ -139,6 +139,18 @@
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
+/* いいねした瞬間の肉球ポップ */
+@keyframes paw-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.45); }
+  65% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.paw-pop {
+  animation: paw-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .ambient-shadow {
   box-shadow: 0 4px 20px rgba(249, 197, 78, 0.1);
 }

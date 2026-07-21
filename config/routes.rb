@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   # ねこの相談室（質問一覧・投稿フォーム・投稿）と回答
   resources :questions, only: %i[index new create show] do
     resources :answers, only: %i[new create]
+    # 肉球ボタン（いいね）。1投稿1ユーザー1件なので単数リソース。
+    resource :like, only: %i[create destroy]
   end
 
   # Defines the root path route ("/")

@@ -42,9 +42,12 @@
         <% if @question.image.attached? %>
           <%= image_tag @question.image, alt: @question.title, class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
         <% end %>
-        <div class="flex items-center gap-base mt-md">
-          <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md"><%= @question.user.username.first %></div>
-          <span class="text-label-md font-label-md text-on-surface-variant">質問者: <%= @question.user.username %>さん</span>
+        <div class="flex items-center justify-between gap-sm mt-md">
+          <div class="flex items-center gap-base min-w-0">
+            <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md shrink-0"><%= @question.user.username.first %></div>
+            <span class="text-label-md font-label-md text-on-surface-variant truncate">質問者: <%= @question.user.username %>さん</span>
+          </div>
+          <%= render "likes/button", question: @question, variant: "detail" %>
         </div>
       </section>
 
