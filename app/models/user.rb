@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   # プロフィール項目のバリデーション（email/password は :validatable が担当）
   validates :username, presence: true, uniqueness: true, length: { maximum: 30 }
