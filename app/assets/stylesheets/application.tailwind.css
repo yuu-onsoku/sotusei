@@ -143,6 +143,24 @@
   box-shadow: 0 4px 20px rgba(249, 197, 78, 0.1);
 }
 
+.custom-shadow {
+  box-shadow: 0 10px 30px -10px rgba(249, 197, 78, 0.25);
+}
+
+/* 背景の肉球ドットパターン */
+.paw-pattern {
+  background-color: #fff8f3;
+  background-image: radial-gradient(#f9c54e 0.5px, transparent 0.5px),
+    radial-gradient(#f9c54e 0.5px, #fff8f3 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.1;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
 .auth-card-shadow {
   box-shadow: 0 20px 40px rgba(249, 197, 78, 0.12);
 }

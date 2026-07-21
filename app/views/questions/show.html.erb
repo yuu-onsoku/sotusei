@@ -1,0 +1,135 @@
+<% content_for :title, "#{@question.title} | ねこの集会場" %>
+
+<div class="paw-pattern"></div>
+
+<div class="min-h-screen flex flex-col">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-sm h-16">
+    <div class="max-w-[1200px] mx-auto h-full flex justify-between items-center px-margin-mobile md:px-lg">
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-primary" %>
+      <nav class="hidden md:flex gap-md items-center h-full">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">お迎え診断</a>
+        <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary py-1" %>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">マイページ</a>
+      </nav>
+      <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+            class: "bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-md text-label-md transition-opacity inline-block" %>
+    </div>
+  </header>
+
+  <!-- Main Content Canvas -->
+  <main class="flex-grow pt-24 pb-xl px-margin-mobile md:px-0">
+    <div class="max-w-[800px] mx-auto">
+      <!-- Focused Header Section -->
+      <div class="flex items-center gap-sm mb-lg">
+        <%= link_to questions_path, class: "w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-primary" do %>
+          <span class="material-symbols-outlined">arrow_back</span>
+        <% end %>
+        <h1 class="font-headline-md text-headline-md text-on-surface">質問の詳細</h1>
+      </div>
+
+      <!-- Question Detail -->
+      <section class="bg-surface-container-low rounded-xl p-md mb-lg border border-outline-variant/30 custom-shadow">
+        <div class="flex items-start justify-between gap-sm mb-sm">
+          <div class="flex items-start gap-sm flex-wrap">
+            <span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm font-label-sm">質問内容</span>
+            <span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-label-sm"><%= @question.category %></span>
+          </div>
+          <span class="font-label-sm text-label-sm text-outline shrink-0"><%= @question.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+        </div>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs leading-tight"><%= @question.title %></h2>
+        <p class="font-body-md text-body-md text-on-surface-variant whitespace-pre-line leading-relaxed"><%= @question.content %></p>
+        <% if @question.image.attached? %>
+          <%= image_tag @question.image, alt: @question.title, class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
+        <% end %>
+        <div class="flex items-center gap-base mt-md">
+          <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md"><%= @question.user.username.first %></div>
+          <span class="text-label-md font-label-md text-on-surface-variant">質問者: <%= @question.user.username %>さん</span>
+        </div>
+      </section>
+
+      <!-- Answers Section -->
+      <section class="space-y-md">
+        <div class="flex items-center justify-between gap-sm">
+          <h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">forum</span>
+            みんなの回答（<%= @answers.size %>）
+          </h2>
+          <%= link_to new_question_answer_path(@question), class: "hidden md:inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-md text-label-md shadow-sm hover:shadow-md transition-all" do %>
+            <span class="material-symbols-outlined text-sm">edit</span>
+            回答する
+          <% end %>
+        </div>
+
+        <% if @answers.any? %>
+          <% @answers.each do |answer| %>
+            <article class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm">
+              <div class="flex items-center justify-between gap-sm mb-sm">
+                <div class="flex items-center gap-base min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md shrink-0"><%= answer.user.username.first %></div>
+                  <span class="font-label-md text-label-md text-on-surface-variant truncate"><%= answer.user.username %>さん</span>
+                  <% if answer.user_id == @question.user_id %>
+                    <span class="bg-primary-container text-on-primary-container px-2 py-1 rounded-full text-label-sm font-label-sm shrink-0">質問者</span>
+                  <% end %>
+                </div>
+                <span class="font-label-sm text-label-sm text-outline shrink-0"><%= answer.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed"><%= answer.content %></p>
+              <% if answer.image.attached? %>
+                <%= image_tag answer.image, loading: "lazy", alt: "#{answer.user.username}さんの回答画像",
+                      class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
+              <% end %>
+            </article>
+          <% end %>
+        <% else %>
+          <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
+            <span class="material-symbols-outlined text-[48px] text-outline-variant">pets</span>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ回答がありません。最初の回答を届けてみませんか？</p>
+          </div>
+        <% end %>
+
+        <!-- Actions -->
+        <div class="flex flex-col md:flex-row items-center justify-end gap-md pt-md">
+          <%= link_to "質問一覧に戻る", questions_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors underline underline-offset-4" %>
+          <%= link_to new_question_answer_path(@question), class: "w-full md:w-auto text-center bg-primary-container text-on-primary-container px-xl py-md rounded-full font-headline-sm text-headline-sm shadow-sm hover:shadow-md transition-all duration-200" do %>
+            回答を投稿する
+          <% end %>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- BottomNavBar (Mobile Only) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface-container-low border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl">
+    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
+      <span class="material-symbols-outlined">home</span>
+      <span class="font-label-sm text-label-sm">ホーム</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span class="font-label-sm text-label-sm">お迎え診断</span>
+    </a>
+    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" do %>
+      <span class="material-symbols-outlined">forum</span>
+      <span class="font-label-sm text-label-sm">相談室</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">person</span>
+      <span class="font-label-sm text-label-sm">マイページ</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="w-full py-xl px-gutter bg-surface-container-low border-t border-outline-variant/30 mt-auto">
+    <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+      <div class="font-headline-sm text-headline-sm text-primary">ねこの集会場</div>
+      <div class="flex flex-wrap justify-center gap-md">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">利用規約</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">プライバシーポリシー</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">お問い合わせ</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">ブランドメッセージ</a>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant/70">© 2026 ねこの集会場. 猫との暮らしに、共感と責任を。</p>
+    </div>
+  </footer>
+</div>

@@ -1,5 +1,9 @@
 class Question < ApplicationRecord
+  # 添付画像（任意）
+  include ImageAttachable
+
   belongs_to :user
+  has_many :answers, dependent: :destroy
 
   # 添付画像（任意）
   has_one_attached :image

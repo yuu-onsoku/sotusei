@@ -10,8 +10,10 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # ねこの相談室（質問一覧・投稿フォーム・投稿）
-  resources :questions, only: %i[index new create]
+  # ねこの相談室（質問一覧・投稿フォーム・投稿）と回答
+  resources :questions, only: %i[index new create show] do
+    resources :answers, only: %i[new create]
+  end
 
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。

@@ -1,0 +1,142 @@
+<% content_for :title, "回答を投稿する | ねこの集会場" %>
+
+<div class="paw-pattern"></div>
+
+<div class="min-h-screen flex flex-col">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-sm h-16">
+    <div class="max-w-[1200px] mx-auto h-full flex justify-between items-center px-margin-mobile md:px-lg">
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-primary" %>
+      <nav class="hidden md:flex gap-md items-center h-full">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">お迎え診断</a>
+        <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary py-1" %>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">マイページ</a>
+      </nav>
+      <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+            class: "bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-md text-label-md transition-opacity inline-block" %>
+    </div>
+  </header>
+
+  <!-- Main Content Canvas -->
+  <main class="flex-grow pt-24 pb-xl px-margin-mobile md:px-0">
+    <div class="max-w-[800px] mx-auto">
+      <!-- Focused Header Section -->
+      <div class="flex items-center gap-sm mb-lg">
+        <%= link_to question_path(@question), class: "w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-primary" do %>
+          <span class="material-symbols-outlined">arrow_back</span>
+        <% end %>
+        <h1 class="font-headline-md text-headline-md text-on-surface">回答を投稿する</h1>
+      </div>
+
+      <!-- Original Question Summary (Context Area) -->
+      <section class="bg-surface-container-low rounded-xl p-md mb-lg border border-outline-variant/30 custom-shadow">
+        <div class="flex items-start gap-sm mb-sm">
+          <span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm font-label-sm">質問内容</span>
+          <span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-label-sm"><%= @question.category %></span>
+        </div>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs leading-tight"><%= @question.title %></h2>
+        <p class="font-body-md text-body-md text-on-surface-variant line-clamp-3"><%= @question.content %></p>
+        <% if @question.image.attached? %>
+          <%= image_tag @question.image, alt: @question.title, class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
+        <% end %>
+        <div class="flex items-center gap-base mt-md">
+          <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md"><%= @question.user.username.first %></div>
+          <span class="text-label-md font-label-md text-on-surface-variant">質問者: <%= @question.user.username %>さん</span>
+        </div>
+      </section>
+
+      <!-- Reply Form Area -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+        <!-- Guidelines -->
+        <aside class="lg:col-span-12">
+          <div class="bg-primary-fixed/20 border border-primary-fixed-dim/40 rounded-xl p-md flex gap-md items-start">
+            <span class="material-symbols-outlined text-primary text-[32px]">lightbulb</span>
+            <div>
+              <p class="font-label-md text-label-md text-on-primary-fixed mb-xs">回答のヒント</p>
+              <p class="text-body-md text-on-surface-variant leading-relaxed">相手の状況に寄り添った回答を心がけましょう。ご自身の経験に基づいた具体的なアドバイスや、こだわっているポイントなどを共有すると、質問者さんにとって非常に助けになります。</p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Form -->
+        <%= form_with model: [@question, @answer], class: "lg:col-span-12 space-y-lg" do |f| %>
+          <% if @answer.errors.any? %>
+            <div class="rounded-lg bg-error-container text-on-error-container p-md font-body-sm text-body-sm">
+              <ul class="list-disc list-inside space-y-xs">
+                <% @answer.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="relative">
+            <label class="block font-label-md text-label-md text-on-surface-variant mb-base" for="reply-content">回答内容</label>
+            <%= f.text_area :content, id: "reply-content", rows: 10, placeholder: "猫好きの仲間にアドバイスや経験を共有しましょう...",
+                  class: "w-full bg-surface border-2 border-outline-variant/50 rounded-xl p-md focus:border-primary focus:ring-0 transition-all text-body-md leading-relaxed placeholder:text-on-surface-variant/40" %>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="space-y-base">
+            <label class="block font-label-md text-label-md text-on-surface-variant">画像を追加(任意)</label>
+            <label for="answer_image" class="group relative w-full h-40 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer overflow-hidden text-center px-md">
+              <span class="material-symbols-outlined text-primary text-[40px] mb-xs group-hover:scale-110 transition-transform">pets</span>
+              <p class="font-label-md text-label-md text-on-surface-variant">画像を選択</p>
+              <p id="answer-image-filename" class="text-label-sm text-on-surface-variant/60 mt-xs">愛猫の写真や参考画像をシェアしましょう</p>
+            </label>
+            <%= f.file_field :image, id: "answer_image", accept: "image/png,image/jpeg,image/gif,image/webp", class: "hidden" %>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col md:flex-row items-center justify-end gap-md pt-md">
+            <%= link_to "キャンセル", question_path(@question), class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors underline underline-offset-4" %>
+            <button class="w-full md:w-auto bg-primary-container text-on-primary-container px-xl py-md rounded-full font-headline-sm text-headline-sm shadow-sm hover:shadow-md transition-all duration-200" type="submit">回答を投稿する</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // 画像を選んだらファイル名を表示
+    document.getElementById("answer_image")?.addEventListener("change", (e) => {
+      const label = document.getElementById("answer-image-filename");
+      const file = e.target.files[0];
+      if (label) label.textContent = file ? `選択中: ${file.name}` : "愛猫の写真や参考画像をシェアしましょう";
+    });
+  </script>
+
+  <!-- BottomNavBar (Mobile Only) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface-container-low border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl">
+    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
+      <span class="material-symbols-outlined">home</span>
+      <span class="font-label-sm text-label-sm">ホーム</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span class="font-label-sm text-label-sm">お迎え診断</span>
+    </a>
+    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" do %>
+      <span class="material-symbols-outlined">forum</span>
+      <span class="font-label-sm text-label-sm">相談室</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+      <span class="material-symbols-outlined">person</span>
+      <span class="font-label-sm text-label-sm">マイページ</span>
+    </a>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="w-full py-xl px-gutter bg-surface-container-low border-t border-outline-variant/30 mt-auto">
+    <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+      <div class="font-headline-sm text-headline-sm text-primary">ねこの集会場</div>
+      <div class="flex flex-wrap justify-center gap-md">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">利用規約</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">プライバシーポリシー</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">お問い合わせ</a>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">ブランドメッセージ</a>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant/70">© 2026 ねこの集会場. 猫との暮らしに、共感と責任を。</p>
+    </div>
+  </footer>
+</div>

@@ -38,5 +38,51 @@
     <% end %>
 
     <%= yield %>
+
+    <%# 画像ライトボックス（js-zoomable な画像をクリックで全体表示） %>
+    <div id="image-lightbox" style="z-index: 100;" class="hidden fixed inset-0 bg-black/80 items-center justify-center p-4 cursor-zoom-out">
+      <!-- ねこの顔の×クローズボタン（Tailwind非依存でインライン指定） -->
+      <button type="button" aria-label="閉じる"
+              style="position:absolute; top:20px; right:20px; width:48px; height:48px; border-radius:9999px; background:#ffffff; color:#201a14; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 15px -3px rgba(0,0,0,.3); cursor:pointer;">
+        <span style="position:absolute; top:-6px; left:6px; width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:13px solid #ffffff; transform:rotate(-28deg);"></span>
+        <span style="position:absolute; top:-6px; right:6px; width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:13px solid #ffffff; transform:rotate(28deg);"></span>
+        <span class="material-symbols-outlined" style="font-size:26px;">close</span>
+      </button>
+      <img class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" alt="">
+    </div>
+    <script>
+      (function () {
+        if (window.__lightboxBound) return;
+        window.__lightboxBound = true;
+
+        function closeLightbox() {
+          const overlay = document.getElementById("image-lightbox");
+          if (overlay) { overlay.classList.add("hidden"); overlay.classList.remove("flex"); }
+        }
+
+        document.addEventListener("click", function (e) {
+          const overlay = document.getElementById("image-lightbox");
+          if (!overlay) return;
+          // 開いている時にオーバーレイをクリックしたら閉じる
+          if (!overlay.classList.contains("hidden") && overlay.contains(e.target)) {
+            closeLightbox();
+            return;
+          }
+          // 拡大対象の画像をクリックしたら開く
+          const img = e.target.closest("img.js-zoomable");
+          if (img) {
+            const full = overlay.querySelector("img");
+            full.src = img.currentSrc || img.src;
+            full.alt = img.alt || "";
+            overlay.classList.remove("hidden");
+            overlay.classList.add("flex");
+          }
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeLightbox();
+        });
+      })();
+    </script>
   </body>
 </html>
