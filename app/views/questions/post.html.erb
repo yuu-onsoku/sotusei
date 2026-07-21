@@ -1,0 +1,209 @@
+<% content_for :title, "質問を投稿する - ねこの集会場" %>
+
+<div class="min-h-screen">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-sm h-16 border-b border-surface-container-high">
+    <div class="max-w-[1200px] mx-auto flex justify-between items-center px-margin-mobile md:px-lg h-full">
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-primary" %>
+      <nav class="hidden md:flex gap-lg items-center">
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">お迎え診断</a>
+        <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary pb-1" %>
+        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">マイページ</a>
+        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+              class: "px-md py-xs rounded-full font-label-md hover:opacity-90 transition-opacity bg-primary text-on-primary inline-block" %>
+      </nav>
+      <div class="md:hidden">
+        <span class="material-symbols-outlined text-on-surface-variant">menu</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-24 pb-xl px-margin-mobile md:px-lg max-w-[1200px] mx-auto">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-xs mb-lg text-on-surface-variant">
+      <%= link_to "ねこの相談室", questions_path, class: "font-label-sm text-label-sm hover:text-primary" %>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+      <span class="font-label-sm text-label-sm text-primary">質問を投稿する</span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-xl">
+      <!-- Form Canvas -->
+      <div class="flex-1 min-w-0">
+        <div class="mb-lg">
+          <h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">新しい質問を投稿する</h1>
+          <p class="font-body-md text-body-md text-on-surface-variant">あなたの不安や疑問を共有してください。コミュニティの仲間や専門家が優しくサポートします。</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg shadow-[0_4px_24px_rgba(249,197,78,0.1)] border border-surface-container-high">
+          <%= form_with model: @question, url: questions_path, class: "flex flex-col gap-lg" do |f| %>
+            <% if @question.errors.any? %>
+              <div class="rounded-lg bg-error-container text-on-error-container p-md font-body-sm text-body-sm">
+                <ul class="list-disc list-inside space-y-xs">
+                  <% @question.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= f.hidden_field :category, id: "category-input" %>
+
+            <!-- Category Selection -->
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-sm">カテゴリーを選択</label>
+              <div class="flex flex-wrap gap-sm">
+                <button data-category="食事" class="category-chip px-md py-sm rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-all flex items-center gap-xs" onclick="selectCategory(this)" type="button">
+                  <span class="material-symbols-outlined text-[18px]">restaurant</span> 食事
+                </button>
+                <button data-category="健康・医療" class="category-chip px-md py-sm rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-all flex items-center gap-xs" onclick="selectCategory(this)" type="button">
+                  <span class="material-symbols-outlined text-[18px]">medical_services</span> 健康・医療
+                </button>
+                <button data-category="住環境・暮らし" class="category-chip px-md py-sm rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-all flex items-center gap-xs" onclick="selectCategory(this)" type="button">
+                  <span class="material-symbols-outlined text-[18px]">home</span> 住環境・暮らし
+                </button>
+                <button data-category="しつけ・行動" class="category-chip px-md py-sm rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-all flex items-center gap-xs" onclick="selectCategory(this)" type="button">
+                  <span class="material-symbols-outlined text-[18px]">pets</span> しつけ・行動
+                </button>
+                <button data-category="その他" class="category-chip px-md py-sm rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-all flex items-center gap-xs" onclick="selectCategory(this)" type="button">
+                  <span class="material-symbols-outlined text-[18px]">help</span> その他
+                </button>
+              </div>
+            </div>
+            <!-- Title Input -->
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-sm" for="title">質問のタイトル</label>
+              <%= f.text_field :title, id: "title", placeholder: "例：生後3ヶ月の子猫のご飯の量について",
+                    class: "w-full h-12 bg-transparent border border-outline-variant rounded-lg px-md font-body-md form-input-focus transition-all" %>
+            </div>
+            <!-- Content Area -->
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-sm" for="content">質問の内容</label>
+              <%= f.text_area :content, id: "content", rows: 10, placeholder: "状況を詳しく教えていただけると、より良いアドバイスが集まりやすくなります。",
+                    class: "w-full bg-transparent border border-outline-variant rounded-lg p-md font-body-md form-input-focus transition-all resize-none" %>
+            </div>
+            <!-- Image Upload -->
+            <div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-primary text-[32px] mb-xs">add_a_photo</span>
+              <span class="font-label-md text-label-md text-on-surface-variant">写真を添付する（任意）</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70 mt-xs">ねこの様子がわかる写真を添えると、伝わりやすくなります。</span>
+            </div>
+            <!-- Submit Button -->
+            <div class="pt-md border-t border-surface-container-high flex flex-col md:flex-row items-center justify-between gap-md">
+              <p class="font-body-sm text-body-sm text-on-surface-variant">
+                投稿前に<a class="text-primary underline" href="#">ガイドライン</a>をご確認ください。あなたの経験が、他の飼い主さんの助けにもなります。
+              </p>
+              <button class="w-full md:w-auto h-12 px-xl bg-primary text-on-primary rounded-full font-label-md text-label-md shadow-md hover:scale-[1.02] active:scale-95 transition-all" type="submit">
+                質問を投稿する
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Side Sidebar: Guidance & Support -->
+      <aside class="w-full lg:w-[320px] lg:shrink-0 flex flex-col gap-md">
+        <!-- Supportive Card -->
+        <div class="bg-surface-container rounded-xl p-md border border-surface-container-highest">
+          <div class="flex items-center gap-sm mb-sm text-primary">
+            <span class="material-symbols-outlined">lightbulb</span>
+            <h2 class="font-headline-sm text-headline-sm">良い回答をもらうコツ</h2>
+          </div>
+          <ul class="flex flex-col gap-sm">
+            <li class="flex gap-sm items-start">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+              <p class="font-body-sm text-body-sm text-on-surface">ねこの年齢、種類、現在の様子を詳しく書きましょう。</p>
+            </li>
+            <li class="flex gap-sm items-start">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+              <p class="font-body-sm text-body-sm text-on-surface">「困っていること」を具体的に1つ絞ると伝わりやすいです。</p>
+            </li>
+            <li class="flex gap-sm items-start">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+              <p class="font-body-sm text-body-sm text-on-surface">これまでに試してみたことがあれば、それも共有しましょう。</p>
+            </li>
+          </ul>
+        </div>
+        <!-- Emergency Contact Card -->
+        <div class="bg-inverse-surface text-inverse-on-surface rounded-xl p-md">
+          <div class="flex items-center gap-sm mb-sm text-primary-fixed">
+            <span class="material-symbols-outlined">warning</span>
+            <h2 class="font-headline-sm text-headline-sm">緊急の場合は</h2>
+          </div>
+          <p class="font-body-sm text-body-sm mb-md opacity-90">
+            ねこの様子が急変している、ぐったりしている、出血があるなどの緊急時は、掲示板への投稿を待たず、すぐに最寄りの動物病院へ連絡してください。
+          </p>
+          <button class="w-full py-sm border border-primary-fixed text-primary-fixed rounded-lg font-label-md hover:bg-white/10 transition-colors">
+            近くの夜間病院を探す
+          </button>
+        </div>
+        <!-- Decorative Image -->
+        <div class="rounded-xl overflow-hidden aspect-video border border-surface-container-high">
+          <img alt="眠っている猫" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdqi1EuI9S57HKIHsysVZnXK7Xsl7oWIYH7u5B8dNQdgV59F5M56VCKFNXAb8Pn-qizikhbHHgYbcTTXXInRP0OERUA9LFTIwuQbfJ3oRIsQ64z071x67gr41k85Enn0WNqBltOWKWknMj5Nple4l217C2mkfjSQFPqmFpDbNLCn1fi_3ltYY4lw01A9qrDJ_1eqNmNZUwL15eAFtz328JYCGu78WwXTSDTgmIUvrdW_ezK3ekgi0XxgD8MKmfcOmZ5beCMk09TDFx"/>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-lg px-margin-mobile md:px-lg flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">
+    <div class="flex flex-col items-center md:items-start gap-xs">
+      <div class="text-headline-sm font-headline-sm text-primary">ねこの集会場</div>
+      <p class="text-label-sm font-label-sm text-on-surface-variant">© 2026 ねこの集会場. 全著作権所有</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-md">
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">利用規約</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">プライバシーポリシー</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">お問い合わせ</a>
+      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">ブランドメッセージ</a>
+    </div>
+  </footer>
+
+  <!-- BottomNavBar (Mobile only) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-surface-container-high shadow-[0_-4px_12px_rgba(249,197,78,0.06)] rounded-t-xl">
+    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" do %>
+      <span class="material-symbols-outlined">home</span>
+      <span class="font-label-sm text-label-sm">ホーム</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" href="#">
+      <span class="material-symbols-outlined">fact_check</span>
+      <span class="font-label-sm text-label-sm">お迎え診断</span>
+    </a>
+    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" do %>
+      <span class="material-symbols-outlined fill">forum</span>
+      <span class="font-label-sm text-label-sm">相談室</span>
+    <% end %>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" href="#">
+      <span class="material-symbols-outlined">person</span>
+      <span class="font-label-sm text-label-sm">マイページ</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+  function selectCategory(button) {
+    // すべてのチップをリセット
+    document.querySelectorAll(".category-chip").forEach((chip) => {
+      chip.classList.remove("active", "bg-primary", "text-on-primary", "border-primary");
+      chip.classList.add("border-outline-variant", "text-on-surface-variant");
+    });
+    // 選択したチップをアクティブに
+    button.classList.remove("border-outline-variant", "text-on-surface-variant");
+    button.classList.add("active", "bg-primary", "text-on-primary", "border-primary");
+    // 選択したカテゴリーを hidden フィールドへ反映
+    const input = document.getElementById("category-input");
+    if (input) input.value = button.dataset.category;
+    // 軽いバウンス
+    button.style.transform = "scale(0.95)";
+    setTimeout(() => { button.style.transform = "scale(1)"; }, 100);
+  }
+
+  // 初期選択：再表示時は選択済みカテゴリー、無ければ先頭（Turbo遷移でも動くよう即時実行）
+  (function () {
+    const input = document.getElementById("category-input");
+    let target = null;
+    if (input && input.value) {
+      target = document.querySelector('.category-chip[data-category="' + input.value + '"]');
+    }
+    target = target || document.querySelector(".category-chip");
+    if (target) selectCategory(target);
+  })();
+</script>

@@ -152,3 +152,10 @@
   border-color: #f9c54e;
   box-shadow: 0 0 0 2px rgba(249, 197, 78, 0.25);
 }
+
+.form-input-focus:focus {
+  border-width: 2px;
+  border-color: #f9c54e;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(249, 197, 78, 0.15);
+}
