@@ -3,7 +3,13 @@ class QuestionsController < ApplicationController
 
   # ねこの相談室（質問一覧）
   def index
-    @questions = Question.includes(:user).order(created_at: :desc)
+    @questions = Question.includes(:user, :answers).order(created_at: :desc)
+  end
+
+  # 質問の詳細と、寄せられた回答の一覧
+  def show
+    @question = Question.includes(:user).find(params[:id])
+    @answers = @question.answers.includes(:user, image_attachment: :blob).order(created_at: :asc)
   end
 
   # 質問を投稿する（フォーム）。テンプレートは post.html.erb。
@@ -25,6 +31,6 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :content, :category)
+    params.require(:question).permit(:title, :content, :category, :image)
   end
 end

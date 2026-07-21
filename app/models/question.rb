@@ -1,5 +1,9 @@
 class Question < ApplicationRecord
+  # 添付画像（任意）
+  include ImageAttachable
+
   belongs_to :user
+  has_many :answers, dependent: :destroy
 
   # 投稿フォームのカテゴリー選択肢
   CATEGORIES = ["食事", "健康・医療", "住環境・暮らし", "しつけ・行動", "その他"].freeze
