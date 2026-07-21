@@ -81,10 +81,13 @@
                     class: "w-full bg-transparent border border-outline-variant rounded-lg p-md font-body-md form-input-focus transition-all resize-none" %>
             </div>
             <!-- Image Upload -->
-            <div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer">
-              <span class="material-symbols-outlined text-primary text-[32px] mb-xs">add_a_photo</span>
-              <span class="font-label-md text-label-md text-on-surface-variant">写真を添付する（任意）</span>
-              <span class="font-body-sm text-body-sm text-on-surface-variant opacity-70 mt-xs">ねこの様子がわかる写真を添えると、伝わりやすくなります。</span>
+            <div>
+              <label for="question_image" class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer text-center">
+                <span class="material-symbols-outlined text-primary text-[32px] mb-xs">add_a_photo</span>
+                <span class="font-label-md text-label-md text-on-surface-variant">写真を添付する（任意）</span>
+                <span id="image-filename" class="font-body-sm text-body-sm text-on-surface-variant opacity-70 mt-xs">ねこの様子がわかる写真を添えると、伝わりやすくなります。</span>
+              </label>
+              <%= f.file_field :image, id: "question_image", accept: "image/png,image/jpeg,image/gif,image/webp", class: "hidden" %>
             </div>
             <!-- Submit Button -->
             <div class="pt-md border-t border-surface-container-high flex flex-col md:flex-row items-center justify-between gap-md">
@@ -206,4 +209,11 @@
     target = target || document.querySelector(".category-chip");
     if (target) selectCategory(target);
   })();
+
+  // 画像を選んだらファイル名を表示
+  document.getElementById("question_image")?.addEventListener("change", (e) => {
+    const label = document.getElementById("image-filename");
+    const file = e.target.files[0];
+    if (label) label.textContent = file ? `選択中: ${file.name}` : "ねこの様子がわかる写真を添えると、伝わりやすくなります。";
+  });
 </script>
