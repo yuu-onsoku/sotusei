@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_21_112935) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_22_042221) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,11 +54,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_21_112935) do
 
   create_table "likes", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "question_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["question_id"], name: "index_likes_on_question_id"
-    t.index ["user_id", "question_id"], name: "index_likes_on_user_id_and_question_id", unique: true
+    t.string "likeable_type", null: false
+    t.bigint "likeable_id", null: false
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
+    t.index ["user_id", "likeable_type", "likeable_id"], name: "index_likes_on_user_and_likeable", unique: true
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
@@ -91,7 +92,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_21_112935) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
-  add_foreign_key "likes", "questions"
   add_foreign_key "likes", "users"
   add_foreign_key "questions", "users"
 end

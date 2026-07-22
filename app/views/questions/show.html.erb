@@ -35,19 +35,23 @@
             <span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm font-label-sm">質問内容</span>
             <span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-label-sm"><%= @question.category %></span>
           </div>
-          <span class="font-label-sm text-label-sm text-outline shrink-0"><%= @question.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+          <div class="flex items-center gap-sm shrink-0">
+            <span class="font-label-sm text-label-sm text-outline"><%= @question.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+            <% if @question.user_id == current_user.id %>
+              <%= link_to edit_question_path(@question), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
+                <span class="material-symbols-outlined text-[16px]">edit</span>編集
+              <% end %>
+            <% end %>
+          </div>
         </div>
         <h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs leading-tight"><%= @question.title %></h2>
         <p class="font-body-md text-body-md text-on-surface-variant whitespace-pre-line leading-relaxed"><%= @question.content %></p>
         <% if @question.image.attached? %>
           <%= image_tag @question.image, alt: @question.title, class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
         <% end %>
-        <div class="flex items-center justify-between gap-sm mt-md">
-          <div class="flex items-center gap-base min-w-0">
-            <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md shrink-0"><%= @question.user.username.first %></div>
-            <span class="text-label-md font-label-md text-on-surface-variant truncate">質問者: <%= @question.user.username %>さん</span>
-          </div>
-          <%= render "likes/button", question: @question, variant: "detail" %>
+        <div class="flex items-center gap-base mt-md">
+          <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md shrink-0"><%= @question.user.username.first %></div>
+          <span class="text-label-md font-label-md text-on-surface-variant truncate">質問者: <%= @question.user.username %>さん</span>
         </div>
       </section>
 
@@ -82,6 +86,14 @@
                 <%= image_tag answer.image, loading: "lazy", alt: "#{answer.user.username}さんの回答画像",
                       class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
               <% end %>
+              <div class="flex items-center justify-end gap-md border-t border-outline-variant mt-sm pt-sm">
+                <% if answer.user_id == current_user.id %>
+                  <%= link_to edit_question_answer_path(@question, answer), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
+                    <span class="material-symbols-outlined text-[16px]">edit</span>編集
+                  <% end %>
+                <% end %>
+                <%= render "likes/button", likeable: answer %>
+              </div>
             </article>
           <% end %>
         <% else %>

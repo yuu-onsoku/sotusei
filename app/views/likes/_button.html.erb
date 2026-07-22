@@ -1,14 +1,12 @@
-<%# 肉球いいねボタン。押した瞬間に見た目を切り替え、サーバーへは裏で送る（Xのいいねのような手触り） %>
-<% liked = question.liked_by?(current_user) %>
-<% detail = variant.to_s == "detail" %>
-<% base_class = detail ? "flex items-center gap-1 px-3 py-1 rounded-full border transition-colors hover:text-primary" : "flex items-center gap-1 transition-colors hover:text-primary" %>
-<% liked_class = detail ? "border-primary text-primary bg-primary-container/30" : "text-primary" %>
-<% unliked_class = detail ? "border-outline-variant text-on-surface-variant" : "text-on-surface-variant" %>
+<%# 肉球いいねボタン（質問・回答の共通）。押した瞬間に見た目を切り替え、サーバーへは裏で送る %>
+<% liked = likeable.liked_by?(current_user) %>
+<% liked_class = "text-primary" %>
+<% unliked_class = "text-on-surface-variant" %>
 
 <%# JS が送信方法（いいね／取り消し）を切り替えるため、フォーム固有ではなくセッションの CSRF トークンを使う %>
-<%= form_with url: question_like_path(question), method: :post,
+<%= form_with url: polymorphic_path([ likeable, :like ]), method: :post,
       authenticity_token: form_authenticity_token,
-      class: "inline-flex#{' shrink-0' if detail}",
+      class: "inline-flex",
       data: {
         controller: "like",
         like_liked_value: liked,
@@ -20,8 +18,8 @@
   <%= hidden_field_tag :_method, liked ? "delete" : "post", id: nil, data: { like_target: "method" } %>
   <button type="submit" data-like-target="button" data-action="like#toggle"
           aria-pressed="<%= liked %>" aria-label="いいね"
-          class="<%= base_class %> <%= liked ? liked_class : unliked_class %>">
+          class="flex items-center gap-1 transition-colors hover:text-primary <%= liked ? liked_class : unliked_class %>">
     <span data-like-target="icon" class="material-symbols-outlined text-sm <%= "fill" if liked %>">pets</span>
-    <span data-like-target="count" class="font-label-md text-label-md"><%= question.likes.size %></span>
+    <span data-like-target="count" class="font-label-md text-label-md"><%= likeable.likes.size %></span>
   </button>
 <% end %>
