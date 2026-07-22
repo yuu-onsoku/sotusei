@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_own_question, only: %i[edit update]
 
   # ねこの相談室（質問一覧）
   def index
@@ -9,7 +10,7 @@ class QuestionsController < ApplicationController
   # 質問の詳細と、寄せられた回答の一覧
   def show
     @question = Question.includes(:user, :likes).find(params[:id])
-    @answers = @question.answers.includes(:user, image_attachment: :blob).order(created_at: :asc)
+    @answers = @question.answers.includes(:user, :likes, image_attachment: :blob).order(created_at: :asc)
   end
 
   # 質問を投稿する（フォーム）。テンプレートは post.html.erb。
@@ -28,7 +29,27 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # 質問を編集する（フォーム）。テンプレートは投稿時と共通の post.html.erb。
+  def edit
+    render :post
+  end
+
+  # 質問の更新
+  def update
+    if @question.update(question_params)
+      redirect_to question_path(@question), notice: "質問を更新しました。"
+    else
+      render :post, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  # 編集できるのは自分の質問だけ
+  def set_own_question
+    @question = current_user.questions.find_by(id: params[:id])
+    redirect_to questions_path, alert: "編集できるのは自分の質問だけです。" if @question.nil?
+  end
 
   def question_params
     params.require(:question).permit(:title, :content, :category, :image)

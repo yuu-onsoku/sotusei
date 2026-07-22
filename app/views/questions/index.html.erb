@@ -123,7 +123,7 @@
                   <span class="material-symbols-outlined text-sm">forum</span>
                   <span class="font-label-md text-label-md"><%= question.answers.size %></span>
                 <% end %>
-                <%= render "likes/button", question: question, variant: "card" %>
+                <%= render "likes/button", likeable: question %>
               </div>
             </div>
           </article>

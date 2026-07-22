@@ -1,16 +1,16 @@
 class LikesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question
+  before_action :set_likeable
 
-  # いいねする（同じ投稿には1回まで。二重送信されても増えない）
+  # いいねする（同じ対象には1回まで。二重送信されても増えない）
   def create
-    current_user.likes.create(question: @question)
+    current_user.likes.create(likeable: @likeable)
     respond_to_toggle
   end
 
   # いいねを取り消す
   def destroy
-    current_user.likes.find_by(question: @question)&.destroy
+    current_user.likes.find_by(likeable: @likeable)&.destroy
     respond_to_toggle
   end
 
@@ -25,7 +25,13 @@ class LikesController < ApplicationController
     end
   end
 
-  def set_question
-    @question = Question.find(params[:question_id])
+  # 質問・回答のどちらへのいいねかはネストされたパスで決まる
+  def set_likeable
+    @likeable =
+      if params[:question_id]
+        Question.find(params[:question_id])
+      else
+        Answer.find(params[:answer_id])
+      end
   end
 end

@@ -1,4 +1,6 @@
-<% content_for :title, "質問を投稿する - ねこの集会場" %>
+<% editing = @question.persisted? %>
+<% page_title = editing ? "質問を編集する" : "質問を投稿する" %>
+<% content_for :title, "#{page_title} - ねこの集会場" %>
 
 <div class="min-h-screen">
   <!-- TopAppBar -->
@@ -23,18 +25,21 @@
     <nav class="flex items-center gap-xs mb-lg text-on-surface-variant">
       <%= link_to "ねこの相談室", questions_path, class: "font-label-sm text-label-sm hover:text-primary" %>
       <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-      <span class="font-label-sm text-label-sm text-primary">質問を投稿する</span>
+      <span class="font-label-sm text-label-sm text-primary"><%= page_title %></span>
     </nav>
 
     <div class="flex flex-col lg:flex-row gap-xl">
       <!-- Form Canvas -->
       <div class="flex-1 min-w-0">
         <div class="mb-lg">
-          <h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">新しい質問を投稿する</h1>
-          <p class="font-body-md text-body-md text-on-surface-variant">あなたの不安や疑問を共有してください。コミュニティの仲間や専門家が優しくサポートします。</p>
+          <h1 class="font-headline-lg text-headline-lg text-on-background mb-sm"><%= editing ? "質問を編集する" : "新しい質問を投稿する" %></h1>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            <%= editing ? "内容を書き直して、伝わりやすい質問にしましょう。" : "あなたの不安や疑問を共有してください。コミュニティの仲間や専門家が優しくサポートします。" %>
+          </p>
         </div>
         <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg shadow-[0_4px_24px_rgba(249,197,78,0.1)] border border-surface-container-high">
-          <%= form_with model: @question, url: questions_path, class: "flex flex-col gap-lg" do |f| %>
+          <%# 新規なら POST /questions、編集なら PATCH /questions/:id %>
+          <%= form_with model: @question, class: "flex flex-col gap-lg" do |f| %>
             <% if @question.errors.any? %>
               <div class="rounded-lg bg-error-container text-on-error-container p-md font-body-sm text-body-sm">
                 <ul class="list-disc list-inside space-y-xs">
@@ -82,6 +87,12 @@
             </div>
             <!-- Image Upload -->
             <div>
+              <% if @question.image.attached? %>
+                <div class="mb-sm">
+                  <p class="font-label-md text-label-md text-on-surface-variant mb-xs">現在の写真（新しく選ぶと差し替わります）</p>
+                  <%= image_tag @question.image, alt: @question.title, class: "w-full max-h-60 object-cover rounded-lg border border-outline-variant" %>
+                </div>
+              <% end %>
               <label for="question_image" class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer text-center">
                 <span class="material-symbols-outlined text-primary text-[32px] mb-xs">add_a_photo</span>
                 <span class="font-label-md text-label-md text-on-surface-variant">写真を添付する（任意）</span>
@@ -95,7 +106,7 @@
                 投稿前に<a class="text-primary underline" href="#">ガイドライン</a>をご確認ください。あなたの経験が、他の飼い主さんの助けにもなります。
               </p>
               <button class="w-full md:w-auto h-12 px-xl bg-primary text-on-primary rounded-full font-label-md text-label-md shadow-md hover:scale-[1.02] active:scale-95 transition-all" type="submit">
-                質問を投稿する
+                <%= editing ? "変更を保存する" : "質問を投稿する" %>
               </button>
             </div>
           <% end %>
