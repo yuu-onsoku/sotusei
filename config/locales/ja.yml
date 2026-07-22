@@ -1,0 +1,32 @@
+# モデル名・項目名の日本語訳。
+# エラーメッセージ本体（「を入力してください」など）は rails-i18n / devise-i18n が提供する。
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      question: 質問
+      answer: 回答
+      like: いいね
+    attributes:
+      user:
+        username: ユーザー名
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認用）
+        current_password: 現在のパスワード
+        remember_me: ログインを保持する
+      question:
+        user: 投稿者
+        title: タイトル
+        content: 内容
+        category: カテゴリー
+        image: 画像
+      answer:
+        user: 回答者
+        question: 質問
+        content: 回答内容
+        image: 画像
+      like:
+        user: ユーザー
+        likeable: 対象
