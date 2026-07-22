@@ -23,6 +23,10 @@ module Myapp
     #
     # 投稿時刻などを日本時間で表示する（本番サーバーのタイムゾーンはUTCのため）
     config.time_zone = "Tokyo"
+
+    # エラーメッセージなどを日本語で表示する
+    config.i18n.default_locale = :ja
+    config.i18n.available_locales = %i[ja en]
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
