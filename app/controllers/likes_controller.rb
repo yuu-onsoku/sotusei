@@ -2,25 +2,31 @@ class LikesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_likeable
 
-  # いいねする（同じ対象には1回まで。二重送信されても増えない）
+  # いいねする。すでにいいね済みなら何もしない（二重送信されても増えない）。
   def create
     current_user.likes.create(likeable: @likeable)
-    respond_to_toggle
+    render_button
   end
 
-  # いいねを取り消す
+  # いいねを取り消す。いいねが無ければ何もしない（二重送信されても壊れない）。
   def destroy
     current_user.likes.find_by(likeable: @likeable)&.destroy
-    respond_to_toggle
+    render_button
   end
 
   private
 
-  # 画面は押した時点で JS が更新済みなので、Turbo からの送信には何も返さない。
+  # ボタンだけを描き直して、画面をサーバーの状態に合わせる。
   # JS が無効な場合は元の画面へ戻す。
-  def respond_to_toggle
+  def render_button
     respond_to do |format|
-      format.turbo_stream { head :no_content }
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          helpers.dom_id(@likeable, :like_form),
+          partial: "likes/form",
+          locals: { likeable: @likeable.reload }
+        )
+      end
       format.html { redirect_back fallback_location: questions_path }
     end
   end

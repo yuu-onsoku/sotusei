@@ -6,6 +6,12 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+# 本番用。CLOUDINARY_URL（cloudinary://APIキー:APIシークレット@クラウド名）を
+# 環境変数で渡す。gem が同名の環境変数を自動で読むため、ここでは指定不要。
+cloudinary:
+  service: Cloudinary
+  secure: true
+
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
 #   service: S3

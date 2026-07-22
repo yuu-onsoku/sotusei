@@ -1,0 +1,23 @@
+# Render の無料プランは15分アクセスが無いとスリープし、復帰に約1分かかる。
+# 10分おきにヘルスチェックを叩いて起こし続ける。
+name: Keep Render awake
+
+on:
+  schedule:
+    # 10分おき（GitHub 側の混雑で数分遅れることがある）
+    - cron: "*/10 * * * *"
+  # 手動でも実行できるようにしておく
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ヘルスチェックを叩く
+        # スリープからの復帰を待つため、長めのタイムアウトと再試行を設定する
+        run: |
+          curl --fail --silent --show-error \
+               --max-time 180 --retry 3 --retry-delay 30 --retry-all-errors \
+               --write-out "HTTP %{http_code} / %{time_total}秒\n" \
+               --output /dev/null \
+               https://sotusei.onrender.com/up

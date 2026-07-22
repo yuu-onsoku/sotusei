@@ -18,6 +18,10 @@ services:
       # Neon の接続文字列を Render ダッシュボードで設定する（sslmode=require 付き）。
       - key: DATABASE_URL
         sync: false
+      # Cloudinary の接続文字列（cloudinary://APIキー:APIシークレット@クラウド名）を
+      # Render ダッシュボードで設定する。アップロード画像の保存先。
+      - key: CLOUDINARY_URL
+        sync: false
       - key: RAILS_ENV
         value: production
       - key: RAILS_LOG_TO_STDOUT

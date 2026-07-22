@@ -1,25 +1,10 @@
-<%# 肉球いいねボタン（質問・回答の共通）。押した瞬間に見た目を切り替え、サーバーへは裏で送る %>
-<% liked = likeable.liked_by?(current_user) %>
-<% liked_class = "text-primary" %>
-<% unliked_class = "text-on-surface-variant" %>
-
-<%# JS が送信方法（いいね／取り消し）を切り替えるため、フォーム固有ではなくセッションの CSRF トークンを使う %>
-<%= form_with url: polymorphic_path([ likeable, :like ]), method: :post,
-      authenticity_token: form_authenticity_token,
-      class: "inline-flex",
-      data: {
-        controller: "like",
-        like_liked_value: liked,
-        like_liked_class: liked_class,
-        like_unliked_class: unliked_class,
-        action: "turbo:submit-end->like#settle"
-      } do %>
-  <%# いいね済みなら次の送信は取り消し（DELETE）。JS 側でも押すたびに切り替える %>
-  <%= hidden_field_tag :_method, liked ? "delete" : "post", id: nil, data: { like_target: "method" } %>
-  <button type="submit" data-like-target="button" data-action="like#toggle"
-          aria-pressed="<%= liked %>" aria-label="いいね"
-          class="flex items-center gap-1 transition-colors hover:text-primary <%= liked ? liked_class : unliked_class %>">
-    <span data-like-target="icon" class="material-symbols-outlined text-sm <%= "fill" if liked %>">pets</span>
-    <span data-like-target="count" class="font-label-md text-label-md"><%= likeable.likes.size %></span>
-  </button>
-<% end %>
+<%# 肉球いいねボタン（質問・回答の共通）。
+    外側の span は差し替えられないので、Stimulus とアニメーションはここに置く。
+    中のフォームはサーバーからの応答で丸ごと差し替わり、表示が常にサーバーの状態に揃う。 %>
+<span class="inline-flex"
+      data-controller="like"
+      data-like-liked-class="text-primary"
+      data-like-unliked-class="text-on-surface-variant"
+      data-action="turbo:submit-end->like#settle">
+  <%= render "likes/form", likeable: likeable %>
+</span>
