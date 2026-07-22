@@ -41,6 +41,11 @@
               <%= link_to edit_question_path(@question), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
                 <span class="material-symbols-outlined text-[16px]">edit</span>編集
               <% end %>
+              <%= link_to question_path(@question),
+                    data: { turbo_method: :delete, turbo_confirm: "この質問を削除しますか？寄せられた回答も一緒に削除されます。" },
+                    class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-error transition-colors" do %>
+                <span class="material-symbols-outlined text-[16px]">delete</span>削除
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -90,6 +95,11 @@
                 <% if answer.user_id == current_user.id %>
                   <%= link_to edit_question_answer_path(@question, answer), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
                     <span class="material-symbols-outlined text-[16px]">edit</span>編集
+                  <% end %>
+                  <%= link_to question_answer_path(@question, answer),
+                        data: { turbo_method: :delete, turbo_confirm: "この回答を削除しますか？" },
+                        class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-error transition-colors" do %>
+                    <span class="material-symbols-outlined text-[16px]">delete</span>削除
                   <% end %>
                 <% end %>
                 <%= render "likes/button", likeable: answer %>

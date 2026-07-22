@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question
-  before_action :set_own_answer, only: %i[edit update]
+  before_action :set_own_answer, only: %i[edit update destroy]
 
   # 回答を投稿する（フォーム）
   def new
@@ -33,16 +33,22 @@ class AnswersController < ApplicationController
     end
   end
 
+  # 回答の削除（いいねも一緒に消える）
+  def destroy
+    @answer.destroy
+    redirect_to question_path(@question), notice: "回答を削除しました。"
+  end
+
   private
 
   def set_question
     @question = Question.find(params[:question_id])
   end
 
-  # 編集できるのは自分の回答だけ
+  # 編集・削除できるのは自分の回答だけ
   def set_own_answer
     @answer = @question.answers.where(user: current_user).find_by(id: params[:id])
-    redirect_to question_path(@question), alert: "編集できるのは自分の回答だけです。" if @answer.nil?
+    redirect_to question_path(@question), alert: "自分の回答だけが編集・削除できます。" if @answer.nil?
   end
 
   def answer_params

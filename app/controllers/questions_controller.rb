@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_own_question, only: %i[edit update]
+  before_action :set_own_question, only: %i[edit update destroy]
 
   # ねこの相談室（質問一覧）
   def index
@@ -43,12 +43,18 @@ class QuestionsController < ApplicationController
     end
   end
 
+  # 質問の削除（回答・いいねも一緒に消える）
+  def destroy
+    @question.destroy
+    redirect_to questions_path, notice: "質問を削除しました。"
+  end
+
   private
 
-  # 編集できるのは自分の質問だけ
+  # 編集・削除できるのは自分の質問だけ
   def set_own_question
     @question = current_user.questions.find_by(id: params[:id])
-    redirect_to questions_path, alert: "編集できるのは自分の質問だけです。" if @question.nil?
+    redirect_to questions_path, alert: "自分の質問だけが編集・削除できます。" if @question.nil?
   end
 
   def question_params
