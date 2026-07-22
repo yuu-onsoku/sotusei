@@ -1,0 +1,13 @@
+<%# いいねボタン本体。押した後はこの要素だけがサーバーの状態で差し替わる。
+    フォームの送信方法（いいね＝POST／取り消し＝DELETE）はサーバーが描いた通りに使い、
+    JS では書き換えない。そのため同じ送信が二重に届いても結果は変わらない。 %>
+<% liked = likeable.liked_by?(current_user) %>
+<%= form_with url: polymorphic_path([ likeable, :like ]), method: liked ? :delete : :post,
+      id: dom_id(likeable, :like_form), class: "inline-flex" do %>
+  <button type="submit" data-like-target="button" data-action="like#toggle"
+          data-liked="<%= liked %>" aria-pressed="<%= liked %>" aria-label="いいね"
+          class="flex items-center gap-1 transition-colors hover:text-primary <%= liked ? "text-primary" : "text-on-surface-variant" %>">
+    <span data-like-target="icon" class="material-symbols-outlined text-sm <%= "fill" if liked %>">pets</span>
+    <span data-like-target="count" class="font-label-md text-label-md"><%= likeable.likes.size %></span>
+  </button>
+<% end %>

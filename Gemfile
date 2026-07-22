@@ -21,6 +21,10 @@ gem "jbuilder"
 
 # Flexible authentication solution for Rails [https://github.com/heartcombo/devise]
 gem "devise"
+
+# 本番の画像置き場（Active Storage の保存先を Cloudinary にする）
+# Render のディスクは再起動で消えるため、アップロード画像は外部に保存する。
+gem "cloudinary", "~> 2.4"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

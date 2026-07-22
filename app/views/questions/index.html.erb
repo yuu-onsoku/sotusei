@@ -1,4 +1,8 @@
 <% content_for :title, "ねこの相談室 - ねこの集会場" %>
+<%# いいねの状態が古いまま復元されないよう、戻る操作でもキャッシュを使わず取り直す %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
 
 <div class="pt-16 pb-20 md:pb-0">
   <!-- 背景の装飾肉球 -->

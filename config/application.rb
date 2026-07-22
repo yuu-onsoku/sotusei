@@ -21,7 +21,8 @@ module Myapp
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    # 投稿時刻などを日本時間で表示する（本番サーバーのタイムゾーンはUTCのため）
+    config.time_zone = "Tokyo"
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
