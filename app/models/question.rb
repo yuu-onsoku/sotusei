@@ -6,6 +6,7 @@ class Question < ApplicationRecord
 
   belongs_to :user
   has_many :answers, dependent: :destroy
+  #  Question（質問）が他のテーブルとどう繋がっているかを Rails に教える「関連（association）」の宣言です。
 
   # 投稿フォームのカテゴリー選択肢
   CATEGORIES = [ "食事", "健康・医療", "住環境・暮らし", "しつけ・行動", "その他" ].freeze

@@ -28,5 +28,9 @@ module Myapp
     config.i18n.default_locale = :ja
     config.i18n.available_locales = %i[ja en]
     # config.eager_load_paths << Rails.root.join("extras")
+    # rails g model などでテストファイルをRSpec（spec/）側に生成する
+    config.generators do |g|
+      g.test_framework :rspec, fixture: false
+    end
   end
 end
