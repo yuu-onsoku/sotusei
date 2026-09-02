@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ねこの集会場 開発まとめ</title>
+<style>
+  :root {
+    --bg: #fff8f3;
+    --surface: #ffffff;
+    --surface-alt: #fff1e3;
+    --text: #201a14;
+    --muted: #6b5d4f;
+    --primary: #f9c54e;
+    --primary-deep: #a9781a;
+    --border: #e7d8c8;
+    --ok: #2e7d32;
+    --warn: #b26a00;
+    --danger: #b3261e;
+    --code-bg: #2b2622;
+    --code-text: #f6e9dc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 20px 80px; }
+  header.hero {
+    background: linear-gradient(135deg, #f9c54e 0%, #f9d55d 100%);
+    color: #3a2c05;
+    border-radius: 20px;
+    padding: 32px 28px;
+    margin-bottom: 12px;
+    box-shadow: 0 10px 30px -10px rgba(249,197,78,.5);
+  }
+  header.hero h1 { margin: 0 0 6px; font-size: 1.9rem; }
+  header.hero p { margin: 0; font-size: 1rem; opacity: .85; }
+  .paw { font-size: 1.4rem; }
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 20px 0 32px;
+  }
+  nav.toc h2 { margin: 0 0 10px; font-size: 1rem; color: var(--muted); }
+  nav.toc ol { margin: 0; padding-left: 1.3em; }
+  nav.toc a { color: var(--primary-deep); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  section { margin-bottom: 40px; }
+  h2.section-title {
+    font-size: 1.35rem;
+    border-left: 6px solid var(--primary);
+    padding-left: 12px;
+    margin: 0 0 16px;
+  }
+  h3 { font-size: 1.1rem; margin: 24px 0 8px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px -8px rgba(160,120,40,.25);
+  }
+  .card h3:first-child { margin-top: 0; }
+  p { margin: 8px 0; }
+  ul { margin: 8px 0; padding-left: 1.4em; }
+  li { margin: 4px 0; }
+  code {
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: .88em;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: .85rem;
+    line-height: 1.6;
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; }
+  .tag {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .tag.feature { background: #e3f2e4; color: var(--ok); }
+  .tag.fix { background: #fde8e6; color: var(--danger); }
+  .tag.infra { background: #fff0d6; color: var(--warn); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: .92rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--surface-alt); }
+  .note {
+    border-left: 4px solid var(--primary);
+    background: var(--surface-alt);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .danger-box {
+    border-left: 4px solid var(--danger);
+    background: #fdeceb;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .flow {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    white-space: pre;
+    overflow-x: auto;
+    font-size: .82rem;
+    line-height: 1.7;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: .85rem;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .files { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+  .files code { font-size: .82em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1><span class="paw">🐾</span> ねこの集会場 — 開発まとめ</h1>
+  <p>今回のセッションで実装・修正した内容の解説ドキュメント</p>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#overview">全体像</a></li>
+    <li><a href="#detail">質問の詳細ページ（回答の閲覧）</a></li>
+    <li><a href="#image">画像アップロード</a></li>
+    <li><a href="#like">いいね機能（肉球ボタン）</a></li>
+    <li><a href="#like-bug">いいね機能のバグ修正</a></li>
+    <li><a href="#search">質問の検索機能</a></li>
+    <li><a href="#edit-delete">編集・削除機能</a></li>
+    <li><a href="#i18n">日本語化・日本時間</a></li>
+    <li><a href="#deploy">本番デプロイのトラブル解決</a></li>
+    <li><a href="#todo">残っている作業</a></li>
+    <li><a href="#glossary">用語のミニ辞典</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<section id="overview">
+  <h2 class="section-title">1. 全体像</h2>
+  <div class="card">
+    <p>「ねこの相談室」に、質問と回答を中心とした機能を追加し、本番環境（Render）で正しく動くように整えました。大きく分けると次の3種類の作業です。</p>
+    <p>
+      <span class="tag feature">機能追加</span> 回答の閲覧・いいね・検索・編集・削除・画像アップロード<br>
+      <span class="tag fix">バグ修正</span> いいねが正しく動かない問題<br>
+      <span class="tag infra">インフラ</span> 本番の500エラー・デプロイ失敗・画像の保存先・日本語化
+    </p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="detail">
+  <h2 class="section-title">2. 質問の詳細ページ（回答の閲覧）<span class="tag feature">機能追加</span></h2>
+  <div class="card">
+    <p>質問をクリックすると、質問の本文と、そこに寄せられた回答の一覧を見られるページを作りました。</p>
+    <h3>やったこと</h3>
+    <ul>
+      <li>ルーティングに <code>show</code> を追加（<code>/questions/:id</code>）</li>
+      <li>コントローラで質問とその回答を読み込み、投稿順に表示</li>
+      <li>一覧のカードのタイトルや回答数から、詳細ページへ移動できるようにリンクを設定</li>
+      <li>回答投稿後は、一覧ではなく詳細ページに戻るように変更（自分の回答がすぐ見える）</li>
+    </ul>
+    <p class="files">主なファイル: <code>app/views/questions/show.html.erb</code>, <code>app/controllers/questions_controller.rb</code></p>
+    <div class="note">
+      <strong>N+1問題への対応:</strong> 回答一覧を表示するとき、回答ごとに投稿者を1回ずつDBに問い合わせると遅くなります（これを「N+1問題」と呼びます）。<code>includes</code> を使ってまとめて読み込むことで、問い合わせ回数を減らしています。
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="image">
+  <h2 class="section-title">3. 画像アップロード<span class="tag feature">機能追加</span></h2>
+  <div class="card">
+    <p>回答にも画像を添付できるようにし、質問と回答で共通の画像処理をまとめました。</p>
+    <ul>
+      <li><code>ImageAttachable</code> という共通モジュール（concern）を作り、「画像は任意・形式はPNG/JPEG/GIF/WEBP・5MBまで」という検証を1か所に集約</li>
+      <li>質問モデルと回答モデルの両方がこれを取り込むだけで、同じ画像機能を持てるように</li>
+      <li>回答フォームのダミー入力を、実際に保存される入力へ置き換え</li>
+    </ul>
+    <p class="files">主なファイル: <code>app/models/concerns/image_attachable.rb</code></p>
+    <div class="note">
+      <strong>concern（コンサーン）とは:</strong> 複数のモデルで使い回したい共通の処理をまとめておく仕組みです。同じコードを何度も書かずに済み、修正も1か所で済みます。
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="like">
+  <h2 class="section-title">4. いいね機能（肉球ボタン）<span class="tag feature">機能追加</span></h2>
+  <div class="card">
+    <p>肉球ボタンを押すと「いいね」できる機能です。段階的に育てました。</p>
+    <table>
+      <tr><th>段階</th><th>内容</th></tr>
+      <tr><td>①</td><td>質問にいいねを付ける。1人が同じ質問に付けられるのは1回まで（DBの制約とモデルの検証の二重で保証）</td></tr>
+      <tr><td>②</td><td>Xのように、押した瞬間に反応してページが再読み込みされない操作感に</td></tr>
+      <tr><td>③</td><td>回答にもいいねできるように拡張。質問用と回答用でコードを重複させないため、<strong>polymorphic 関連</strong>という仕組みで1つのテーブル・部品を共用</td></tr>
+    </table>
+    <div class="note">
+      <strong>polymorphic（ポリモーフィック）関連とは:</strong> 1つの「いいね」テーブルが、質問にも回答にも紐づけられる仕組みです。<code>likeable_type</code>（対象の種類：質問か回答か）と <code>likeable_id</code>（対象のID）の2つを持つことで、どちらにも対応できます。
+    </div>
+    <p class="files">主なファイル: <code>app/models/like.rb</code>, <code>app/models/concerns/likeable.rb</code>, <code>app/controllers/likes_controller.rb</code>, <code>app/views/likes/</code></p>
+    <p>途中で「詳細ページのいいねは不要」というご要望があり、詳細ページの質問へのいいねは外し、一覧と回答にだけ残しています。</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="like-bug">
+  <h2 class="section-title">5. いいね機能のバグ修正<span class="tag fix">バグ修正</span></h2>
+  <div class="card">
+    <p>「押しても1回目が効かない」「再読み込みで消える」という不具合が起きていました。原因は複数あり、順に突き止めて直しました。</p>
+
+    <h3>原因1：画面とサーバーの状態がズレていた</h3>
+    <p>最初の作りは「押した瞬間に見た目だけJavaScriptで変え、サーバーは結果を返さない」方式でした。ボタンには「次はいいねか、取り消しか」の情報が埋め込まれていたため、ブラウザの「戻る」操作などで画面が古くなると、次のクリックが逆の操作として送られてしまいました。</p>
+
+    <h3>原因2：同じ操作が二重に届くと打ち消し合っていた</h3>
+    <p>「押すたびに反転（トグル）」方式にした時期があり、1回のクリックで送信が2回飛ぶと「付ける→外す」で元に戻ってしまいました。実際のサーバーログにも、その現象が記録されていました。</p>
+
+    <h3>原因3：連打防止のロックが解除されなくなっていた</h3>
+    <p>二重送信を防ぐガードを入れたところ、解除のタイミングを逃してボタンが完全に無反応になってしまいました。</p>
+
+    <h3>最終的な直し方</h3>
+    <ul>
+      <li>「いいねする」と「取り消す」を<strong>別々の操作に分離</strong>。同じ操作が何回届いても結果が変わらないようにした（付けるは1件のまま、外すは0件のまま）</li>
+      <li>押したあとは<strong>サーバーがボタンを描き直し</strong>、表示を必ずサーバーの状態に合わせる（ズレても自動で直る）</li>
+      <li>「戻る」で古い状態が復元されないよう、キャッシュを無効化</li>
+      <li>問題のあった連打ガードは削除</li>
+    </ul>
+
+    <div class="danger-box">
+      <strong>いちばん大事だった気づき:</strong> 実は「動かない」の一番の原因は、テストしていたのが<strong>本番サイト（Render）で、そこに修正が反映されていなかった</strong>ことでした。手元（ローカル）では直っていたのに、本番には古いコードが動き続けていたのです。ここから、次のデプロイ問題の調査につながりました。
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="search">
+  <h2 class="section-title">6. 質問の検索機能<span class="tag feature">機能追加</span></h2>
+  <div class="card">
+    <p>一覧ページの検索バーで、実際に質問を絞り込めるようにしました。</p>
+    <ul>
+      <li>検索バーがタイトル欄と同じ幅になるようデザインを調整（Tailwindの設定値の都合で幅が潰れていたのを修正）</li>
+      <li>タイトルまたは本文にキーワードを含む質問を、大文字小文字を区別せず部分一致で検索</li>
+      <li>記号（<code>%</code> など）を入れても誤作動しないよう、安全にエスケープ</li>
+      <li>検索結果が0件のときの案内メッセージと、条件クリアのボタンを追加</li>
+    </ul>
+    <p class="files">主なファイル: <code>app/models/question.rb</code>（<code>search</code> メソッド）, <code>app/views/questions/index.html.erb</code></p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="edit-delete">
+  <h2 class="section-title">7. 編集・削除機能<span class="tag feature">機能追加</span></h2>
+  <div class="card">
+    <p>質問と回答を、投稿した本人が編集・削除できるようにしました。</p>
+    <ul>
+      <li>投稿フォームをそのまま編集フォームとして使い回し、新規なら「投稿」、編集なら「更新」に自動で切り替え</li>
+      <li>編集・削除のリンクは<strong>投稿者本人にだけ表示</strong></li>
+      <li>他人が直接URLを叩いても編集・削除できないよう、サーバー側でも本人確認（見た目を隠すだけでなく、処理側でもブロック）</li>
+      <li>削除は取り消せないため、確認ダイアログを必須に</li>
+      <li>質問を削除すると、ぶら下がる回答・いいね・画像も一緒に片付く</li>
+    </ul>
+    <p class="files">主なファイル: <code>app/controllers/questions_controller.rb</code>, <code>app/controllers/answers_controller.rb</code></p>
+    <div class="note">
+      <strong>セキュリティのポイント:</strong> ボタンを隠すだけでは、URLを直接入力されると防げません。「一覧を自分の投稿だけに絞ってから探す」という書き方にすることで、他人の投稿はそもそも見つからず、編集・削除できないようにしています。
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="i18n">
+  <h2 class="section-title">8. 日本語化・日本時間<span class="tag infra">インフラ</span></h2>
+  <div class="card">
+    <h3>投稿時刻を日本時間に</h3>
+    <p>本番サーバーの時刻がUTC（協定世界時）だったため、14時24分の投稿が「05:24」と表示されていました。設定を「東京」にして、日本時間で表示されるようにしました。</p>
+
+    <h3>エラーメッセージを日本語に</h3>
+    <p>ログイン失敗時の「Invalid Email or password.」などが英語だったので、日本語化しました。</p>
+    <table>
+      <tr><th>変更前</th><th>変更後</th></tr>
+      <tr><td>Invalid Email or password.</td><td>メールアドレスまたはパスワードが違います。</td></tr>
+      <tr><td>Password is too short</td><td>パスワードは8文字以上で入力してください</td></tr>
+      <tr><td>Username can't be blank</td><td>ユーザー名を入力してください</td></tr>
+    </table>
+    <ul>
+      <li><code>rails-i18n</code>（Rails本体のメッセージ）と <code>devise-i18n</code>（ログイン系のメッセージ）を導入</li>
+      <li>項目名の訳（Title→タイトル など）を <code>config/locales/ja.yml</code> に用意</li>
+    </ul>
+    <p class="files">主なファイル: <code>config/application.rb</code>, <code>config/locales/ja.yml</code></p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="deploy">
+  <h2 class="section-title">9. 本番デプロイのトラブル解決<span class="tag infra">インフラ</span></h2>
+  <div class="card">
+    <p>本番サイトで発生していた複数の問題を、順に切り分けて解決しました。ここが今回いちばん時間をかけた部分です。</p>
+
+    <h3>① 全ページが500エラー → 本番DBが空だった</h3>
+    <p>ヘルスチェック（<code>/up</code>）は正常なのに、他のページが全部エラー。調べると、本番のデータベース（Neon）にテーブルが1つも作られていませんでした。マイグレーション（テーブルを作る作業）を実行して解決しました。</p>
+
+    <h3>② 画像がデプロイのたびに消える → Cloudinaryへ</h3>
+    <p>画像をサーバー内のディスクに保存していたため、再起動やデプロイのたびに消えていました。外部の画像保管サービス <strong>Cloudinary</strong> に保存先を変更しました。</p>
+    <div class="note">Renderの無料プランは、一定時間アクセスがないと停止し、再起動でファイルが消えます。だから画像は外部に置く必要があります。</div>
+
+    <h3>③ デプロイが失敗する → 3つの設定ミス</h3>
+    <p>デプロイのログを1行ずつ読み解き、原因を特定しました。</p>
+    <table>
+      <tr><th>症状</th><th>原因</th><th>対処</th></tr>
+      <tr>
+        <td>起動時にエラーで停止</td>
+        <td><code>CLOUDINARY_URL</code> の値が <code>cloudinary://</code> で始まっていなかった（別のURLが入っていた）</td>
+        <td>正しい接続文字列に修正</td>
+      </tr>
+      <tr>
+        <td>環境が <code>deployment</code> になる</td>
+        <td><code>RAILS_ENV</code> が未設定で、本番モードで起動していなかった</td>
+        <td>環境変数に <code>RAILS_ENV=production</code> を追加</td>
+      </tr>
+      <tr>
+        <td>失敗しても気づけない／DBが空のまま</td>
+        <td>ビルド手順が <code>;</code> でつながれ、途中の失敗が無視されていた。マイグレーションも含まれていなかった</td>
+        <td>ビルド用スクリプト <code>bin/render-build.sh</code> を作成</td>
+      </tr>
+    </table>
+    <p>作成したビルドスクリプトの中身（要点）:</p>
+    <pre><code>set -o errexit          # 途中で失敗したら止める
+bundle install          # ライブラリの用意
+yarn install            # JS/CSSのライブラリ
+rails assets:precompile # JS/CSSのビルド
+rails db:migrate        # テーブルの作成・更新</code></pre>
+
+    <h3>④ 無料プランのスリープ対策</h3>
+    <p>無料プランは15分アクセスがないと眠り、次のアクセスで復帰に約1分かかります。10分おきにヘルスチェックを叩いて起こし続ける仕組み（GitHub Actions）を追加しました。</p>
+    <p class="files">主なファイル: <code>bin/render-build.sh</code>, <code>.github/workflows/keep-alive.yml</code>, <code>config/storage.yml</code></p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section id="todo">
+  <h2 class="section-title">10. 残っている作業</h2>
+  <div class="card">
+    <table>
+      <tr><th>項目</th><th>内容</th></tr>
+      <tr>
+        <td>壊れた画像2件</td>
+        <td>Cloudinary導入<strong>前</strong>に投稿された質問（パグの写真など）の画像は既に消失。編集画面から上げ直すか、削除が必要</td>
+      </tr>
+      <tr>
+        <td>DBパスワードの再発行</td>
+        <td>接続情報を一度チャットで共有したため、Neon側でパスワードを作り直すのが安全</td>
+      </tr>
+      <tr>
+        <td>日本語化の本番反映</td>
+        <td>ライブラリを追加したので、コミット→デプロイして本番に反映する必要あり</td>
+      </tr>
+      <tr>
+        <td><code>render.yaml</code> の整理</td>
+        <td>実際の設定はダッシュボードで行われており、このファイルは使われていない。混乱の元なので更新か削除がおすすめ</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- 11 -->
+<section id="glossary">
+  <h2 class="section-title">11. 用語のミニ辞典</h2>
+  <div class="card">
+    <table>
+      <tr><th>用語</th><th>意味</th></tr>
+      <tr><td>マイグレーション</td><td>データベースの表（テーブル）を作ったり変更したりする作業・手順</td></tr>
+      <tr><td>concern</td><td>複数のモデルで共通の処理をまとめて使い回す仕組み</td></tr>
+      <tr><td>polymorphic 関連</td><td>1つのテーブルが複数の種類のデータ（質問・回答）に紐づけられる関連</td></tr>
+      <tr><td>N+1問題</td><td>一覧表示などで、データの数だけDBへ問い合わせが増えて遅くなる問題</td></tr>
+      <tr><td>環境変数</td><td>パスワードや接続情報など、コードに直接書かない設定値。サーバー側で設定する</td></tr>
+      <tr><td>デプロイ</td><td>作ったプログラムを本番のサーバーに反映して動かすこと</td></tr>
+      <tr><td>UTC</td><td>世界標準の時刻。日本時間はこれより9時間進んでいる</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  🐾 ねこの集会場 開発まとめ ／ このファイルは <code>docs/開発まとめ.html</code> です<br>
+  ブラウザで開くと、この整形された状態で読めます
+</footer>
+
+</div>
+</body>
+</html>
