@@ -112,7 +112,7 @@
               <% end %>
               <div class="flex justify-between items-start gap-sm">
                 <span class="inline-block px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm"><%= question.category %></span>
-                <span class="font-label-sm text-label-sm text-outline shrink-0"><%= question.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+                <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(question.created_at) %></span>
               </div>
               <%= link_to question.title, question_path(question), class: "block font-headline-sm text-headline-sm text-on-surface line-clamp-2 hover:text-primary transition-colors" %>
               <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3"><%= question.content %></p>
