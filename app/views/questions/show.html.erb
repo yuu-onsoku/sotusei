@@ -40,7 +40,7 @@
             <span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-label-sm"><%= @question.category %></span>
           </div>
           <div class="flex items-center gap-sm shrink-0">
-            <span class="font-label-sm text-label-sm text-outline"><%= @question.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+            <span class="font-label-sm text-label-sm text-outline"><%= posted_at(@question.created_at) %></span>
             <% if @question.user_id == current_user.id %>
               <%= link_to edit_question_path(@question), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
                 <span class="material-symbols-outlined text-[16px]">edit</span>編集
@@ -88,7 +88,7 @@
                     <span class="bg-primary-container text-on-primary-container px-2 py-1 rounded-full text-label-sm font-label-sm shrink-0">質問者</span>
                   <% end %>
                 </div>
-                <span class="font-label-sm text-label-sm text-outline shrink-0"><%= answer.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+                <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(answer.created_at) %></span>
               </div>
               <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed"><%= answer.content %></p>
               <% if answer.image.attached? %>
