@@ -44,4 +44,39 @@ RSpec.describe User, type: :model do
       expect(user).to be_invalid
     end
   end
+
+  describe "email" do
+    it "空だと無効になる" do
+      user = build(:user, email: "")
+      expect(user).to be_invalid
+    end
+
+    it "@がない形式だと無効になる" do
+      user = build(:user, email: "abc")
+      expect(user).to be_invalid
+    end
+
+    it "他の人とかぶっていると無効になる" do
+      create(:user, email: "nekoneko@gmail.com")
+      duplicate = build(:user, email: "nekoneko@gmail.com")
+      expect(duplicate).to be_invalid
+    end
+  end
+
+  describe "password" do
+    it "空だと無効になる" do
+      user = build(:user, password: "")
+      expect(user).to be_invalid
+    end
+
+    it "7文字だと無効になる" do
+      user = build(:user, password: "あ" * 7)
+      expect(user).to be_invalid
+    end
+
+    it "8文字ちょうどなら有効になる" do
+      user = build(:user, password: "あ" * 8)
+      expect(user).to be_valid
+    end
+  end
 end
