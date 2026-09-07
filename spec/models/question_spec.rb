@@ -107,4 +107,24 @@ RSpec.describe Question, type: :model do
       expect(Question.search("   ")).to match_array([ cat_question, dog_question, english_question ])
     end
   end
+
+  describe "#liked_by?" do
+    it "いいねしたユーザーを渡すと true になる" do
+      user = create(:user)
+      question = create(:question)
+      create(:like, user: user, likeable: question)   # この人がいいねした状態を作る
+      expect(question.liked_by?(user)).to be true
+    end
+
+    it "いいねしていないユーザーを渡すと false になる" do
+      question = create(:question)
+      another = create(:user)
+      expect(question.liked_by?(another)).to be false
+    end
+
+    it "nil を渡すと false になる" do
+      question = create(:question)
+      expect(question.liked_by?(nil)).to be false
+    end
+  end
 end

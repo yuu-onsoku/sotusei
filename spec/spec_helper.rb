@@ -17,7 +17,7 @@ require "simplecov"
 
 SimpleCov.start "rails" do
   # テストコード自体は計測対象から外す
-  add_filter "/spec/"
+  skip "/spec/"
 end
 
 RSpec.configure do |config|
