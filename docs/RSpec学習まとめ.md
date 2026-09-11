@@ -1,6 +1,7 @@
 # Rails 8 + RSpec 学習まとめ
 
-猫コミュニティアプリ（卒業制作）に RSpec を導入し、モデルとヘルパーのテストを40本書くまでの記録。
+猫コミュニティアプリ（卒業制作）に RSpec を導入し、モデル・ヘルパー・リクエストのテストを56本書くまでの記録。
+カバレッジは SimpleCov で計測し、32.67% から 52.28% まで引き上げた。
 環境は Rails 8.0.5 / Ruby 3.4.8 / PostgreSQL / Docker Compose / Devise。
 
 ---
@@ -569,9 +570,212 @@ end
 
 ---
 
-## 9. よくあるエラーと対処
+## 9. リクエストspec（コントローラのテスト）
 
-### 9-1. `end` の数が合わない
+### 9-1. モデルspecとの違い
+
+| | モデルspec | リクエストspec |
+|---|---|---|
+| 調べるもの | データのルール | **画面の動き** |
+| たとえ | 部品の検査 | **実際に走らせてみる** |
+| 例 | 「空だと保存できない」 | 「一覧ページを開くと表示される」 |
+
+車の工場で言えば、モデルspecが「エンジン単体の検査」なら、リクエストspecは「実際に走らせるテスト」。
+
+### 9-2. 準備
+
+```bash
+bin/rails g rspec:request questions   # spec/requests/questions_spec.rb
+```
+
+```ruby
+RSpec.describe "Questions", type: :request do
+```
+
+`type: :request` が目印。これが付いていると `get` や `post` でページを開ける。
+
+### 9-3. 3つの命令
+
+| 命令 | 意味 | ブラウザでの操作 |
+|---|---|---|
+| `get` | 見せて | URLを開く・リンクをクリック |
+| `post` | 送ります | フォームの送信ボタン |
+| `delete` | 消して | 削除ボタン |
+| `patch` | 更新して | 編集フォームの送信 |
+
+### 9-4. パスの単数形と複数形
+
+**`s` が付くかどうか**で意味が変わる。
+
+| 書き方 | URL | 用途 |
+|---|---|---|
+| `questions_path` | `/questions` | 一覧を見る・**新しく作る** |
+| `question_path(question)` | `/questions/5` | **その質問1つ**を見る・消す |
+
+新規作成のときはまだ番号が決まっていないので複数形。単数形は「どれか」を伝える必要があるのでカッコに渡す。
+
+### 9-5. ログインの扱い
+
+このアプリのコントローラには門番がいる。
+
+```ruby
+before_action :authenticate_user!
+```
+
+そのため、同じページでも結果が2通りに分かれる。
+
+| 状況 | 結果 | 確認方法 |
+|---|---|---|
+| ログイン済み | 表示される（200） | `have_http_status(:ok)` |
+| 未ログイン | ログイン画面へ追い返される（302） | `redirect_to(new_user_session_path)` |
+
+ログインさせるのは1行。Devise の機能で、`spec/rails_helper.rb` に
+`config.include Devise::Test::IntegrationHelpers, type: :request` を設定してあるので使える。
+
+```ruby
+sign_in user
+```
+
+**「追い返される」ほうも必ずテストする。** これを書いておかないと、
+`before_action` の行が消えて誰でも見られる状態になっても気づけない。
+
+### 9-6. ステータスコード
+
+| 番号 | 名前 | 意味 |
+|---|---|---|
+| 200 | `:ok` | はい、どうぞ |
+| 302 | （リダイレクト） | 別の場所へどうぞ |
+| 422 | `:unprocessable_content` | **その内容では受け付けられません** |
+
+422 は役所の窓口で「記入漏れがあるので受け付けられません」と書類を返されるイメージ。
+追い返される（リダイレクト）のではなく、同じ窓口で書き直すのでフォーム画面が再表示される。
+
+**注意：** `:unprocessable_entity` は Rack で非推奨になった。`:unprocessable_content` を使う。
+
+### 9-7. 投稿のテスト（成功と失敗の両方）
+
+コントローラの `create` には道が2つある。**両方テストしないと片方が未検証のまま残る。**
+
+```ruby
+if @question.save
+  redirect_to questions_path      # 成功
+else
+  render :post, status: :unprocessable_entity   # 失敗
+end
+```
+
+```ruby
+describe "POST /questions" do
+  context "ログインしていて、入力が正しいとき" do
+    it "質問が作成される" do
+      user = create(:user)
+      sign_in user
+
+      post questions_path, params: {
+        question: {
+          title: "猫のごはんについて",
+          content: "食欲がないのですが、どうすればいいでしょうか。",
+          category: "食事"
+        }
+      }
+
+      expect(Question.count).to eq(1)                   # ① 保存された
+      expect(response).to redirect_to(questions_path)   # ② 一覧に戻った
+    end
+  end
+
+  context "入力が正しくないとき" do
+    it "質問が作成されない" do
+      user = create(:user)
+      sign_in user
+
+      post questions_path, params: {
+        question: { title: "", content: "食欲がないのですが", category: "食事" }
+      }
+
+      expect(Question.count).to eq(0)                              # 保存されていない
+      expect(response).to have_http_status(:unprocessable_content) # フォームに戻った
+    end
+  end
+end
+```
+
+**`params:` はフォームの入力欄そのもの。** ブラウザで各欄を埋めて送信ボタンを押した状態を表す。
+`question:` という包みがあるのは、Rails のフォームが `question[title]` の形で送るため
+（コントローラの `params.require(:question)` と対応している）。
+
+投稿では **保存**と**画面遷移**の2つが起きるので、両方確かめて初めて「投稿できた」と言える。
+
+### 9-8. 他人のデータを守るテスト
+
+このアプリでは「自分の質問しか編集・削除できない」ようになっている。
+
+```ruby
+# app/controllers/questions_controller.rb
+def set_own_question
+  @question = current_user.questions.find_by(id: params[:id])
+  redirect_to questions_path, alert: "自分の質問だけが編集・削除できます。" if @question.nil?
+end
+```
+
+肝は `current_user.questions` の部分。
+
+```ruby
+Question.find_by(id: 5)                 # 全部の質問から探す（誰のでも見つかる）
+current_user.questions.find_by(id: 5)   # 自分の質問からだけ探す ← こちら
+```
+
+**自分のロッカーの中だけを探している。** 他人の質問は入っていないので `nil` が返り、追い返される。
+
+```ruby
+describe "DELETE /questions/:id" do
+  context "他人の質問を削除しようとしたとき" do
+    it "削除されず、一覧にリダイレクトされる" do
+      owner = create(:user)                        # 質問を書いた人
+      question = create(:question, user: owner)    # その人の質問
+
+      other = create(:user)                        # 別の誰か
+      sign_in other                                # 別人としてログイン
+
+      delete question_path(question)               # 消そうとする
+
+      expect(Question.count).to eq(1)              # 消えていない ← ここが心臓部
+      expect(response).to redirect_to(questions_path)
+    end
+  end
+end
+```
+
+**なぜ2人必要なのか。** 1人だけだと「自分の質問を自分で消す」になり、消せて当たり前なのでテストにならない。
+守りたいのは「他人のものを勝手に消されないこと」なので、**わざと別人を用意する**。
+
+`user: owner` を書くのも大事。これがないとファクトリが勝手に別のユーザーを作り、
+「誰の質問か」があいまいになる。
+
+**一番大事なのは `expect(Question.count).to eq(1)`。**
+リダイレクトされていても、裏でこっそり消えていたら意味がない。
+
+もし誰かが `current_user.questions` を `Question` に書き換えてしまったら、
+誰でも他人の質問を消せるアプリになる。画面上は普通に動くので人間の目では気づきにくい。
+このテストがあれば、その瞬間に赤くなる。
+
+### 9-9. カバレッジへの効果が大きい
+
+リクエストspecは1本でカバレッジが大きく動く。ページを1回開くと関係するコードが全部通るため。
+
+```
+get questions_path
+  → ルーティング → コントローラ → authenticate_user! → Question.search → ビュー
+```
+
+実績：モデルのテストを3本足しても 1.3% しか動かなかったが、
+リクエストspec 7本で **33.98% → 52.28%** まで上がった。
+
+---
+
+## 10. よくあるエラーと対処
+
+### 10-1. `end` の数が合わない
 
 ```
 SyntaxError: Unmatched keyword, missing `end' ?
@@ -582,7 +786,7 @@ SyntaxError: Unmatched keyword, missing `end' ?
 Ruby が**あやしい場所を指さしてくれる**。`>` の行を見る。
 `do` の数と `end` の数を数える。字下げの深さで対応を確認する。
 
-### 9-2. クォートの閉じ忘れ
+### 10-2. クォートの閉じ忘れ
 
 ```ruby
 build(:user, username:")     # ❌ " が1個
@@ -596,7 +800,7 @@ build(:user, username: "")   # ⭕ " が2個
 Unmatched `(', missing `)' ?
 ```
 
-### 9-3. expect のないテストは緑になる
+### 10-3. expect のないテストは緑になる
 
 ```ruby
 it "何かのテスト" do
@@ -607,7 +811,7 @@ end
 RSpec は「**最後まで転ばずに走り終えたら合格**」と判断する。
 何も確かめていないテストも緑になる。**テストで一番あぶない状態。**
 
-### 9-4. テストDBが汚れている
+### 10-4. テストDBが汚れている
 
 ```
 ActiveRecord::RecordInvalid: ユーザー名はすでに存在します
@@ -622,7 +826,7 @@ docker compose exec web bin/rails db:test:prepare   # テストDBの掃除
 
 変なエラーで落ちたとき、まずこれを試す。
 
-### 9-5. モデルとスペックの置き場所を間違える
+### 10-5. モデルとスペックの置き場所を間違える
 
 | ファイル | 役割 |
 |---|---|
@@ -631,14 +835,68 @@ docker compose exec web bin/rails db:test:prepare   # テストDBの掃除
 
 テストコードをモデルファイルに書くと、アプリが起動しなくなる。
 
-### 9-6. エラーは1つずつ順番に出てくる
+### 10-6. エラーは1つずつ順番に出てくる
 
 Ruby は**文法のチェックが先**。構文エラーがあるうちは、その先のエラーは出てこない。
 1つ直すと次が現れるのは、**進んでいる証拠**。
 
+### 10-7. 打ち間違いによる `NoMethodError`
+
+```
+NoMethodError:
+  undefined method 'content' for class RSpec::ExampleGroups::...
+```
+
+「**そんな名前のもの、知らないよ**」というエラー。`undefined method '◯◯'` の `◯◯` が
+打ち間違えた名前。**このエラーが出たら、まず綴りを疑う。**
+
+実際にやった間違い：
+
+| 間違い | 正しい | 覚え方 |
+|---|---|---|
+| `content` | `context` | **`context` には `text` が入っている**（コン**テキスト**＝文脈） |
+| `it` | `if` | `it` はテスト1本、`if` は条件分岐。`if` には `do 〜 end` が付かない |
+| `radirect_to` | `redirect_to` | `re`（再び）+ `direct`（向ける） |
+
+### 10-8. `{ }` の中のカンマ忘れ
+
+```ruby
+params: {
+  question: {
+    title: "",
+    content: "食欲がないのですが"      # ← カンマが無い
+    category: "食事"
+  }
+}
+```
+
+```
+unexpected ':', expecting end-of-input
+```
+
+`{ }` の中は**リスト**。日本語の「りんご、みかん、ぶどう」の「、」と同じで、
+**最後の項目以外はカンマが要る**。
+
+カンマが無いと `"食欲がないのですが" category:` という意味不明なつながりになり、
+「`:` が変なところにある」と怒られる。
+
+### 10-9. rubocop が字下げを直してくれない
+
+このプロジェクトは `rubocop-rails-omakase` を使っている。これは「細かいことは言わない」方針で、
+**字下げの深さをチェックしない**。
+
+```
+1 file inspected, no offenses detected    ← ズレていてもこう出る
+```
+
+rubocop が見るのは行末の空白、ファイル末尾の改行、`do` の前のスペースなど。
+**字下げのズレは手で直す**しかない。
+
+VSCode なら範囲を選択して `Tab`（右へ1段）/ `Shift + Tab`（左へ1段）でまとめて動かせる。
+
 ---
 
-## 10. テストが本物か確かめる方法
+## 11. テストが本物か確かめる方法
 
 **わざとアプリを壊して、テストが赤くなるか見る。**
 
@@ -662,7 +920,7 @@ Ruby は**文法のチェックが先**。構文エラーがあるうちは、�
 
 ---
 
-## 11. 実際に見つけたバグ
+## 12. 実際に見つけたバグ
 
 `Question.search` が**二重定義**されていた。
 
@@ -690,7 +948,7 @@ WHERE (title ILIKE '%...%' OR content ILIKE '%...%')
 
 ---
 
-## 12. コマンド集
+## 13. コマンド集
 
 ```bash
 # テスト実行
@@ -711,12 +969,28 @@ docker compose exec web bin/rubocop -a spec       # 自動修正
 # ファイル生成
 docker compose exec web bin/rails g rspec:model user
 docker compose exec web bin/rails g rspec:helper application
+docker compose exec web bin/rails g rspec:request questions
 docker compose exec web bin/rails g factory_bot:model user
+
+# カバレッジの赤い行を調べる（coverage/index.html をブラウザで開いてもよい）
+docker compose exec web ruby -rjson -e '
+data = JSON.parse(File.read("coverage/.resultset.json"))
+cov = data.values.first["coverage"]
+cov.each do |path, info|
+  next unless path.include?("likeable")     # 調べたいファイル名
+  lines = info.is_a?(Hash) ? info["lines"] : info
+  src = File.readlines(path)
+  lines.each_with_index do |hits, i|
+    next if hits.nil?
+    mark = hits.to_i.zero? ? "赤 未実行" : "緑 #{hits}回"
+    puts "#{(i+1).to_s.rjust(2)}行 #{mark}  #{src[i].to_s.strip}"
+  end
+end'
 ```
 
 ---
 
-## 13. 完成した構成
+## 14. 完成した構成
 
 ```
 spec/
@@ -730,16 +1004,31 @@ spec/
 ├── models/
 │   ├── answer_spec.rb                5本
 │   ├── like_spec.rb                  6本
-│   ├── question_spec.rb             18本
-│   └── user_spec.rb                  8本
+│   ├── question_spec.rb             21本
+│   └── user_spec.rb                 14本
+├── requests/
+│   └── questions_spec.rb             7本
 ├── rails_helper.rb
 └── spec_helper.rb
-                                    計40本
+                                    計56本
 ```
+
+カバレッジの推移：
+
+| 時点 | テスト数 | カバレッジ |
+|---|---|---|
+| モデルspec完成 | 46本 | 32.67% |
+| `liked_by?` 追加 | 49本 | 33.98% |
+| リクエストspec（表示） | 53本 | 47.71% |
+| リクエストspec（投稿・削除） | 56本 | **52.28%** |
+
+`app/models/` `app/helpers/` は 100%。残っている穴は
+`app/models/concerns/image_attachable.rb` の画像検証4行と、
+answers / likes コントローラのリクエストspec。
 
 ---
 
-## 14. 大事な考え方まとめ
+## 15. 大事な考え方まとめ
 
 1. **テストは「見張りロボット」** — 一度書けば何度でも一瞬で確かめてくれる
 2. **テストが通る＝正しい、とは限らない** — 何も確かめていないテストも緑になる
@@ -749,3 +1038,7 @@ spec/
 6. **同じにしたいものは1回だけ作る。別にしたいものは2回作る**
 7. **意味は人間が直し、見た目は機械（rubocop）が直す**
 8. **わざと壊して、1本だけ赤くなるか確かめる**
+9. **分岐は全部の道を通す** — `if` と `else` があるなら、成功したときと失敗したときの両方を書く
+10. **「できる」だけでなく「できない」もテストする** — 未ログインなら弾かれる、他人のものは消せない。セキュリティはここで守る
+11. **カバレッジは地図** — 数字だけ見ても分からないが、色を見れば「次に何をテストすべきか」が読み取れる
+12. **打ち間違いはエラーの大半を占める** — `NoMethodError` が出たら、まず綴りを疑う
