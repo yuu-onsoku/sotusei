@@ -19,13 +19,13 @@ RSpec.describe "Questions", type: :request do
     end
   end
 
-  describe "GET /questions/:id" do        # ① 名前を変える
+  describe "GET /questions/:id" do
     context "ログインしているとき" do
       it "詳細ページが表示される" do
         user = create(:user)
-        question = create(:question)      # ② 見る対象を用意する（追加）
+        question = create(:question)
         sign_in user
-        get question_path(question)       # ③ questions_path → question_path(question)
+        get question_path(question)
         expect(response).to have_http_status(:ok)
       end
     end
@@ -35,6 +35,44 @@ RSpec.describe "Questions", type: :request do
         question = create(:question)
         get question_path(question)
         expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+  end
+
+  describe "POST /questions" do
+    context "ログインしていて、入力が正しいとき" do
+      it "質問が作成される" do
+        user = create(:user)
+        sign_in user
+
+        post questions_path, params: {
+          question: {
+            title: "猫のごはんについて",
+            content: "食欲がないのですが、どうすればいいでしょうか。",
+            category: "食事"
+          }
+        }
+
+        expect(Question.count).to eq(1)
+        expect(response).to redirect_to(questions_path)
+      end
+    end
+
+    context "入力が正しくないとき" do
+      it "質問が作成されない" do
+        user = create(:user)
+        sign_in user
+
+        post questions_path, params: {
+          question: {
+            title: "",
+            content: "食欲がないのですが",
+            category: "食事"
+          }
+        }
+
+        expect(Question.count).to eq(0)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
