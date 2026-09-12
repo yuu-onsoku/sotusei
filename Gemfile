@@ -59,7 +59,6 @@ group :development, :test do
 
   gem "rspec-rails"        # Rails用RSpec本体
   gem "factory_bot_rails"  # テストデータ作成（fixturesの代わり、任意）
-
 end
 
 group :development do

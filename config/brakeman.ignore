@@ -1,0 +1,15 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 122,
+      "fingerprint": "21ab0fe00fdd5899ffc405cff75aadb91b805ee996a614f7e27b08a287e9062d",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 8.0.5 ends on 2026-11-07",
+      "file": "Gemfile.lock",
+      "line": 510,
+      "note": "Rails 8.0 のサポート期限は認識済み。卒業制作の提出を優先し、提出後に Rails 8.1 系への更新を検討する。期限（2026-11-07）までに再評価すること。"
+    }
+  ],
+  "brakeman_version": "8.0.6"
+}
