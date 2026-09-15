@@ -93,4 +93,63 @@ RSpec.describe "Questions", type: :request do
       end
     end
   end
+
+  describe "GET /questions/:id/edit" do
+    context "他人の質問のとき" do
+      it "編集画面を開けず、一覧にリダイレクトされる" do
+        owner = create(:user)
+        question = create(:question, user: owner)
+        other = create(:user)
+        sign_in other
+        get edit_question_path(question)
+        expect(response).to redirect_to(questions_path)
+      end
+    end
+
+    context "自分の質問のとき" do
+      it "編集画面を開ける" do
+        user = create(:user)
+        question = create(:question, user: user)
+        sign_in user
+
+        get edit_question_path(question)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe "PATCH /questions/:id" do
+    context "他人の質問のとき" do
+      it "更新できない" do
+        owner = create(:user)
+        question = create(:question, user: owner, title: "元のタイトル")
+
+        other = create(:user)
+        sign_in other
+
+        patch question_path(question), params: {
+          question: { title: "書き換えられたタイトル" }
+        }
+
+        expect(question.reload.title).to eq("元のタイトル")
+        expect(response).to redirect_to(questions_path)
+      end
+    end
+
+    context "自分の質問のとき" do
+      it "更新できる" do
+        user = create(:user)
+        question = create(:question, user: user, title: "元のタイトル")
+        sign_in user
+
+        patch question_path(question), params: {
+          question: { title: "新しいタイトル" }
+        }
+
+        expect(question.reload.title).to eq("新しいタイトル")
+        expect(response).to redirect_to(question_path(question))
+      end
+    end
+  end
 end
