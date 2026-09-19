@@ -127,4 +127,47 @@ RSpec.describe Question, type: :model do
       expect(question.liked_by?(nil)).to be false
     end
   end
+
+    describe "画像の添付" do
+    it "PNG画像を添付できる" do
+      question = build(:question)
+      question.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/test_image.png")),
+        filename: "test_image.png",
+        content_type: "image/png"
+      )
+
+      expect(question).to be_valid
+    end
+
+    it "画像でないファイルは無効になる" do
+      question = build(:question)
+      question.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/not_image.txt")),
+        filename: "not_image.txt",
+        content_type: "text/plain"
+      )
+
+      expect(question).to be_invalid
+      expect(question.errors[:image]).to include("はPNG / JPEG / GIF / WEBP 形式で添付してください")
+    end
+
+    it "画像を添付しなくても有効" do
+      expect(build(:question)).to be_valid
+    end
+
+    it "5MBを超える画像は無効になる" do
+      question = build(:question)
+      question.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/test_image.png")),
+        filename: "big.png",
+        content_type: "image/png"
+      )
+      # 実際は70バイトだが、6MBということにする（大きなファイルを用意せずに検証するため）
+      question.image.blob.byte_size = 6.megabytes
+
+      expect(question).to be_invalid
+      expect(question.errors[:image]).to include("は5MB以下にしてください")
+    end
+  end
 end
