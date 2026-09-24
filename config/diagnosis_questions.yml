@@ -9,9 +9,27 @@ simple:
       - { text: "6〜10時間", score: 0 }
       - { text: "10時間以上", score: -2 }
 
-  #- text: "（2問目をここに）"
-   #  - { text: "", score: 2 }
-    #  - { text: "", score: 0 }
-     # - { text: "", score: -2 }
+  - text: "家に人がいない状態で年に何回くらい、家を2~3日空けますか？"
+    choices:
+      - { text: "空けない", score: 2 }
+      - { text: "年に2回以下", score: 0 }
+      - { text: "年に2回以上", blocker: true }
 
-  # 3〜5問目も同じ形で
+  # 引っ越し予定は「行動を起こしている」ため、0ではなく1点を与える
+  - text: "今のお住まいはペットを飼えますか？"
+    choices:
+      - { text: "現在ペット可の住宅に住んでいる", score: 2 }
+      - { text: "ペット可の住宅に引っ越し予定（引っ越し検討）", score: 1 }
+      - { text: "現在はペット不可の住宅に住んでいる", blocker: true }
+
+  - text: "急に10万円の医療費が必要になったら、出せますか？"
+    choices:
+      - { text: "無理なく払える", score: 2 }
+      - { text: "頑張れば払える", score: 0 }
+      - { text: "払えない", blocker: true }
+      
+  - text: "猫のために月々使える金額はどれくらいですか？"
+    choices:
+      - { text: "いくらでも", score: 2}
+      - { text: "7000円以上", score: 0 }
+      - { text: "7000円以下", score: -2 }
