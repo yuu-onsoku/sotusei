@@ -24,4 +24,20 @@ class DiagnosisJudge
   def score
     selected_choices.sum { |choice| choice["score"].to_i }
   end
+
+  # 絶対条件を満たしていない選択肢が1つでもあるか
+  def blocked?
+    selected_choices.any? { |choice| choice["blocker"] }
+  end
+
+  # 判定結果を返す
+  def result
+    return "今はまだ早い" if blocked?
+
+    case score
+    when 6..    then "準備万端"
+    when 0..5   then "成猫なら可能"
+    else             "今はまだ早い"
+    end
+  end
 end
