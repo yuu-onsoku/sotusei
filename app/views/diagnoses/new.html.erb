@@ -1,0 +1,19 @@
+<h1>お迎え診断</h1>
+<p>5つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。</p>
+
+<%= form_with url: diagnoses_path, method: :post do |form| %>
+  <% @questions.each_with_index do |question, index| %>
+    <div>
+      <h2><%= index + 1 %>. <%= question["text"] %></h2>
+
+      <% question["choices"].each_with_index do |choice, choice_index| %>
+        <label>
+          <%= radio_button_tag "answers[#{index}]", choice_index, choice_index.zero?, required: true %>
+          <%= choice["text"] %>
+        </label>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form.submit "診断する" %>
+<% end %>

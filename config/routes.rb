@@ -23,6 +23,11 @@ Rails.application.routes.draw do
     resource :like, only: %i[create destroy]
   end
 
+  # お迎え診断（未ログインでも使える入口機能）
+  resources :diagnoses, only: %i[new create] do
+    get :result, on: :collection
+  end
+
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。
   root "home#index"
