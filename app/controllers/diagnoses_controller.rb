@@ -26,7 +26,9 @@ class DiagnosesController < ApplicationController
   private
 
   # 回答は { "0" => "1", "1" => "0", ... } の形で届く
+  # 質問の数だけキーを明示的に許可する（permit! は何でも通してしまうため使わない）
   def answers_params
-    params.fetch(:answers, {}).permit!.to_h
+    keys = DiagnosisJudge.simple_questions.each_index.map(&:to_s)
+    params.fetch(:answers, {}).permit(*keys).to_h
   end
 end
