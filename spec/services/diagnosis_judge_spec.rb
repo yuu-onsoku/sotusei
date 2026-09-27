@@ -33,6 +33,45 @@ RSpec.describe DiagnosisJudge do
     end
   end
 
+  describe "#category_scores" do
+    it "カテゴリごとに点数を集計する" do
+      # すべて最良（各2点）を選んだ場合
+      answers = { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
+      expect(DiagnosisJudge.new(answers).category_scores).to eq(
+        "生活リズム" => 4,   # 2問 × 2点
+        "住環境" => 2,       # 1問 × 2点
+        "経済" => 4          # 2問 × 2点
+      )
+    end
+
+    it "カテゴリごとに弱い部分がわかる" do
+      # 1問目だけ最低（-2点）、他は最良
+      answers = { "0" => "2", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
+      scores = DiagnosisJudge.new(answers).category_scores
+
+      expect(scores["生活リズム"]).to eq(0)   # -2 + 2 = 0
+      expect(scores["住環境"]).to eq(2)
+      expect(scores["経済"]).to eq(4)
+    end
+  end
+
+  describe "#weak_categories" do
+    it "マイナスのカテゴリがなければ空になる" do
+      answers = { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
+      expect(DiagnosisJudge.new(answers).weak_categories).to be_empty
+    end
+
+    it "留守が長いと生活リズムが弱点になる" do
+      answers = { "0" => "2", "1" => "1", "2" => "1", "3" => "1", "4" => "1" }
+      expect(DiagnosisJudge.new(answers).weak_categories).to eq([ "生活リズム" ])
+    end
+
+    it "複数の弱点があれば両方返す" do
+      answers = { "0" => "2", "1" => "1", "2" => "1", "3" => "1", "4" => "2" }
+      expect(DiagnosisJudge.new(answers).weak_categories).to eq([ "生活リズム", "経済" ])
+    end
+  end
+
   describe "#blocked?" do
     it "blockerを選んでいなければ false" do
       answers = { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
@@ -61,6 +100,33 @@ RSpec.describe DiagnosisJudge do
       # 3問目だけ blocker、他は最良
       answers = { "0" => "0", "1" => "0", "2" => "2", "3" => "0", "4" => "0" }
       expect(DiagnosisJudge.new(answers).result).to eq("今はまだ早い")
+    end
+  end
+
+  describe "#cat_comments" do
+    it "判定に応じたコメントが含まれる" do
+      answers = { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
+      comments = DiagnosisJudge.new(answers).cat_comments
+
+      expect(comments).to include(DiagnosisJudge::RESULT_COMMENTS["準備万端"])
+    end
+
+    it "弱いカテゴリのコメントが含まれる" do
+      # 留守が長く、お金も厳しい
+      answers = { "0" => "2", "1" => "1", "2" => "1", "3" => "1", "4" => "2" }
+      comments = DiagnosisJudge.new(answers).cat_comments
+
+      expect(comments).to include(DiagnosisJudge::CATEGORY_COMMENTS["生活リズム"])
+      expect(comments).to include(DiagnosisJudge::CATEGORY_COMMENTS["経済"])
+    end
+
+    it "blockerがあるときは専用コメントだけで、カテゴリのコメントは出ない" do
+      # ペット不可の住宅。他は最良なのでカテゴリはマイナスにならない
+      answers = { "0" => "0", "1" => "0", "2" => "2", "3" => "0", "4" => "0" }
+      comments = DiagnosisJudge.new(answers).cat_comments
+
+      expect(comments).to include(DiagnosisJudge::BLOCKER_COMMENT)
+      expect(comments).not_to include(DiagnosisJudge::CATEGORY_COMMENTS["住環境"])
     end
   end
 end

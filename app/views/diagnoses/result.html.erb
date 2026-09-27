@@ -3,5 +3,11 @@
 <h2><%= @result %></h2>
 <p>スコア：<%= @score %>点</p>
 
+<div>
+  <% @comments.each do |comment| %>
+    <p>🐈 <%= comment %></p>
+  <% end %>
+</div>
+
 <p><%= link_to "もう一度診断する", new_diagnosis_path %></p>
 <p><%= link_to "ねこの相談室を見る", questions_path %></p>

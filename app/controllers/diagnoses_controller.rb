@@ -9,18 +9,22 @@ class DiagnosesController < ApplicationController
   # 回答を受け取って判定し、結果画面へ移動する
   def create
     judge = DiagnosisJudge.new(answers_params)
-    session[:diagnosis] = { "score" => judge.score, "result" => judge.result }
+    session[:diagnosis] = {
+      "score" => judge.score,
+      "result" => judge.result,
+      "comments" => judge.cat_comments      # ← 追加
+    }
     redirect_to result_diagnoses_path
   end
 
   # 判定結果を表示する
   def result
     diagnosis = session[:diagnosis]
-    # 診断していない人が直接URLを開いた場合は、質問画面へ戻す
     return redirect_to new_diagnosis_path if diagnosis.blank?
 
     @score = diagnosis["score"]
     @result = diagnosis["result"]
+    @comments = diagnosis["comments"]       # ← 追加
   end
 
   private
