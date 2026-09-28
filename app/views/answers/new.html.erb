@@ -10,7 +10,7 @@
     <div class="max-w-[1200px] mx-auto h-full flex justify-between items-center px-margin-mobile md:px-lg">
       <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-primary" %>
       <nav class="hidden md:flex gap-md items-center h-full">
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">お迎え診断</a>
+        <%= link_to "お迎え診断", new_diagnosis_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" %>
         <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary py-1" %>
         <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1" href="#">マイページ</a>
       </nav>
@@ -120,10 +120,10 @@
       <span class="material-symbols-outlined">home</span>
       <span class="font-label-sm text-label-sm">ホーム</span>
     <% end %>
-    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+    <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">fact_check</span>
-      <span class="font-label-sm text-label-sm">お迎え診断</span>
-    </a>
+      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
+    <% end %>
     <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" do %>
       <span class="material-symbols-outlined">forum</span>
       <span class="font-label-sm text-label-sm">相談室</span>

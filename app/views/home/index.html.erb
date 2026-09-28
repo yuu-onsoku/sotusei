@@ -28,7 +28,7 @@
       <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight" %>
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-8">
-        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">お迎え診断</a>
+        <%= link_to "お迎え診断", new_diagnosis_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
         <%= link_to "ねこの相談室", questions_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
         <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">にゃんスタ</a>
         <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">マイページ</a>
@@ -57,10 +57,10 @@
           </p>
           <!-- Primary CTA -->
           <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <button class="bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 group w-full sm:w-auto">
+            <%= link_to new_diagnosis_path, class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 group w-full sm:w-auto" do %>
               お迎え診断を始める
               <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </button>
+            <% end %>
             <span class="font-label-sm text-label-sm text-on-surface-variant/70">所要時間: 約3分</span>
           </div>
         </div>
@@ -142,10 +142,10 @@
       <span class="material-symbols-outlined">home</span>
       <span class="font-label-sm text-label-sm mt-1">ホーム</span>
     </a>
-    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+    <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">fact_check</span>
       <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
-    </a>
+    <% end %>
     <%= link_to questions_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">forum</span>
       <span class="font-label-sm text-label-sm mt-1">相談室</span>
