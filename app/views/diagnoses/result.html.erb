@@ -1,13 +1,93 @@
-<h1>診断結果</h1>
+<% content_for :title, "診断結果 - ねこの集会場" %>
 
-<h2><%= @result %></h2>
-<p>スコア：<%= @score %>点</p>
+<%
+  # 判定ごとの見た目（責める色は使わず、いずれも温かい色にする）
+  # cat は吹き出しの隣に出す猫のイラスト
+  style = case @result
+          when "準備万端"     then { bg: "bg-primary-container", cat: "cats/cheer.png", alt: "ポンポンを持って喜ぶ猫" }
+          when "成猫なら可能" then { bg: "bg-secondary-fixed",   cat: "cats/smile.png", alt: "座って笑っている猫" }
+          else                     { bg: "bg-tertiary-fixed",    cat: "cats/relax.png", alt: "寝そべって待っている猫" }
+          end
+%>
 
-<div>
-  <% @comments.each do |comment| %>
-    <p>🐈 <%= comment %></p>
-  <% end %>
+<div class="min-h-screen relative">
+  <!-- 背景の装飾肉球（余白にバラバラに散らす） -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none text-[#f9c54e]/20" aria-hidden="true">
+    <span class="material-symbols-outlined absolute top-[7%] left-[6%] text-5xl rotate-[-20deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[13%] left-[90%] text-3xl rotate-[35deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[24%] left-[3%] text-6xl rotate-[12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[29%] left-[85%] text-4xl rotate-[-45deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[40%] left-[11%] text-3xl rotate-[28deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[47%] left-[95%] text-5xl rotate-[8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[58%] left-[4%] text-4xl rotate-[-33deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[66%] left-[88%] text-6xl rotate-[22deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[75%] left-[9%] text-5xl rotate-[-8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[83%] left-[93%] text-3xl rotate-[40deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[92%] left-[5%] text-4xl rotate-[-25deg]">pets</span>
+  </div>
+
+  <!-- ヘッダー -->
+  <header class="relative z-10 w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-[800px] mx-auto px-gutter py-12">
+    <!-- 判定 -->
+    <div class="<%= style[:bg] %> rounded-xl p-8 md:p-10 shadow-sm text-center mb-8">
+      <%= image_tag style[:cat], alt: style[:alt], class: "w-32 h-32 md:w-40 md:h-40 mx-auto object-contain mb-2 mix-blend-multiply" %>
+
+      <p class="font-label-sm text-label-sm text-on-background/70 mb-2">診断結果</p>
+
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-4">
+        <%= @result %>
+      </h1>
+
+      <p class="font-label-md text-label-md text-on-background/80">
+        スコア <span class="font-headline-sm text-headline-sm"><%= @score %></span> 点 / 10点満点
+      </p>
+    </div>
+
+    <!-- 猫からのコメント -->
+    <div class="flex flex-col gap-4 mb-10">
+      <% @comments.each do |comment| %>
+        <div class="flex items-start gap-3">
+          <%= image_tag style[:cat], alt: style[:alt], class: "w-12 h-12 object-contain shrink-0 mix-blend-multiply" %>
+
+          <!-- 吹き出し -->
+          <div class="relative bg-surface-container-lowest rounded-xl p-4 shadow-sm flex-1">
+            <!-- 左向きの三角（吹き出しのしっぽ） -->
+            <div class="absolute left-[-6px] top-4 w-3 h-3 bg-surface-container-lowest rotate-45"></div>
+            <p class="relative font-body-md text-body-md text-on-surface leading-relaxed"><%= comment %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 次のアクション -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to new_diagnosis_path, class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">refresh</span>
+        もう一度診断する
+      <% end %>
+
+      <%= link_to questions_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">forum</span>
+        ねこの相談室を見る
+      <% end %>
+    </div>
+
+    <!-- 未ログインの人への案内 -->
+    <% unless user_signed_in? %>
+      <div class="mt-10 p-6 rounded-xl bg-surface-container-low text-center">
+        <p class="font-body-md text-body-md text-on-surface-variant mb-4">
+          ねこの相談室では、猫を飼っている先輩たちに質問できます。
+        </p>
+        <%= link_to "無料で登録する", new_user_registration_path,
+              class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      </div>
+    <% end %>
+  </main>
 </div>
-
-<p><%= link_to "もう一度診断する", new_diagnosis_path %></p>
-<p><%= link_to "ねこの相談室を見る", questions_path %></p>
