@@ -56,14 +56,14 @@ RSpec.describe DiagnosisJudge do
   end
 
   describe "#weak_categories" do
-    it "マイナスのカテゴリがなければ空になる" do
+    it "0以下のカテゴリがなければ空になる" do
       answers = { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" }
       expect(DiagnosisJudge.new(answers).weak_categories).to be_empty
     end
 
-    it "留守が長いと生活リズムが弱点になる" do
+    it "留守が長く経済も余裕がないと、両方が弱点になる" do
       answers = { "0" => "2", "1" => "1", "2" => "1", "3" => "1", "4" => "1" }
-      expect(DiagnosisJudge.new(answers).weak_categories).to eq([ "生活リズム" ])
+      expect(DiagnosisJudge.new(answers).weak_categories).to eq([ "生活リズム", "経済" ])
     end
 
     it "複数の弱点があれば両方返す" do

@@ -52,13 +52,15 @@ class DiagnosisJudge
     end
   end
 
-  # 点数がマイナスのカテゴリを返す（点数が低い順）
+  # 点数が0以下のカテゴリを返す（点数が低い順）
+  # 0点は「可もなく不可もない」状態だが、猫にとっては十分とは言えないため弱点に含める
   # => ["経済", "生活リズム"]
   def weak_categories
-    category_scores.select { |_category, score| score.negative? }
+    category_scores.select { |_category, score| score <= 0 }
                    .sort_by { |_category, score| score }
                    .map(&:first)
   end
+
 
 
   # 絶対条件を満たしていない選択肢が1つでもあるか
