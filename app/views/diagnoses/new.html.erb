@@ -1,19 +1,87 @@
-<h1>お迎え診断</h1>
-<p>5つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。</p>
+<% content_for :title, "お迎え診断 - ねこの集会場" %>
 
-<%= form_with url: diagnoses_path, method: :post do |form| %>
-  <% @questions.each_with_index do |question, index| %>
-    <div>
-      <h2><%= index + 1 %>. <%= question["text"] %></h2>
+<div class="min-h-screen relative">
+  <!-- 背景の装飾肉球（余白にバラバラに散らす。カード背後では隠れる） -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none text-[#f9c54e]/20" aria-hidden="true">
+    <span class="material-symbols-outlined absolute top-[5%] left-[7%] text-5xl rotate-[-20deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[11%] left-[91%] text-3xl rotate-[35deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[19%] left-[2%] text-6xl rotate-[12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[23%] left-[84%] text-4xl rotate-[-45deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[31%] left-[12%] text-3xl rotate-[28deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[36%] left-[96%] text-5xl rotate-[8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[44%] left-[4%] text-4xl rotate-[-33deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[51%] left-[88%] text-6xl rotate-[22deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[57%] left-[10%] text-5xl rotate-[-8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[64%] left-[94%] text-3xl rotate-[40deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[72%] left-[3%] text-6xl rotate-[-25deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[77%] left-[86%] text-4xl rotate-[15deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[85%] left-[9%] text-3xl rotate-[-38deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[89%] left-[92%] text-5xl rotate-[30deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[95%] left-[5%] text-4xl rotate-[-14deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[97%] left-[78%] text-3xl rotate-[18deg]">pets</span>
+  </div>
 
-      <% question["choices"].each_with_index do |choice, choice_index| %>
-        <label>
-          <%= radio_button_tag "answers[#{index}]", choice_index, choice_index.zero?, required: true %>
-          <%= choice["text"] %>
-        </label>
-      <% end %>
+  <!-- ヘッダー -->
+  <header class="relative z-10 w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-3 text-on-background shrink-0">
+        <span class="material-symbols-outlined text-[16px]">verified</span>
+        <span class="font-label-sm text-label-sm font-semibold">登録不要・無料</span>
+      </div>
     </div>
-  <% end %>
+  </header>
 
-  <%= form.submit "診断する" %>
-<% end %>
+  <main class="relative z-10 max-w-[800px] mx-auto px-gutter py-12">
+    <!-- 導入 -->
+    <div class="mb-10">
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-4">お迎え診断</h1>
+
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        5つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。
+      </p>
+      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">所要時間: 約3分</p>
+    </div>
+
+    <!-- 質問フォーム -->
+    <%= form_with url: diagnoses_path, method: :post do |form| %>
+      <div class="flex flex-col gap-6">
+        <% @questions.each_with_index do |question, index| %>
+          <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+            <!-- カテゴリのバッジ -->
+            <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant mb-3">
+              <span class="font-label-sm text-label-sm"><%= question["category"] %></span>
+            </div>
+
+            <!-- 質問文 -->
+            <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 leading-snug">
+              <span class="text-brand-1"><%= index + 1 %>.</span>
+              <%= question["text"] %>
+            </h2>
+
+            <!-- 選択肢 -->
+            <div class="flex flex-col gap-2">
+              <% question["choices"].each_with_index do |choice, choice_index| %>
+                <label class="cursor-pointer flex items-start gap-3 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+                  <%= radio_button_tag "answers[#{index}]", choice_index, choice_index.zero?,
+                        required: true, class: "mt-1 w-5 h-5 accent-brand-1 cursor-pointer shrink-0" %>
+                  <span class="font-body-md text-body-md text-on-surface"><%= choice["text"] %></span>
+                </label>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 送信ボタン -->
+      <div class="mt-10 flex justify-center">
+        <%= form.submit "診断する",
+              class: "bg-brand-1 text-on-primary h-[48px] px-12 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 cursor-pointer" %>
+      </div>
+    <% end %>
+  </main>
+</div>
