@@ -1,0 +1,38 @@
+<% content_for :title, "ねこの集会場 - お迎え診断" %>
+
+<div class="min-h-screen bg-surface">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex justify-between items-center bg-surface shadow-sm">
+    <span class="font-headline-md text-headline-md font-bold text-on-background">ねこの集会場</span>
+    <div class="flex items-center gap-4">
+      <%= link_to "ログイン", new_user_session_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" %>
+      <%= link_to "新規登録", new_user_registration_path, class: "font-label-md text-label-md bg-brand-1 text-on-primary px-6 py-2 rounded-full hover:bg-brand-2 transition-all" %>
+    </div>
+  </header>
+
+  <!-- メイン -->
+  <main class="max-w-[1200px] mx-auto px-gutter py-16">
+    <!-- 登録不要バッジ -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-3 text-on-background mb-6">
+      <span class="material-symbols-outlined text-[18px]">verified</span>
+      <span class="font-label-sm text-label-sm font-semibold">登録不要ですぐ試せる無料診断</span>
+    </div>
+
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-6 leading-tight">
+      可愛い、だけでは<br class="hidden md:block" />飼えないから。<br />
+      <span class="text-brand-1 block mt-2">一生のパートナーになる<br class="hidden md:block" />ための準備を始めよう</span>
+    </h1>
+
+    <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-2xl">
+      猫との暮らしは、毎日の癒しであると同時に、15年以上続くひとつの「命」への大きな責任を伴います。環境、費用、そしてあなたの覚悟。本当に迎える準備ができているか、まずは客観的に確認してみませんか？
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+      <%= link_to new_diagnosis_path, class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 group w-full sm:w-auto" do %>
+        お迎え診断を始める
+        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      <% end %>
+      <span class="font-label-sm text-label-sm text-on-surface-variant/70">所要時間: 約3分</span>
+    </div>
+  </main>
+</div>

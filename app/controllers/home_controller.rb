@@ -1,7 +1,9 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!
+  # トップページは未ログインでも開ける（診断への入口のため）
+  before_action :authenticate_user!, except: :index
 
-  # ログイン後のトップページ
+  # ログイン済みならコミュニティのトップ、未ログインならランディングページ
   def index
+    render :landing unless user_signed_in?
   end
 end
