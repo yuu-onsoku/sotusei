@@ -28,6 +28,12 @@ Rails.application.routes.draw do
     get :result, on: :collection
   end
 
+  # 覚悟のチェックリスト（ログイン後の機能）
+  resources :checklists, only: %i[new create] do
+    get :result, on: :collection
+  end
+
+
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。
   root "home#index"

@@ -1,0 +1,27 @@
+<% content_for :title, "覚悟のチェックリスト - ねこの集会場" %>
+
+<h1>覚悟のチェックリスト</h1>
+
+<p>
+  猫と暮らすうえで「大変なこと」を<%= ChecklistJudge.items.size %>個ならべました。
+  読んで納得できたものにチェックを付けてください。
+</p>
+<p>全部にチェックが付かなくても、結果は見られます。</p>
+
+<%= form_with url: checklists_path, method: :post do |form| %>
+  <% @items.each_with_index.group_by { |item, _index| item["category"] }.each do |category, items| %>
+    <section>
+      <h2><%= category %></h2>
+
+      <% items.each do |item, index| %>
+        <div>
+          <%= check_box_tag "checklist[checked][]", index, false, id: "item_#{index}" %>
+          <%= label_tag "item_#{index}", item["text"] %>
+          <p><%= item["detail"] %></p>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+
+  <%= form.submit "結果を見る" %>
+<% end %>
