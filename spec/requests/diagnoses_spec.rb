@@ -21,5 +21,12 @@ RSpec.describe "Diagnoses", type: :request do
       get result_diagnoses_path
       expect(response).to redirect_to(new_diagnosis_path)
     end
+    # 診断からチェックリストへの流れが、このアプリの中心。
+    # リンクを消しても画面もテストも壊れないため、ここで固定する。
+    it "診断結果からチェックリストへの導線がある" do
+      post diagnoses_path, params: { answers: { "0" => "0", "1" => "0", "2" => "0", "3" => "0", "4" => "0" } }
+      get result_diagnoses_path
+      expect(response.body).to include(new_checklist_path)
+    end
   end
 end
