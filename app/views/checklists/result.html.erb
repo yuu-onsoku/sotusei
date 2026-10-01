@@ -1,0 +1,34 @@
+<% content_for :title, "チェックの結果 - ねこの集会場" %>
+
+<h1>チェックの結果</h1>
+
+<p>
+  <%= @judge.total_count %>個のうち、<%= @judge.checked_count %>個に納得できました。
+</p>
+
+<% if @judge.all_checked? %>
+  <h2>覚悟はできているにゃ</h2>
+  <p>
+    大変なことを全部知ったうえで、それでも一緒に暮らしたいと思ってくれたにゃ。
+    その気持ちがあれば、きっと大丈夫にゃ。
+  </p>
+<% else %>
+  <h2>この<%= @judge.unchecked_items.size %>個が、まだ引っかかっているみたいだにゃ</h2>
+  <p>
+    無理に納得しなくていいにゃ。
+    気になることが残っているうちは、まだ一緒に暮らすときじゃないのかもしれないにゃ。
+  </p>
+
+  <ul>
+    <% @judge.unchecked_items.each do |item| %>
+      <li>
+        <strong><%= item["text"] %></strong>
+        <p><%= item["detail"] %></p>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p>
+  <%= link_to "もう一度チェックする", new_checklist_path %>
+</p>
