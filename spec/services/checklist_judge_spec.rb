@@ -13,6 +13,23 @@ RSpec.describe ChecklistJudge do
         expect(item["detail"]).to be_present
       end
     end
+
+    it "カテゴリが5種類、YAMLの順番どおりに並んでいる" do
+      categories = ChecklistJudge.items.map { |item| item["category"] }.uniq
+      expect(categories).to eq([
+        "毎日のお世話",
+        "ねこの行動",
+        "家や物への影響",
+        "健康とお金",
+        "暮らしと将来"
+      ])
+    end
+  end
+
+  describe "#total_count" do
+    it "16項目あることを数えられる" do
+      expect(ChecklistJudge.new([]).total_count).to eq(16)
+    end
   end
 
   describe "#checked_count" do
@@ -36,6 +53,15 @@ RSpec.describe ChecklistJudge do
 
       expect(unchecked.size).to eq(1)
       expect(unchecked.first["text"]).to eq(ChecklistJudge.items.first["text"])
+    end
+
+    it "1つもチェックしないと、16項目すべてが残る" do
+      expect(ChecklistJudge.new([]).unchecked_items.size).to eq(16)
+    end
+
+    it "全部チェックすると、空になる" do
+      all = (0..15).map(&:to_s)
+      expect(ChecklistJudge.new(all).unchecked_items).to be_empty
     end
   end
 
