@@ -1,34 +1,86 @@
 <% content_for :title, "覚悟のチェックリスト - ねこの集会場" %>
 
-<header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm mb-8">
-  <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
-    <span class="material-symbols-outlined text-brand-1">pets</span>
-    <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+<div class="min-h-screen relative">
+  <!-- 背景の装飾肉球（余白にバラバラに散らす。カード背後では隠れる） -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none text-[#f9c54e]/20" aria-hidden="true">
+    <span class="material-symbols-outlined absolute top-[5%] left-[7%] text-5xl rotate-[-20deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[11%] left-[91%] text-3xl rotate-[35deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[19%] left-[2%] text-6xl rotate-[12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[23%] left-[84%] text-4xl rotate-[-45deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[31%] left-[12%] text-3xl rotate-[28deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[36%] left-[96%] text-5xl rotate-[8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[44%] left-[4%] text-4xl rotate-[-33deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[51%] left-[88%] text-6xl rotate-[22deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[57%] left-[10%] text-5xl rotate-[-8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[64%] left-[94%] text-3xl rotate-[40deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[72%] left-[3%] text-6xl rotate-[-25deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[77%] left-[86%] text-4xl rotate-[15deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[85%] left-[9%] text-3xl rotate-[-38deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[89%] left-[92%] text-5xl rotate-[30deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[95%] left-[5%] text-4xl rotate-[-14deg]">pets</span>
   </div>
-</header>
 
-<h1>覚悟のチェックリスト</h1>
+  <!-- ヘッダー -->
+  <header class="relative z-10 w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
 
-<p>
-  猫と暮らすうえで「大変なこと」を<%= ChecklistJudge.items.size %>個ならべました。
-  読んで納得できたものにチェックを付けてください。
-</p>
-<p>全部にチェックが付かなくても、結果は見られます。</p>
+      <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-3 text-on-background shrink-0">
+        <span class="material-symbols-outlined text-[16px]">checklist</span>
+        <span class="font-label-sm text-label-sm font-semibold">全<%= @items.size %>項目</span>
+      </div>
+    </div>
+  </header>
 
-<%= form_with url: checklists_path, method: :post do |form| %>
-  <% @items.each_with_index.group_by { |item, _index| item["category"] }.each do |category, items| %>
-    <section>
-      <h2><%= category %></h2>
+  <main class="relative z-10 max-w-[800px] mx-auto px-gutter py-12">
+    <!-- 導入 -->
+    <div class="mb-10">
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-4">覚悟のチェックリスト</h1>
 
-      <% items.each do |item, index| %>
-        <div>
-          <%= check_box_tag "checklist[checked][]", index, false, id: "item_#{index}" %>
-          <%= label_tag "item_#{index}", item["text"] %>
-          <p><%= item["detail"] %></p>
-        </div>
-      <% end %>
-    </section>
-  <% end %>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        猫と暮らすうえで「大変なこと」を<%= @items.size %>個ならべました。
+        読んで、納得できたものにチェックを付けてください。
+      </p>
+      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
+        全部にチェックが付かなくても、結果は見られます。
+      </p>
+    </div>
 
-  <%= form.submit "結果を見る" %>
-<% end %>
+    <!-- チェックリスト本体 -->
+    <%= form_with url: checklists_path, method: :post do |form| %>
+      <div class="flex flex-col gap-6">
+        <% @items.each_with_index.group_by { |item, _index| item["category"] }.each do |category, items| %>
+          <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+            <!-- カテゴリのバッジ -->
+            <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant mb-4">
+              <span class="font-label-sm text-label-sm"><%= category %></span>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <% items.each do |item, index| %>
+                <label for="item_<%= index %>" class="cursor-pointer flex items-start gap-3 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+                  <%= check_box_tag "checklist[checked][]", index, false,
+                        id: "item_#{index}", class: "mt-1 w-5 h-5 accent-brand-1 cursor-pointer shrink-0" %>
+
+                  <span class="flex flex-col gap-1">
+                    <span class="font-body-md text-body-md text-on-surface font-semibold"><%= item["text"] %></span>
+                    <span class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed"><%= item["detail"] %></span>
+                  </span>
+                </label>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 送信ボタン -->
+      <div class="mt-10 flex justify-center">
+        <%= form.submit "結果を見る",
+              class: "bg-brand-1 text-on-primary h-[48px] px-12 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200 cursor-pointer" %>
+      </div>
+    <% end %>
+  </main>
+</div>
