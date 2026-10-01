@@ -1,41 +1,114 @@
 <% content_for :title, "チェックの結果 - ねこの集会場" %>
 
-<header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm mb-8">
-  <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
-    <span class="material-symbols-outlined text-brand-1">pets</span>
-    <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+<%
+  # 全部にチェックが付いたかで見た目を変える（責める色は使わず、どちらも温かい色にする）
+  style = if @judge.all_checked?
+            { bg: "bg-primary-container", cat: "cats/cheer.png", alt: "ポンポンを持って喜ぶ猫" }
+          else
+            { bg: "bg-tertiary-fixed", cat: "cats/relax.png", alt: "寝そべって待っている猫" }
+          end
+
+  percent = (@judge.checked_count * 100.0 / @judge.total_count).round
+%>
+
+<div class="min-h-screen relative">
+  <!-- 背景の装飾肉球（余白にバラバラに散らす） -->
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none text-[#f9c54e]/20" aria-hidden="true">
+    <span class="material-symbols-outlined absolute top-[7%] left-[6%] text-5xl rotate-[-20deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[13%] left-[90%] text-3xl rotate-[35deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[24%] left-[3%] text-6xl rotate-[12deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[29%] left-[85%] text-4xl rotate-[-45deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[40%] left-[11%] text-3xl rotate-[28deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[47%] left-[95%] text-5xl rotate-[8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[58%] left-[4%] text-4xl rotate-[-33deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[66%] left-[88%] text-6xl rotate-[22deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[75%] left-[9%] text-5xl rotate-[-8deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[83%] left-[93%] text-3xl rotate-[40deg]">pets</span>
+    <span class="material-symbols-outlined absolute top-[92%] left-[5%] text-4xl rotate-[-25deg]">pets</span>
   </div>
-</header>
 
-<h1>チェックの結果</h1>
+  <!-- ヘッダー -->
+  <header class="relative z-10 w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
 
-<p>
-  <%= @judge.total_count %>個のうち、<%= @judge.checked_count %>個に納得できました。
-</p>
+  <main class="relative z-10 max-w-[800px] mx-auto px-gutter py-12">
+    <!-- 判定 -->
+    <div class="<%= style[:bg] %> rounded-xl p-8 md:p-10 shadow-sm text-center mb-8">
+      <%= image_tag style[:cat], alt: style[:alt], class: "w-32 h-32 md:w-40 md:h-40 mx-auto object-contain mb-2 mix-blend-multiply" %>
 
-<% if @judge.all_checked? %>
-  <h2>覚悟はできているにゃ</h2>
-  <p>
-    大変なことを全部知ったうえで、それでも一緒に暮らしたいと思ってくれたにゃ。
-    その気持ちがあれば、きっと大丈夫にゃ。
-  </p>
-<% else %>
-  <h2>この<%= @judge.unchecked_items.size %>個が、まだ引っかかっているみたいだにゃ</h2>
-  <p>
-    無理に納得しなくていいにゃ。
-    気になることが残っているうちは、まだ一緒に暮らすときじゃないのかもしれないにゃ。
-  </p>
+      <p class="font-label-sm text-label-sm text-on-background/70 mb-2">チェックの結果</p>
 
-  <ul>
-    <% @judge.unchecked_items.each do |item| %>
-      <li>
-        <strong><%= item["text"] %></strong>
-        <p><%= item["detail"] %></p>
-      </li>
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-6">
+        <%= @judge.total_count %>個のうち、<%= @judge.checked_count %>個に納得できました。
+      </h1>
+
+      <!-- 進み具合のバー -->
+      <div class="max-w-[400px] mx-auto">
+        <div class="h-3 w-full rounded-full bg-surface/60 overflow-hidden">
+          <div class="h-full rounded-full bg-brand-1 transition-all duration-500" style="width: <%= percent %>%"></div>
+        </div>
+        <p class="font-label-sm text-label-sm text-on-background/70 mt-2"><%= percent %>%</p>
+      </div>
+    </div>
+
+    <!-- 猫からのコメント -->
+    <div class="flex items-start gap-3 mb-10">
+      <%= image_tag style[:cat], alt: style[:alt], class: "w-12 h-12 object-contain shrink-0 mix-blend-multiply" %>
+
+      <!-- 吹き出し -->
+      <div class="relative bg-surface-container-lowest rounded-xl p-5 shadow-sm flex-1">
+        <!-- 左向きの三角（吹き出しのしっぽ） -->
+        <div class="absolute left-[-6px] top-5 w-3 h-3 bg-surface-container-lowest rotate-45"></div>
+
+        <% if @judge.all_checked? %>
+          <h2 class="relative font-headline-sm text-headline-sm text-on-surface mb-2">覚悟はできているにゃ</h2>
+          <p class="relative font-body-md text-body-md text-on-surface leading-relaxed">
+            大変なことを全部知ったうえで、それでも一緒に暮らしたいと思ってくれたにゃ。
+            その気持ちがあれば、きっと大丈夫にゃ。
+          </p>
+        <% else %>
+          <h2 class="relative font-headline-sm text-headline-sm text-on-surface mb-2">
+            この<%= @judge.unchecked_items.size %>個が、まだ引っかかっているみたいだにゃ
+          </h2>
+          <p class="relative font-body-md text-body-md text-on-surface leading-relaxed">
+            無理に納得しなくていいにゃ。
+            気になることが残っているうちは、まだ一緒に暮らすときじゃないのかもしれないにゃ。
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- まだチェックが付いていない項目 -->
+    <% unless @judge.all_checked? %>
+      <div class="flex flex-col gap-3 mb-10">
+        <% @judge.unchecked_items.each do |item| %>
+          <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm">
+            <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant mb-3">
+              <span class="font-label-sm text-label-sm"><%= item["category"] %></span>
+            </div>
+
+            <h3 class="font-body-md text-body-md text-on-surface font-semibold mb-1"><%= item["text"] %></h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed"><%= item["detail"] %></p>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
 
-<p>
-  <%= link_to "もう一度チェックする", new_checklist_path %>
-</p>
+    <!-- 次のアクション -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to new_checklist_path, class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 hover:scale-[1.02] transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">refresh</span>
+        もう一度チェックする
+      <% end %>
+
+      <%= link_to questions_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">forum</span>
+        ねこの相談室で聞いてみる
+      <% end %>
+    </div>
+  </main>
+</div>
