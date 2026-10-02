@@ -32,7 +32,9 @@ Rails.application.routes.draw do
   resources :checklists, only: %i[new create] do
     get :result, on: :collection
   end
-
+  # 静的ページ（未ログインでも見られる）
+  get "terms", to: "pages#terms"
+  get "privacy", to: "pages#privacy"
 
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。

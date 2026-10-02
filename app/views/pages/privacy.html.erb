@@ -1,0 +1,133 @@
+<% content_for :title, "プライバシーポリシー - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">プライバシーポリシー</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">制定日: 2026年10月2日</p>
+
+    <!-- 最初に読んでほしいこと -->
+    <div class="bg-tertiary-fixed rounded-xl p-6 mb-10">
+      <p class="font-body-md text-body-md text-on-background leading-relaxed">
+        「ねこの集会場」（以下「本サービス」）における、利用者の情報の取り扱いについて定めたものです。
+        本サービスは<strong>プログラミング学習の卒業制作として個人が開発・運営しているもの</strong>であり、
+        取得する情報は、サービスの提供に必要な最小限にとどめています。
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-8">
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">1. 取得する情報</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          本サービスでは、次の情報を取得します。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li><strong>登録時にご入力いただく情報</strong> — ユーザー名、お名前（表示名）、メールアドレス、パスワード</li>
+          <li><strong>投稿していただく内容</strong> — 質問、回答、添付された画像</li>
+          <li><strong>サービスの利用に伴い発生する情報</strong> — いいねの記録、投稿日時</li>
+        </ul>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
+          パスワードは暗号化（ハッシュ化）して保存しており、運営者が元の文字列を知ることはできません。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">2. お迎え診断・覚悟のチェックリストの回答について</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          お迎え診断および覚悟のチェックリストの回答は、<strong>データベースには保存していません。</strong>
+          結果を表示するあいだだけ、ブラウザのセッション（Cookie）に一時的に保持し、
+          ブラウザを閉じると失われます。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">3. 利用目的</h2>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>本サービスの提供・運営のため</li>
+          <li>利用者の本人確認、ログイン状態の維持のため</li>
+          <li>パスワードを忘れた際の再設定のため</li>
+          <li>規約に違反する行為への対応のため</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">4. 第三者への提供</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          法令に基づく場合を除き、利用者の同意なく個人情報を第三者に提供することはありません。
+          情報を販売・貸与することもありません。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">5. 外部サービスの利用</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          本サービスは、運営のために次の外部サービスを利用しています。
+          これらのサービス上に情報が保存されるため、各社の定めに従って取り扱われます。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li><strong>Render</strong> — アプリケーションおよびデータベースの設置場所</li>
+          <li><strong>Cloudinary</strong> — 投稿された画像の保存</li>
+          <li><strong>Google Fonts</strong> — 画面で使用する書体の配信</li>
+        </ul>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
+          なお、本サービスではアクセス解析ツール（Google アナリティクス等）を使用していません。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">6. Cookie の使用</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          ログイン状態の維持と、診断結果の一時的な保持のために Cookie を使用しています。
+          広告や行動の追跡を目的とした Cookie は使用していません。
+          ブラウザの設定で Cookie を無効にすると、ログインができなくなります。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">7. 公開される情報</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          投稿した質問・回答・画像と、お名前（表示名）は、本サービスを利用する他の方が見られる状態になります。
+          <strong>メールアドレスが他の利用者に表示されることはありません。</strong>
+          公開したくない情報は投稿しないようご注意ください。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">8. 情報の確認・訂正・削除</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          登録した情報は、ご自身でいつでも確認・変更できます。
+          投稿した質問や回答も、ご自身で削除できます。
+          アカウントの削除をご希望の場合は、お問い合わせフォームよりご連絡ください。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">9. 本ポリシーの変更</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          必要に応じて本ポリシーを変更することがあります。
+          変更後の内容は、本ページに掲載した時点から適用されます。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">10. お問い合わせ</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          本ポリシーに関するお問い合わせは、お問い合わせフォームよりご連絡ください。
+        </p>
+      </section>
+    </div>
+
+    <!-- 関連ページ -->
+    <div class="mt-12 pt-8 border-t border-outline-variant flex flex-wrap gap-6">
+      <%= link_to "利用規約", terms_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      <%= link_to "トップページへ戻る", root_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+    </div>
+  </main>
+</div>

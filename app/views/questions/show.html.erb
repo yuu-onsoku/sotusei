@@ -153,8 +153,8 @@
     <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
       <div class="font-headline-sm text-headline-sm text-primary">ねこの集会場</div>
       <div class="flex flex-wrap justify-center gap-md">
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">利用規約</a>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">プライバシーポリシー</a>
+        <%= link_to "利用規約", terms_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" %>
+        <%= link_to "プライバシーポリシー", privacy_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" %>
         <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">お問い合わせ</a>
         <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">ブランドメッセージ</a>
       </div>

@@ -41,7 +41,7 @@
           <%= check_box_tag "terms", "1", false, required: true,
                 id: "terms", class: "mt-1 rounded border-outline-variant text-primary accent-primary focus:ring-primary h-4 w-4" %>
           <label class="font-body-md text-body-md text-on-surface-variant" for="terms">
-            <a class="text-primary hover:underline font-semibold" href="#">利用規約</a>と<a class="text-primary hover:underline font-semibold" href="#">プライバシーポリシー</a>に同意します。猫の生涯に責任を持つことを誓います。
+            <%= link_to "利用規約", terms_path, class: "text-primary hover:underline font-semibold" %>と<%= link_to "プライバシーポリシー", privacy_path, class: "text-primary hover:underline font-semibold" %>に同意します。猫の生涯に責任を持つことを誓います。
           </label>
         </div>
 
@@ -59,8 +59,8 @@
   <footer class="mt-xl py-lg w-full max-w-[1200px] flex flex-col md:flex-row items-center px-gutter gap-md justify-center text-center">
     <p class="font-label-sm text-label-sm text-on-surface-variant/60">© 2026 ねこの集会場. Empathetic Responsibility for Feline Life.</p>
     <div class="gap-lg inline-flex justify-center">
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">利用規約</a>
-      <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">プライバシー</a>
+      <%= link_to "利用規約", terms_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" %>
+      <%= link_to "プライバシー", privacy_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" %>
       <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">お問い合わせ</a>
     </div>
   </footer>
