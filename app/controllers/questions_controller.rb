@@ -9,8 +9,9 @@ class QuestionsController < ApplicationController
 
   # 質問の詳細と、寄せられた回答の一覧
   def show
-    @question = Question.includes(:user, :likes).find(params[:id])
-    @answers = @question.answers.includes(:user, :likes, image_attachment: :blob).order(created_at: :asc)
+    # コメントは投稿者名も出すので、comments: :user までまとめて読み込む
+    @question = Question.includes(:user, :likes, comments: :user).find(params[:id])
+    @answers = @question.answers.includes(:user, :likes, { comments: :user }, image_attachment: :blob).order(created_at: :asc)
   end
 
   # 質問を投稿する（フォーム）。テンプレートは post.html.erb。

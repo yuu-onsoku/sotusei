@@ -1,0 +1,42 @@
+<% content_for :title, "コメントの編集 - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-2">コメントの編集</h1>
+
+    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">
+      <%= @commentable.is_a?(Question) ? "質問" : "回答" %>へのコメントを書き直します。
+    </p>
+
+    <%= form_with model: [ @commentable, @comment ], class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm" do |form| %>
+      <% if @comment.errors.any? %>
+        <div class="bg-error-container text-on-error-container rounded-lg p-4 mb-4">
+          <ul class="list-disc pl-5 font-body-sm text-body-sm">
+            <% @comment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form.text_area :content, rows: 5, maxlength: 1000,
+            class: "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary resize-y" %>
+
+      <div class="flex items-center justify-end gap-4 mt-6">
+        <%= link_to "やめる", question_path(@commentable.is_a?(Question) ? @commentable : @commentable.question),
+              class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+
+        <%= form.submit "更新する",
+              class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200 cursor-pointer" %>
+      </div>
+    <% end %>
+  </main>
+</div>

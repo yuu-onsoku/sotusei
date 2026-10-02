@@ -16,11 +16,15 @@ Rails.application.routes.draw do
     # 肉球ボタン（いいね）。付ける／外すを別々の操作にして、
     # 同じ送信が二重に届いても結果が変わらないようにする。
     resource :like, only: %i[create destroy]
+    # コメント（質問へ）
+    resources :comments, only: %i[create edit update destroy]
   end
 
   # 回答へのいいね
   resources :answers, only: [] do
     resource :like, only: %i[create destroy]
+    # コメント（回答へ）
+    resources :comments, only: %i[create edit update destroy]
   end
 
   # お迎え診断（未ログインでも使える入口機能）

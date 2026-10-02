@@ -1,0 +1,42 @@
+<%# コメント欄。質問にも回答にも使う（commentable が Question か Answer のどちらか） %>
+<div class="mt-sm pt-sm border-t border-outline-variant/50">
+  <% if commentable.comments.any? %>
+    <ul class="flex flex-col gap-2 mb-sm">
+      <% commentable.comments.each do |comment| %>
+        <li class="bg-surface-container-low rounded-lg px-3 py-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-label-sm text-label-sm text-on-surface-variant truncate"><%= comment.user.username %>さん</span>
+            <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(comment.created_at) %></span>
+          </div>
+
+          <p class="font-body-sm text-body-sm text-on-surface whitespace-pre-line leading-relaxed mt-1"><%= comment.content %></p>
+
+          <% if comment.user_id == current_user.id %>
+            <div class="flex items-center justify-end gap-3 mt-1">
+              <%= link_to edit_polymorphic_path([ commentable, comment ]),
+                    class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
+                <span class="material-symbols-outlined text-[16px]">edit</span>編集
+              <% end %>
+
+              <%= link_to polymorphic_path([ commentable, comment ]),
+                    data: { turbo_method: :delete, turbo_confirm: "このコメントを削除しますか？" },
+                    class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-error transition-colors" do %>
+                <span class="material-symbols-outlined text-[16px]">delete</span>削除
+              <% end %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= form_with model: [ commentable, Comment.new ] do |form| %>
+    <div class="flex items-end gap-2">
+      <%= form.text_area :content, rows: 1, maxlength: 1000, placeholder: "コメントを書く",
+            class: "flex-1 rounded-lg border border-outline-variant bg-surface px-3 py-2 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary resize-y" %>
+
+      <%= form.submit "送信",
+            class: "shrink-0 bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:shadow-md transition-all cursor-pointer" %>
+    </div>
+  <% end %>
+</div>
