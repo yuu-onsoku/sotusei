@@ -1,0 +1,142 @@
+<% content_for :title, "利用規約 - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">利用規約</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">制定日: 2026年10月2日</p>
+
+    <!-- 最初に読んでほしいこと -->
+    <div class="bg-tertiary-fixed rounded-xl p-6 mb-10">
+      <p class="font-body-md text-body-md text-on-background leading-relaxed">
+        本サービス「ねこの集会場」は、<strong>プログラミング学習の卒業制作として個人が開発・運営しているもの</strong>です。
+        商用サービスではなく、予告なく内容の変更や公開の停止を行う場合があります。
+        ご利用の前に、この利用規約をお読みください。
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-8">
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第1条（適用）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          本規約は、本サービスの利用に関する条件を、利用者と運営者との間で定めるものです。
+          利用者は、本サービスを利用することで本規約に同意したものとみなします。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第2条（利用登録）</h2>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>利用登録は、本規約に同意のうえ、所定の方法で申請することにより完了します。</li>
+          <li>虚偽の内容を登録した場合や、過去に本規約に違反したことがある場合、運営者は登録を承認しないことがあります。</li>
+          <li>ユーザー名およびメールアドレスは、他の利用者と重複して登録することはできません。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第3条（アカウントの管理）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          利用者は、自己の責任においてアカウントとパスワードを管理するものとします。
+          第三者に利用させたり、譲渡・貸与することはできません。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第4条（禁止事項）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          利用者は、本サービスの利用にあたり、次の行為をしてはなりません。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>法令または公序良俗に違反する行為</li>
+          <li>犯罪行為に関連する行為</li>
+          <li>他の利用者、第三者、または運営者の権利・利益を侵害する行為</li>
+          <li>他の利用者を誹謗中傷し、または不快にさせる行為</li>
+          <li>動物の虐待を助長する内容、または生体の売買を目的とする投稿</li>
+          <li>本サービスの運営を妨害する行為、不正アクセスを試みる行為</li>
+          <li>営利を目的とした宣伝、広告、勧誘を行う行為</li>
+          <li>他人になりすます行為</li>
+          <li>その他、運営者が不適切と判断する行為</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第5条（投稿内容の取り扱い）</h2>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>利用者が投稿した文章および画像の権利は、投稿した利用者に帰属します。</li>
+          <li>利用者は、投稿にあたり必要な権利を有していることを保証するものとします。</li>
+          <li>運営者は、本規約に違反すると判断した投稿を、事前の通知なく削除することがあります。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第6条（猫の飼育に関する情報について）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          本サービスで提供する「お迎え診断」「覚悟のチェックリスト」の結果、および利用者同士のやりとりで得られる情報は、
+          <strong>一般的な参考情報であり、獣医師による診断や専門家の助言に代わるものではありません。</strong>
+          猫の健康や行動に不安がある場合は、必ず動物病院などの専門機関にご相談ください。
+          これらの情報に基づく判断や行動の結果について、運営者は責任を負いかねます。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第7条（サービスの変更・停止）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          運営者は、利用者への事前の通知なく、本サービスの内容を変更し、または提供を停止・終了することができます。
+          これにより利用者に生じた損害について、運営者は責任を負いません。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第8条（免責事項）</h2>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>運営者は、本サービスの内容について、正確性・完全性・有用性を保証しません。</li>
+          <li>利用者同士または利用者と第三者との間に生じたトラブルについて、運営者は責任を負いません。</li>
+          <li>通信障害やシステム不具合によるデータの消失について、運営者は責任を負いません。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第9条（利用登録の抹消）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          運営者は、利用者が本規約に違反したと判断した場合、事前の通知なく、投稿の削除または利用登録の抹消を行うことができます。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第10条（本規約の変更）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          運営者は、必要と判断した場合、本規約を変更することができます。
+          変更後の規約は、本ページに掲載した時点から効力を生じるものとします。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第11条（準拠法・管轄裁判所）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          本規約の解釈には日本法を適用します。
+          本サービスに関して紛争が生じた場合、運営者の所在地を管轄する裁判所を専属的合意管轄とします。
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第12条（お問い合わせ）</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          本規約に関するお問い合わせは、お問い合わせフォームよりご連絡ください。
+        </p>
+      </section>
+    </div>
+
+    <!-- 関連ページ -->
+    <div class="mt-12 pt-8 border-t border-outline-variant flex flex-wrap gap-6">
+      <%= link_to "プライバシーポリシー", privacy_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      <%= link_to "トップページへ戻る", root_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+    </div>
+  </main>
+</div>
