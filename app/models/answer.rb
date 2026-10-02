@@ -4,6 +4,9 @@ class Answer < ApplicationRecord
   # いいね（肉球ボタン）
   include Likeable
 
+  # コメント
+  include Commentable
+
   belongs_to :question
   #  質問機能にいいねと画像挿入
   belongs_to :user

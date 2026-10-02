@@ -4,6 +4,9 @@ class Question < ApplicationRecord
   # いいね（肉球ボタン）
   include Likeable
 
+  # コメント
+  include Commentable
+
   belongs_to :user
   has_many :answers, dependent: :destroy
   #  Question（質問）が他のテーブルとどう繋がっているかを Rails に教える「関連（association）」の宣言です。
