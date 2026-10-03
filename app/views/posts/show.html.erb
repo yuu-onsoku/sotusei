@@ -1,0 +1,74 @@
+<% content_for :title, "#{@post.user.username}さんの投稿 - にゃんスタ" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[720px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <%= link_to posts_path, class: "inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" do %>
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        にゃんスタへ
+      <% end %>
+    </div>
+  </header>
+
+  <main class="max-w-[720px] mx-auto px-gutter py-12">
+    <article class="bg-surface-container-lowest rounded-xl p-md shadow-sm">
+      <!-- 投稿者 -->
+      <div class="flex items-center justify-between gap-sm mb-sm">
+        <div class="flex items-center gap-base min-w-0">
+          <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md shrink-0"><%= @post.user.username.first %></div>
+          <span class="font-label-md text-label-md text-on-surface-variant truncate"><%= @post.user.username %>さん</span>
+        </div>
+        <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(@post.created_at) %></span>
+      </div>
+
+      <%# 枠の形は1枚目の写真に合わせる（複数枚で形が変わると見づらいため） %>
+      <% aspect = post_aspect_class(@post.images.first) %>
+
+      <!-- 写真。インスタと同じ 1:1 / 4:5 / 16:9 のどれかに寄せ、複数枚は横にスワイプして見る -->
+      <%# 幅は600pxまで。これより広げると、縦長(4:5)のとき画面に収まらなくなる %>
+      <div class="relative max-w-[600px] mx-auto">
+        <div class="flex overflow-x-auto snap-x snap-mandatory rounded-lg border border-outline-variant/30">
+          <% @post.images.each do |image| %>
+            <div class="snap-center shrink-0 w-full">
+              <%= image_tag image, loading: "lazy", alt: "#{@post.user.username}さんの投稿写真",
+                    class: "js-zoomable cursor-zoom-in w-full #{aspect} object-cover" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- 複数枚のときだけ枚数を出す -->
+        <% if @post.images.size > 1 %>
+          <span class="absolute top-2 right-2 px-2 py-1 rounded-full bg-black/60 text-white font-label-sm text-label-sm pointer-events-none">
+            <%= @post.images.size %>枚 →
+          </span>
+        <% end %>
+      </div>
+
+      <!-- キャプション -->
+      <% if @post.content.present? %>
+        <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed mt-md"><%= @post.content %></p>
+      <% end %>
+
+      <!-- 自分の投稿なら編集・削除 -->
+      <% if @post.user_id == current_user.id %>
+        <div class="flex items-center justify-end gap-md border-t border-outline-variant mt-sm pt-sm">
+          <%= link_to edit_post_path(@post), class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" do %>
+            <span class="material-symbols-outlined text-[16px]">edit</span>編集
+          <% end %>
+
+          <%= link_to post_path(@post),
+                data: { turbo_method: :delete, turbo_confirm: "この投稿を削除しますか？いいねやコメントも一緒に削除されます。" },
+                class: "flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-error transition-colors" do %>
+            <span class="material-symbols-outlined text-[16px]">delete</span>削除
+          <% end %>
+        </div>
+      <% end %>
+    </article>
+  </main>
+</div>

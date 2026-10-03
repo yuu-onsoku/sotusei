@@ -24,8 +24,9 @@ RUN apt-get update -qq \
   | tee /etc/apt/sources.list.d/yarn.list
 
 # パッケージインストール
+# libvips: Active Storage が画像の縦横を読み、縮小版を作るために使う（本番用 Dockerfile にも入っている）
 RUN apt-get update -qq \
-&& apt-get install -y build-essential libpq-dev nodejs yarn vim
+&& apt-get install -y build-essential libpq-dev nodejs yarn vim libvips
 
 # アプリケーションディレクトリの作成
 RUN mkdir /myapp

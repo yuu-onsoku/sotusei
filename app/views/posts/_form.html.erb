@@ -1,0 +1,94 @@
+<%# 投稿フォーム。新規作成と編集で共通して使う %>
+<%= form_with model: post, class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm" do |form| %>
+  <% if post.errors.any? %>
+    <div class="bg-error-container text-on-error-container rounded-lg p-4 mb-6">
+      <ul class="list-disc pl-5 font-body-sm text-body-sm">
+        <% post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- いま付いている写真（編集のときだけ出す） -->
+  <% if post.persisted? && post.images.attached? %>
+    <div class="mb-6">
+      <p class="font-label-md text-label-md text-on-surface mb-2">いまの写真</p>
+
+      <div class="grid grid-cols-4 gap-2">
+        <% post.images.each do |image| %>
+          <%= image_tag image, alt: "いまの写真", class: "w-full aspect-square object-cover rounded-lg border border-outline-variant/30" %>
+        <% end %>
+      </div>
+
+      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
+        新しく写真をえらぶと、いまの写真はすべて入れ替わります。そのままでよければ何もえらばないでください。
+      </p>
+    </div>
+  <% end %>
+
+  <!-- 写真。カメラのマークを押すとファイル選択が開く -->
+  <div class="mb-6">
+    <%= form.label :images, class: "block cursor-pointer" do %>
+      <div class="flex flex-col items-center justify-center gap-2 py-10 px-4 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low hover:bg-surface-container hover:border-brand-1 transition-colors text-center">
+        <span class="material-symbols-outlined text-brand-1 text-[48px]">add_a_photo</span>
+
+        <span class="font-label-md text-label-md text-on-surface">ここを押して写真をえらぶ</span>
+        <span class="font-label-sm text-label-sm text-on-surface-variant/70">1〜4枚 / PNG・JPEG・GIF・WEBP / 1枚5MBまで</span>
+        <span class="font-label-sm text-label-sm text-on-surface-variant/70">まとめて選ぶときは Ctrl（Macは⌘）を押しながら</span>
+      </div>
+
+      <%= form.file_field :images, multiple: true, accept: "image/png,image/jpeg,image/gif,image/webp",
+            class: "hidden", data: { picker: true } %>
+    <% end %>
+
+    <!-- えらんだ写真をその場に出す -->
+    <div data-preview class="grid grid-cols-4 gap-2 mt-3 hidden"></div>
+  </div>
+
+  <!-- キャプション -->
+  <div class="mb-6">
+    <%= form.label :content, "ひとこと（任意）", class: "block font-label-md text-label-md text-on-surface mb-2" %>
+
+    <%= form.text_area :content, rows: 4, maxlength: 1000, placeholder: "今日もよく寝ています。",
+          class: "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary resize-y" %>
+  </div>
+
+  <div class="flex items-center justify-end gap-4">
+    <%= link_to "やめる", posts_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+
+    <%= form.submit submit_label,
+          class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200 cursor-pointer" %>
+  </div>
+<% end %>
+
+<script>
+  // えらんだ写真をその場に表示する。
+  // 送信前に「何をえらんだか」が見えないと不安なので、ここだけJSで補う。
+  (function () {
+    const picker = document.querySelector("[data-picker]");
+    const preview = document.querySelector("[data-preview]");
+    if (!picker || !preview) return;
+
+    picker.addEventListener("change", function () {
+      preview.innerHTML = "";
+
+      const files = Array.from(picker.files || []).slice(0, 4);
+      if (files.length === 0) {
+        preview.classList.add("hidden");
+        return;
+      }
+
+      files.forEach(function (file) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.className = "w-full aspect-square object-cover rounded-lg border border-outline-variant/30";
+        img.onload = function () { URL.revokeObjectURL(img.src); };
+        preview.appendChild(img);
+      });
+
+      preview.classList.remove("hidden");
+    });
+  })();
+</script>

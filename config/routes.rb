@@ -27,6 +27,9 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create edit update destroy]
   end
 
+  # にゃんスタ（うちの子自慢の写真投稿）
+  resources :posts
+
   # お迎え診断（未ログインでも使える入口機能）
   resources :diagnoses, only: %i[new create] do
     get :result, on: :collection
