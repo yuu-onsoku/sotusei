@@ -8,9 +8,9 @@ class CommentsController < ApplicationController
     @comment = @commentable.comments.build(comment_params)
     @comment.user = current_user
     if @comment.save
-      redirect_to question_path(question_of(@commentable)), notice: "コメントを投稿しました。"
+      redirect_to back_path(@commentable), notice: "コメントを投稿しました。"
     else
-      redirect_to question_path(question_of(@commentable)), alert: "コメントを投稿できませんでした。"
+      redirect_to back_path(@commentable), alert: "コメントを投稿できませんでした。"
     end
   end
 
@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
   # コメントの更新
   def update
     if @comment.update(comment_params)
-      redirect_to question_path(question_of(@commentable)), notice: "コメントを更新しました。"
+      redirect_to back_path(@commentable), notice: "コメントを更新しました。"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,30 +30,36 @@ class CommentsController < ApplicationController
   # コメントの削除
   def destroy
     @comment.destroy
-    redirect_to question_path(question_of(@commentable)), notice: "コメントを削除しました。"
+    redirect_to back_path(@commentable), notice: "コメントを削除しました。"
   end
 
   private
 
-  # 質問・回答のどちらへのコメントかはネストされたパスで決まる
+  # 質問・回答・にゃんスタの投稿のどれへのコメントかは、ネストされたパスで決まる
   def set_commentable
     @commentable =
       if params[:question_id]
         Question.find(params[:question_id])
-      else
+      elsif params[:answer_id]
         Answer.find(params[:answer_id])
+      else
+        Post.find(params[:post_id])
       end
   end
 
   # 編集・削除できるのは自分のコメントだけ
   def set_own_comment
     @comment = @commentable.comments.where(user: current_user).find_by(id: params[:id])
-    redirect_to question_path(question_of(@commentable)), alert: "自分のコメントだけが編集・削除できます。" if @comment.nil?
+    redirect_to back_path(@commentable), alert: "自分のコメントだけが編集・削除できます。" if @comment.nil?
   end
 
-  # 回答へのコメントでも、戻る先は質問の詳細画面
-  def question_of(commentable)
-    commentable.is_a?(Question) ? commentable : commentable.question
+  # コメントのあと戻る先。回答へのコメントは、その回答が属する質問の詳細へ。
+  def back_path(commentable)
+    case commentable
+    when Question then question_path(commentable)
+    when Answer   then question_path(commentable.question)
+    when Post     then post_path(commentable)
+    end
   end
 
   def comment_params

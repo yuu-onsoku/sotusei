@@ -72,6 +72,28 @@ RSpec.describe "Comments", type: :request do
       end
     end
 
+    describe "POST /posts/:post_id/comments" do
+      it "にゃんスタの投稿にコメントでき、投稿の詳細に戻る" do
+        nyansta_post = create(:post)
+
+        expect {
+          post post_comments_path(nyansta_post), params: { comment: { content: "かわいいです" } }
+        }.to change(Comment, :count).by(1)
+
+        expect(response).to redirect_to(post_path(nyansta_post))
+      end
+
+      # 戻り先を back_path にまとめているので、投稿でも正しい場所へ戻る必要がある
+      it "他人のコメントは編集画面を開けず、投稿の詳細に戻される" do
+        nyansta_post = create(:post)
+        comment = create(:comment, commentable: nyansta_post)
+
+        get edit_post_comment_path(nyansta_post, comment)
+
+        expect(response).to redirect_to(post_path(nyansta_post))
+      end
+    end
+
     # 講師から指摘のあった「他人の投稿を編集・削除できない」をここでも守る
     describe "他人のコメント" do
       it "編集画面を開けない" do
