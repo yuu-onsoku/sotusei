@@ -1,0 +1,63 @@
+<% content_for :title, "にゃんスタ - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[960px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <%= link_to new_post_path, class: "inline-flex items-center gap-2 bg-brand-1 text-on-primary px-5 py-2 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+        投稿する
+      <% end %>
+    </div>
+  </header>
+
+  <main class="max-w-[960px] mx-auto px-gutter py-12">
+    <div class="mb-8">
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-2 flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1 text-[32px]">photo_camera</span>
+        にゃんスタ
+      </h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">うちの子の写真を見せ合う場所です。</p>
+    </div>
+
+    <% if @posts.any? %>
+      <!-- 写真の格子。スマホ2列・PC3列 -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <% @posts.each do |post| %>
+          <%= link_to post_path(post), class: "group relative block aspect-square rounded-xl overflow-hidden bg-surface-container shadow-sm hover:shadow-md transition-all" do %>
+            <%# 一覧は縮小版を使う。元サイズのままだと写真が増えるほど重くなるため %>
+            <%= image_tag post.images.first.variant(resize_to_fill: [ 600, 600 ]), loading: "lazy",
+                  alt: "#{post.user.username}さんの投稿",
+                  class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
+
+            <!-- 複数枚のときだけ出す印 -->
+            <% if post.images.size > 1 %>
+              <span class="material-symbols-outlined absolute top-2 right-2 text-white drop-shadow text-[20px]">filter_none</span>
+            <% end %>
+
+            <!-- 下に投稿者といいね数 -->
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2 flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-white truncate"><%= post.user.username %>さん</span>
+              <span class="flex items-center gap-1 font-label-sm text-label-sm text-white shrink-0">
+                <span class="material-symbols-outlined text-[16px]">pets</span><%= post.likes.size %>
+              </span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
+        <span class="material-symbols-outlined text-outline text-5xl">photo_camera</span>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ投稿がありません。最初のうちの子を見せてみませんか？</p>
+
+        <%= link_to "写真を投稿する", new_post_path,
+              class: "inline-block mt-4 bg-brand-1 text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-brand-2 transition-all duration-200" %>
+      </div>
+    <% end %>
+  </main>
+</div>

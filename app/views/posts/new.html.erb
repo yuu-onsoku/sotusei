@@ -1,0 +1,18 @@
+<% content_for :title, "写真を投稿する - にゃんスタ" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[720px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[720px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-2">写真を投稿する</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-8">うちの子の写真を1〜4枚えらんでください。</p>
+
+    <%= render "form", post: @post, submit_label: "投稿する" %>
+  </main>
+</div>

@@ -23,7 +23,7 @@
     <nav class="flex space-x-6 font-label-md text-label-md">
       <%= link_to "お迎え診断", new_diagnosis_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
       <%= link_to "ねこの相談室", questions_path, class: "text-primary border-b-2 border-primary pb-1 transition-opacity" %>
-      <a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">にゃんスタ</a>
+      <%= link_to "にゃんスタ", posts_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
       <a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">マイページ</a>
     </nav>
     <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },

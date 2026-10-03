@@ -1,0 +1,17 @@
+<% content_for :title, "投稿を編集する - にゃんスタ" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[720px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[720px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-8">投稿を編集する</h1>
+
+    <%= render "form", post: @post, submit_label: "更新する" %>
+  </main>
+</div>
