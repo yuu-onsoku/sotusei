@@ -1,0 +1,14 @@
+<%# ブックマークボタン本体。押した後はこの要素だけがサーバーの状態で差し替わる。
+    送信方法（保存＝POST／取り消し＝DELETE）はサーバーが描いた通りに使うため、
+    同じ送信が二重に届いても結果は変わらない。 %>
+<% bookmarked = bookmarkable.bookmarked_by?(current_user) %>
+<%= form_with url: polymorphic_path([ bookmarkable, :bookmark ]), method: bookmarked ? :delete : :post,
+      id: dom_id(bookmarkable, :bookmark_form), class: "inline-flex" do %>
+  <button type="submit" aria-pressed="<%= bookmarked %>"
+          aria-label="<%= bookmarked ? "保存をやめる" : "保存する" %>"
+          class="relative flex items-center gap-1 transition-colors hover:text-primary <%= bookmarked ? "text-primary" : "text-on-surface-variant" %>">
+    <%= render "shared/cat_bookmark_icon", size: 20, filled: bookmarked %>
+
+    <span class="font-label-md text-label-md"><%= bookmarked ? "保存済み" : "保存" %></span>
+  </button>
+<% end %>

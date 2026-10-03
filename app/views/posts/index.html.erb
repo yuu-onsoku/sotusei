@@ -9,10 +9,17 @@
         <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
       </div>
 
-      <%= link_to new_post_path, class: "inline-flex items-center gap-2 bg-brand-1 text-on-primary px-5 py-2 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200" do %>
-        <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
-        投稿する
-      <% end %>
+      <div class="flex items-center gap-3">
+        <%= link_to bookmarks_path, class: "inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" do %>
+          <%= render "shared/cat_bookmark_icon", size: 18 %>
+          <span class="hidden sm:inline">保存した投稿</span>
+        <% end %>
+
+        <%= link_to new_post_path, class: "inline-flex items-center gap-2 bg-brand-1 text-on-primary px-5 py-2 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200" do %>
+          <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+          投稿する
+        <% end %>
+      </div>
     </div>
   </header>
 

@@ -1,0 +1,38 @@
+<%# ねこ形のブックマークマーク。手描き風のねこの顔。
+    輪郭と耳はオレンジ、目・口・ひげは黒。保存済みのときだけ顔の中を塗る。
+    locals: size（マークの大きさ・px）、filled（保存済みなら true） %>
+<%
+  size = local_assigns.fetch(:size, 20)
+  filled = local_assigns.fetch(:filled, false)
+
+  outline = "#f9a32b"                       # 輪郭のオレンジ
+  face = filled ? "#fde9bb" : "none"        # 保存済みのときだけ顔の中を塗る
+  feature = "#000000"                       # 目・口・ひげ
+%>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 470"
+     width="<%= size %>" height="<%= (size * 470 / 420.0).round %>"
+     fill="none" stroke-linecap="round" stroke-linejoin="round"
+     class="shrink-0 overflow-visible" aria-hidden="true">
+  <%# 顔の輪郭と耳 %>
+  <path d="M35 437 C22 360 18 250 24 180 C28 120 32 75 42 55 C70 85 108 120 122 142
+           C150 152 185 155 212 148 C240 110 275 50 303 16 C330 60 355 120 368 168
+           C382 240 392 360 385 437 C300 428 120 428 35 437 Z"
+        fill="<%= face %>" stroke="<%= outline %>" stroke-width="20" />
+
+  <%# 目（閉じた線） %>
+  <path d="M78 252 C108 244 140 244 166 252" stroke="<%= feature %>" stroke-width="17" />
+  <path d="M212 260 C242 251 273 251 296 260" stroke="<%= feature %>" stroke-width="17" />
+
+  <%# 口。左右の輪が下にふくらみ、真ん中が持ち上がる「ω」のねこ口 %>
+  <path d="M133 305 C141 338 161 342 171 311 C181 342 201 338 209 305"
+        stroke="<%= feature %>" stroke-width="17" />
+
+  <%# ひげ（左） %>
+  <path d="M48 292 C62 285 78 285 92 291" stroke="<%= feature %>" stroke-width="15" />
+  <path d="M52 331 C64 326 78 327 90 334" stroke="<%= feature %>" stroke-width="15" />
+
+  <%# ひげ（右） %>
+  <path d="M304 300 C321 294 341 294 357 301" stroke="<%= feature %>" stroke-width="15" />
+  <path d="M307 336 C323 333 342 341 357 351" stroke="<%= feature %>" stroke-width="15" />
+</svg>
