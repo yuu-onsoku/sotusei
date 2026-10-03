@@ -50,9 +50,10 @@
         <% end %>
       </div>
 
-      <!-- 肉球ボタン -->
-      <div class="flex items-center gap-md mt-md">
+      <!-- 肉球ボタンとブックマーク -->
+      <div class="flex items-center justify-between gap-md mt-md">
         <%= render "likes/button", likeable: @post %>
+        <%= render "bookmarks/button", bookmarkable: @post %>
       </div>
 
       <!-- キャプション -->

@@ -2,6 +2,7 @@ class Post < ApplicationRecord
   # いいね（肉球ボタン）とコメントは共通部品に任せる
   include Likeable
   include Commentable
+  include Bookmarkable
 
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
   IMAGE_MAX_SIZE = 5.megabytes

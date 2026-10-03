@@ -30,8 +30,12 @@ Rails.application.routes.draw do
   # にゃんスタ（うちの子自慢の写真投稿）
   resources :posts do
     resource :like, only: %i[create destroy]
+    resource :bookmark, only: %i[create destroy]
     resources :comments, only: %i[create edit update destroy]
   end
+
+  # 保存した投稿の一覧
+  resources :bookmarks, only: :index
 
   # お迎え診断（未ログインでも使える入口機能）
   resources :diagnoses, only: %i[new create] do

@@ -1,0 +1,66 @@
+<% content_for :title, "保存した投稿 - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[960px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <%= link_to posts_path, class: "inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" do %>
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        にゃんスタへ
+      <% end %>
+    </div>
+  </header>
+
+  <main class="max-w-[960px] mx-auto px-gutter py-12">
+    <div class="mb-8">
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-2 flex items-center gap-2">
+        <span class="text-brand-1 inline-flex">
+          <%= render "shared/cat_bookmark_icon", size: 32, filled: true %>
+        </span>
+        保存した投稿
+      </h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">あとで見返したい「うちの子」をここにためておけます。</p>
+    </div>
+
+    <% if @bookmarks.any? %>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <% @bookmarks.each do |bookmark| %>
+          <% nyansta_post = bookmark.bookmarkable %>
+
+          <%= link_to post_path(nyansta_post), class: "group relative block aspect-square rounded-xl overflow-hidden bg-surface-container shadow-sm hover:shadow-md transition-all" do %>
+            <%= image_tag nyansta_post.images.first.variant(resize_to_fill: [ 600, 600 ]), loading: "lazy",
+                  alt: "#{nyansta_post.user.username}さんの投稿",
+                  class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
+
+            <% if nyansta_post.images.size > 1 %>
+              <span class="material-symbols-outlined absolute top-2 right-2 text-white drop-shadow text-[20px]">filter_none</span>
+            <% end %>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2 flex items-center justify-between">
+              <span class="font-label-sm text-label-sm text-white truncate"><%= nyansta_post.user.username %>さん</span>
+              <span class="flex items-center gap-1 font-label-sm text-label-sm text-white shrink-0">
+                <span class="material-symbols-outlined text-[16px]">pets</span><%= nyansta_post.likes.size %>
+              </span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
+        <span class="text-outline inline-flex justify-center">
+          <%= render "shared/cat_bookmark_icon", size: 48 %>
+        </span>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ保存した投稿がありません。</p>
+        <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-1">気に入った投稿の「保存」を押すと、ここに並びます。</p>
+
+        <%= link_to "にゃんスタを見る", posts_path,
+              class: "inline-block mt-4 bg-brand-1 text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-brand-2 transition-all duration-200" %>
+      </div>
+    <% end %>
+  </main>
+</div>

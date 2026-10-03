@@ -1,0 +1,6 @@
+<%# ねこ形ブックマークボタン。
+    外側の span は差し替えられないので、ここを入れ物にしておく。
+    中のフォームはサーバーからの応答で丸ごと差し替わり、表示が常にサーバーの状態に揃う。 %>
+<span class="inline-flex">
+  <%= render "bookmarks/form", bookmarkable: bookmarkable %>
+</span>
