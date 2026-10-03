@@ -50,10 +50,18 @@
         <% end %>
       </div>
 
+      <!-- 肉球ボタン -->
+      <div class="flex items-center gap-md mt-md">
+        <%= render "likes/button", likeable: @post %>
+      </div>
+
       <!-- キャプション -->
       <% if @post.content.present? %>
-        <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed mt-md"><%= @post.content %></p>
+        <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed mt-sm"><%= @post.content %></p>
       <% end %>
+
+      <!-- コメント -->
+      <%= render "comments/section", commentable: @post %>
 
       <!-- 自分の投稿なら編集・削除 -->
       <% if @post.user_id == current_user.id %>

@@ -31,13 +31,15 @@ class LikesController < ApplicationController
     end
   end
 
-  # 質問・回答のどちらへのいいねかはネストされたパスで決まる
+  # 質問・回答・にゃんスタの投稿のどれへのいいねかは、ネストされたパスで決まる
   def set_likeable
     @likeable =
       if params[:question_id]
         Question.find(params[:question_id])
-      else
+      elsif params[:answer_id]
         Answer.find(params[:answer_id])
+      else
+        Post.find(params[:post_id])
       end
   end
 end

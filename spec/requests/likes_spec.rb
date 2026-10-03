@@ -43,6 +43,29 @@ RSpec.describe "Likes", type: :request do
     end
   end
 
+  describe "POST /posts/:post_id/like" do
+    it "にゃんスタの投稿にいいねできる" do
+      user = create(:user)
+      nyansta_post = create(:post)
+      sign_in user
+
+      post post_like_path(nyansta_post)
+
+      expect(nyansta_post.likes.count).to eq(1)
+    end
+
+    it "同じ投稿に2回いいねしても1件のまま" do
+      user = create(:user)
+      nyansta_post = create(:post)
+      sign_in user
+
+      post post_like_path(nyansta_post)
+      post post_like_path(nyansta_post)
+
+      expect(nyansta_post.likes.count).to eq(1)
+    end
+  end
+
   describe "いいね後のボタン再描画" do
     it "turbo_stream でボタンが描き直される" do
       user = create(:user)

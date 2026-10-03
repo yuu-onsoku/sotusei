@@ -12,8 +12,16 @@
   <main class="max-w-[800px] mx-auto px-gutter py-12">
     <h1 class="font-headline-lg text-headline-lg text-on-background mb-2">コメントの編集</h1>
 
+    <%
+      kind = case @commentable
+             when Question then "質問"
+             when Answer   then "回答"
+             when Post     then "にゃんスタの投稿"
+             end
+    %>
+
     <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">
-      <%= @commentable.is_a?(Question) ? "質問" : "回答" %>へのコメントを書き直します。
+      <%= kind %>へのコメントを書き直します。
     </p>
 
     <%= form_with model: [ @commentable, @comment ], class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm" do |form| %>
@@ -31,7 +39,7 @@
             class: "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary resize-y" %>
 
       <div class="flex items-center justify-end gap-4 mt-6">
-        <%= link_to "やめる", question_path(@commentable.is_a?(Question) ? @commentable : @commentable.question),
+        <%= link_to "やめる", @commentable.is_a?(Post) ? post_path(@commentable) : question_path(@commentable.is_a?(Question) ? @commentable : @commentable.question),
               class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
 
         <%= form.submit "更新する",
