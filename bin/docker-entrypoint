@@ -5,9 +5,13 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+# Webサーバーとして起動するときは、DBの作成・マイグレーションを済ませてから起動する。
+# Render は CMD を 'bundle exec puma ...' に差し替えて起動するため、
+# './bin/rails server' だけを見ていると db:prepare が一度も走らない（2026-10-03に発覚）。
+case "${*}" in
+  *"rails server"* | *puma*)
+    ./bin/rails db:prepare
+    ;;
+esac
 
 exec "${@}"
