@@ -65,6 +65,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # N+1クエリの検出。開発中だけ動かす [https://github.com/flyerhzm/bullet]
+  gem "bullet"
 end
 
 group :test do
