@@ -139,10 +139,10 @@
 
   <!-- BottomNavBar (Mobile Only) -->
   <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl">
-    <a class="flex flex-col items-center justify-center bg-brand-2 text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150" href="#">
+    <%= link_to root_path, class: "flex flex-col items-center justify-center bg-brand-2 text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150" do %>
       <span class="material-symbols-outlined">home</span>
       <span class="font-label-sm text-label-sm mt-1">ホーム</span>
-    </a>
+    <% end %>
     <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">fact_check</span>
       <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
