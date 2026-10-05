@@ -1,7 +1,19 @@
-<p>Hello <%= @email %>!</p>
+<p><%= @email %> 様</p>
 
 <% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+  <p>ねこの集会場に登録されているメールアドレスを <%= @resource.unconfirmed_email %> に変更する手続きが行われました。</p>
 <% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+  <p>ねこの集会場に登録されているメールアドレスが <%= @resource.email %> に変更されました。</p>
 <% end %>
+
+<p>
+  心当たりがない場合は、第三者があなたのアカウントを操作している可能性があります。<br>
+  お手数ですが、お問い合わせからご連絡ください。
+</p>
+
+<hr>
+
+<p style="color: #666; font-size: 12px;">
+  ねこの集会場<br>
+  このメールは送信専用です。返信いただいてもお答えできません。
+</p>
