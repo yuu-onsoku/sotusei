@@ -68,6 +68,15 @@
               class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
       <% end %>
 
+      <!-- ログアウト。PC用ヘッダーは md:flex でスマホに出ないため、ここが唯一の出口になる -->
+      <div class="mt-lg pt-md border-t border-outline-variant/50">
+        <%= link_to destroy_user_session_path, data: { turbo_method: :delete },
+              class: "flex items-center justify-center gap-2 w-full h-[48px] border border-outline-variant text-on-surface rounded-lg hover:bg-surface-container transition-colors font-label-md text-label-md" do %>
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          ログアウト
+        <% end %>
+      </div>
+
       <!-- 退会 -->
       <div class="mt-lg pt-md border-t border-outline-variant/50">
         <h3 class="font-label-md text-label-md text-on-surface-variant mb-xs">退会</h3>

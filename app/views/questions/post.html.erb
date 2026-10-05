@@ -10,7 +10,7 @@
       <nav class="hidden md:flex gap-lg items-center">
         <%= link_to "お迎え診断", new_diagnosis_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" %>
         <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary pb-1" %>
-        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">マイページ</a>
+        <%= link_to "マイページ", edit_user_registration_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" %>
         <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
               class: "px-md py-xs rounded-full font-label-md hover:opacity-90 transition-opacity bg-primary text-on-primary inline-block" %>
       </nav>
@@ -185,10 +185,10 @@
       <span class="material-symbols-outlined fill">forum</span>
       <span class="font-label-sm text-label-sm">相談室</span>
     <% end %>
-    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" href="#">
+    <%= link_to edit_user_registration_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" do %>
       <span class="material-symbols-outlined">person</span>
       <span class="font-label-sm text-label-sm">マイページ</span>
-    </a>
+    <% end %>
   </nav>
 </div>
 
