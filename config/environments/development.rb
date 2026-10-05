@@ -43,6 +43,10 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
+  # 開発中はメールを送らず、tmp/mails/ にファイルとして書き出す。
+  # Resendの無料枠を消費せず、誤送信も起きない。
+  config.action_mailer.delivery_method = :file
+
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
   # Print deprecation notices to the Rails logger.
