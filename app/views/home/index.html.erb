@@ -32,7 +32,7 @@
         <%= link_to "覚悟のチェックリスト", new_checklist_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
         <%= link_to "ねこの相談室", questions_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
         <%= link_to "にゃんスタ", posts_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <a class="text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" href="#">マイページ</a>
+        <%= link_to "マイページ", edit_user_registration_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
       </nav>
       <!-- Trailing Action -->
       <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
@@ -155,10 +155,10 @@
       <span class="material-symbols-outlined">camera</span>
       <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
     <% end %>
-    <a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" href="#">
+    <%= link_to edit_user_registration_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
       <span class="material-symbols-outlined">person</span>
       <span class="font-label-sm text-label-sm mt-1">マイページ</span>
-    </a>
+    <% end %>
   </nav>
 
   <!-- Footer -->
