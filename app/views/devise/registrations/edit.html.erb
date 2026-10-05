@@ -1,42 +1,88 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% content_for :title, "アカウント設定 - ねこの集会場" %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="min-h-screen flex flex-col items-center justify-center py-lg">
+  <!-- Header / Brand Section -->
+  <header class="mb-lg text-center px-gutter">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">ねこの集会場</h1>
+    <p class="font-label-md text-label-md text-on-surface-variant tracking-widest uppercase">Empathetic Responsibility</p>
+  </header>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
+  <main class="w-full max-w-[480px] px-margin-mobile md:px-0">
+    <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30">
+      <div class="mb-md text-center">
+        <h2 class="font-headline-md text-headline-md text-on-surface">アカウント設定</h2>
+      </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i></p>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
-    <% if @minimum_password_length %>
-      <p><em><%= @minimum_password_length %> characters minimum</em></p>
-    <% end %>
-  </div>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-md" }) do |f| %>
+        <div class="space-y-xs">
+          <%= f.label :username, "ユーザー名", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.text_field :username, autofocus: true,
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
 
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
+        <div class="space-y-xs">
+          <%= f.label :name, "表示名", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.text_field :name,
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
 
-  <div class="field">
-    <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i></p>
-    <p><%= f.password_field :current_password, autocomplete: "current-password" %></p>
-  </div>
+        <div class="space-y-xs">
+          <%= f.label :email, "メールアドレス", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.email_field :email, autocomplete: "email",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+            <%= resource.unconfirmed_email %> への変更を確認中です。
+          </p>
+        <% end %>
 
-<h3>Cancel my account</h3>
+        <div class="space-y-xs">
+          <%= f.label :password, "新しいパスワード", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+            変更しない場合は空のままにしてください<% if @minimum_password_length %>（<%= @minimum_password_length %>文字以上）<% end %>
+          </p>
+          <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••••",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+        <div class="space-y-xs">
+          <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
 
-<%= link_to "Back", :back %>
+        <div class="space-y-xs">
+          <%= f.label :current_password, "現在のパスワード", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+            本人確認のため、変更には現在のパスワードが必要です
+          </p>
+          <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "••••••••",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
+
+        <%= f.submit "変更する",
+              class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
+      <% end %>
+
+      <!-- 退会 -->
+      <div class="mt-lg pt-md border-t border-outline-variant/50">
+        <h3 class="font-label-md text-label-md text-on-surface-variant mb-xs">退会</h3>
+        <p class="font-body-sm text-body-sm text-on-surface-variant/70 mb-sm">
+          退会すると、投稿した質問・回答・写真・コメントもすべて削除されます。元に戻せません。
+        </p>
+
+        <%= button_to "退会する", registration_path(resource_name), method: :delete,
+              data: { turbo_confirm: "本当に退会しますか？投稿したものはすべて削除され、元に戻せません。" },
+              class: "w-full h-[48px] border border-error text-error rounded-lg hover:bg-error-container transition-colors font-label-md text-label-md cursor-pointer" %>
+      </div>
+
+      <div class="mt-md pt-md border-t border-outline-variant/50 text-center">
+        <%= link_to "トップページへ戻る", root_path, class: "font-label-md text-label-md text-primary hover:underline" %>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,16 +1,38 @@
-<h2>Forgot your password?</h2>
+<% content_for :title, "パスワードの再設定 - ねこの集会場" %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="min-h-screen flex flex-col items-center justify-center">
+  <!-- Header / Brand Section -->
+  <header class="mb-lg text-center px-gutter">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">ねこの集会場</h1>
+    <p class="font-label-md text-label-md text-on-surface-variant tracking-widest uppercase">Empathetic Responsibility</p>
+  </header>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
+  <main class="w-full max-w-[480px] px-margin-mobile md:px-0">
+    <div class="bg-surface-container-lowest rounded-xl p-md md:p-lg auth-card-shadow border border-outline-variant/30">
+      <div class="mb-md text-center">
+        <h2 class="font-headline-md text-headline-md text-on-surface">パスワードの再設定</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-xs">
+          登録したメールアドレスを入力してください。<br>
+          再設定用のリンクをお送りします。
+        </p>
+      </div>
 
-  <div class="actions">
-    <%= f.submit "Send me password reset instructions" %>
-  </div>
-<% end %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-<%= render "devise/shared/links" %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-md" }) do |f| %>
+        <div class="space-y-xs">
+          <%= f.label :email, "メールアドレス", class: "font-label-md text-label-md text-on-surface-variant" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "example@email.com",
+                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
+        </div>
+
+        <%= f.submit "再設定用のメールを送る",
+              class: "w-full h-[48px] bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-sm cursor-pointer" %>
+      <% end %>
+
+      <div class="mt-md pt-md border-t border-outline-variant/50 text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </main>
+</div>
