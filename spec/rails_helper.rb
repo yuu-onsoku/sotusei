@@ -46,4 +46,7 @@ RSpec.configure do |config|
   # Devise のログインヘルパー
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
+
+  # deliver_later で裏に回したメールを、テスト中にその場で実行できるようにする
+  config.include ActiveJob::TestHelper
 end

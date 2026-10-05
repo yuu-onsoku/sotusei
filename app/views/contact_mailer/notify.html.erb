@@ -1,0 +1,26 @@
+<p>お問い合わせが届きました。</p>
+
+<table style="border-collapse: collapse;">
+  <tr>
+    <th style="text-align: left; padding: 4px 12px 4px 0; vertical-align: top;">受付日時</th>
+    <td style="padding: 4px 0;"><%= @contact.created_at.strftime("%Y年%-m月%-d日 %H:%M") %></td>
+  </tr>
+  <tr>
+    <th style="text-align: left; padding: 4px 12px 4px 0; vertical-align: top;">お名前</th>
+    <td style="padding: 4px 0;"><%= @contact.name.presence || "（未記入）" %></td>
+  </tr>
+  <tr>
+    <th style="text-align: left; padding: 4px 12px 4px 0; vertical-align: top;">返信先</th>
+    <td style="padding: 4px 0;"><%= @contact.email %></td>
+  </tr>
+</table>
+
+<hr>
+
+<p style="white-space: pre-line;"><%= @contact.content %></p>
+
+<hr>
+
+<p style="color: #666; font-size: 12px;">
+  このメールにそのまま返信すると、お問い合わせいただいた方へ届きます。
+</p>

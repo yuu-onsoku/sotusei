@@ -1,0 +1,73 @@
+<% content_for :title, "お問い合わせ - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">お問い合わせ</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+      ご質問・ご要望・不具合のご報告などをお送りください。<br>
+      返信までお時間をいただく場合があります。
+    </p>
+
+    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+      <%= form_with model: @contact, class: "space-y-6" do |form| %>
+        <% if @contact.errors.any? %>
+          <div class="bg-error-container text-on-error-container rounded-lg p-4">
+            <ul class="list-disc pl-5 font-body-sm text-body-sm">
+              <% @contact.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="space-y-2">
+          <%= form.label :name, "お名前（任意）", class: "block font-label-md text-label-md text-on-surface" %>
+          <%= form.text_field :name, maxlength: 50, placeholder: "ねこ太郎",
+                class: "w-full h-[48px] px-4 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" %>
+        </div>
+
+        <div class="space-y-2">
+          <%= form.label :email, "メールアドレス", class: "block font-label-md text-label-md text-on-surface" %>
+          <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+            ご返信先です。お間違いがないかご確認ください。
+          </p>
+          <%= form.email_field :email, maxlength: 255, placeholder: "example@email.com",
+                class: "w-full h-[48px] px-4 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" %>
+        </div>
+
+        <div class="space-y-2">
+          <%= form.label :content, "お問い合わせ内容", class: "block font-label-md text-label-md text-on-surface" %>
+          <%= form.text_area :content, rows: 8, maxlength: 2000, placeholder: "お困りごとやご要望をご記入ください。",
+                class: "w-full rounded-lg border border-outline-variant bg-surface px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary resize-y" %>
+          <p class="font-label-sm text-label-sm text-on-surface-variant/70">2000文字まで</p>
+        </div>
+
+        <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+          お送りいただいた内容の取り扱いについては<%= link_to "プライバシーポリシー", privacy_path, class: "text-brand-1 hover:underline" %>をご確認ください。
+        </p>
+
+        <div class="flex items-center justify-end gap-4">
+          <%= link_to "やめる", root_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+
+          <%= form.submit "送信する",
+                class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200 cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 関連ページ -->
+    <div class="mt-12 pt-8 border-t border-outline-variant flex flex-wrap gap-6">
+      <%= link_to "利用規約", terms_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      <%= link_to "プライバシーポリシー", privacy_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      <%= link_to "トップページへ戻る", root_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+    </div>
+  </main>
+</div>
