@@ -26,15 +26,17 @@
   </head>
 
   <body class="bg-background text-on-surface font-body-md">
+    <%# お知らせは固定ヘッダー（高さ64px・z-50）より下かつ前面に出す。
+        top-gutter だとヘッダーの内側に入り、z-50 同士で埋もれて読めなかった。 %>
     <% if notice.present? %>
       <div data-turbo-temporary
-           class="fixed top-gutter left-1/2 -translate-x-1/2 z-50 max-w-[480px] w-[90%] rounded-lg border border-primary/30 bg-surface-container-high text-on-surface p-md shadow-sm font-body-md text-body-md text-center">
+           class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] max-w-[480px] w-[90%] rounded-lg border border-primary/30 bg-surface-container-high text-on-surface p-md shadow-lg font-body-md text-body-md text-center">
         <%= notice %>
       </div>
     <% end %>
     <% if alert.present? %>
       <div data-turbo-temporary
-           class="fixed top-gutter left-1/2 -translate-x-1/2 z-50 max-w-[480px] w-[90%] rounded-lg border border-error/40 bg-error-container text-on-error-container p-md shadow-sm font-body-md text-body-md text-center">
+           class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] max-w-[480px] w-[90%] rounded-lg border border-error/40 bg-error-container text-on-error-container p-md shadow-lg font-body-md text-body-md text-center">
         <%= alert %>
       </div>
     <% end %>

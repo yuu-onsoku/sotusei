@@ -128,7 +128,7 @@
       <section>
         <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">第12条（お問い合わせ）</h2>
         <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-          本規約に関するお問い合わせは、お問い合わせフォームよりご連絡ください。
+          本規約に関するお問い合わせは、<%= link_to "お問い合わせフォーム", new_contact_path, class: "text-brand-1 hover:underline" %>よりご連絡ください。
         </p>
       </section>
     </div>
@@ -136,6 +136,7 @@
     <!-- 関連ページ -->
     <div class="mt-12 pt-8 border-t border-outline-variant flex flex-wrap gap-6">
       <%= link_to "プライバシーポリシー", privacy_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
+      <%= link_to "お問い合わせ", new_contact_path, class: "font-label-md text-label-md text-brand-1 hover:underline" %>
       <%= link_to "トップページへ戻る", root_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
     </div>
   </main>

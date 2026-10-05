@@ -50,6 +50,9 @@ Rails.application.routes.draw do
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
 
+  # お問い合わせ（ログインできない人からの連絡も受け取るため、ログイン不要）
+  resources :contacts, only: %i[new create]
+
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。
   root "home#index"
