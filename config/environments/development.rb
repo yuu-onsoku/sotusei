@@ -95,5 +95,7 @@ Rails.application.configure do
     # 「使っていない」ように見える（誤検出）。外すと本物の N+1 になるため残す。
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Question", association: :answers
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Post", association: :likes
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Answer", association: :likes
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Question", association: :likes
   end
 end

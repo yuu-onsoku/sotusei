@@ -1,0 +1,99 @@
+<% content_for :title, "マイページ - ねこの集会場" %>
+
+<%
+  # タブの定義。ラベルとアイコンをここにまとめておく
+  # icon が :cat_tail のときは、Material のアイコンではなく自作のSVG（ねこのしっぽ）を出す
+  tabs = {
+    "questions" => { label: "質問", icon: :cat_tail },
+    "answers" => { label: "回答", icon: "forum" },
+    "posts" => { label: "にゃんスタ", icon: "photo_camera" },
+    "bookmarks" => { label: "保存", icon: "bookmark" }
+  }
+%>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[960px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <%= link_to edit_user_registration_path, class: "inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" do %>
+        <span class="material-symbols-outlined text-[18px]">settings</span>
+        <span class="hidden sm:inline">アカウント設定</span>
+      <% end %>
+    </div>
+  </header>
+
+  <main class="max-w-[960px] mx-auto px-gutter py-12">
+    <!-- プロフィール欄（アイコンは #141 で対応） -->
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md text-headline-md shrink-0">
+        <%= current_user.username.first %>
+      </div>
+
+      <div class="min-w-0">
+        <h1 class="font-headline-lg text-headline-lg text-on-background truncate"><%= current_user.username %>さん</h1>
+        <p class="font-label-sm text-label-sm text-on-surface-variant/70">
+          <%= current_user.created_at.strftime("%Y年%-m月") %>から参加
+        </p>
+      </div>
+    </div>
+
+    <!-- タブ -->
+    <div class="flex gap-1 border-b border-outline-variant mb-6 overflow-x-auto">
+      <% tabs.each do |key, tab| %>
+        <% current = (key == @tab) %>
+
+        <%# 画面が広いときは、アイコンも文字もひとまわり大きくする %>
+        <%= link_to mypage_path(tab: key),
+              class: "flex items-center gap-1 md:gap-2 px-4 md:px-6 py-3 md:py-4 shrink-0 border-b-2 transition-colors font-label-md text-label-md md:text-[17px]
+                      #{current ? "border-brand-1 text-brand-1" : "border-transparent text-on-surface-variant hover:text-on-surface"}" do %>
+          <% if tab[:icon] == :cat_tail %>
+            <%= render "shared/cat_tail_icon", classes: "w-5 h-7 md:w-7 md:h-10" %>
+          <% else %>
+            <span class="material-symbols-outlined text-[18px] md:text-[26px]"><%= tab[:icon] %></span>
+          <% end %>
+          <%= tab[:label] %>
+          <span class="font-label-sm text-label-sm md:text-[15px] <%= current ? "text-brand-1" : "text-on-surface-variant/70" %>">
+            <%= @counts[key] %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- 中身 -->
+    <% if @items.any? %>
+      <%= render "mypages/#{@tab}", items: @items %>
+    <% else %>
+      <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
+        <% if tabs[@tab][:icon] == :cat_tail %>
+          <span class="inline-flex justify-center">
+            <%= render "shared/cat_tail_icon", classes: "w-14 h-20 md:w-20 md:h-28" %>
+          </span>
+        <% else %>
+          <span class="material-symbols-outlined text-outline text-5xl md:text-7xl"><%= tabs[@tab][:icon] %></span>
+        <% end %>
+
+        <p class="font-body-md text-body-md text-on-surface-variant mt-sm">
+          <%= { "questions" => "まだ質問していません。",
+                "answers" => "まだ回答していません。",
+                "posts" => "まだ写真を投稿していません。",
+                "bookmarks" => "まだ保存した投稿がありません。" }[@tab] %>
+        </p>
+
+        <%
+          go = { "questions" => [ "質問してみる", new_question_path ],
+                 "answers" => [ "相談室を見る", questions_path ],
+                 "posts" => [ "写真を投稿する", new_post_path ],
+                 "bookmarks" => [ "にゃんスタを見る", posts_path ] }[@tab]
+        %>
+
+        <%= link_to go[0], go[1],
+              class: "inline-block mt-4 bg-brand-1 text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-brand-2 transition-all duration-200" %>
+      </div>
+    <% end %>
+  </main>
+</div>

@@ -52,6 +52,8 @@ Rails.application.routes.draw do
 
   # お問い合わせ（ログインできない人からの連絡も受け取るため、ログイン不要）
   resources :contacts, only: %i[new create]
+  # マイページ（自分が書いたもの・保存したものをまとめて見る）
+  get "mypage", to: "mypages#show"
 
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。

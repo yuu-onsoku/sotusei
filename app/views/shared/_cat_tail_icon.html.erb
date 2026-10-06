@@ -1,0 +1,41 @@
+<%# ねこのしっぽで作った「？」。質問のしるしに使う。
+    上の曲線がしっぽ（縞模様つき）、下は後ろ向きに座ったねこのおしりと脚。
+    locals: size（大きさ・px） %>
+<%
+  # 大きさはCSSのクラスで指定する。数字で固定すると画面幅に応じて変えられないため。
+  # viewBox が 100 x 140（縦長）なので、高さは幅の1.4倍にそろえる。
+  classes = local_assigns.fetch(:classes, "w-5 h-7")
+
+  orange = "#f9a32b"
+  stripe = "#fffaf0"   # 縞。背景のクリーム色に近づけて「毛が抜けている」ように見せる
+  dark = "#201a14"
+%>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"
+     fill="none" stroke-linecap="round" stroke-linejoin="round"
+     class="shrink-0 <%= classes %>" aria-hidden="true">
+  <%# ①しっぽ本体（「？」の形） %>
+  <path d="M33 44 C31 22 46 11 62 17 C78 23 80 44 65 55 C55 62 50 70 50 84"
+        stroke="<%= orange %>" stroke-width="20" />
+
+  <%# ②縞模様。しっぽを横切るように短く入れる %>
+  <g stroke="<%= stripe %>" stroke-width="5">
+    <path d="M24 41 L42 37" />
+    <path d="M30 24 L44 33" />
+    <path d="M45 12 L49 29" />
+    <path d="M63 13 L60 31" />
+    <path d="M77 26 L64 37" />
+    <path d="M78 45 L61 47" />
+    <path d="M42 73 L58 73" />
+  </g>
+
+  <%# ③後ろ向きに座ったねこのおしりと脚 %>
+  <path d="M30 126 C32 110 40 103 50 103 C60 103 68 110 70 126"
+        stroke="<%= orange %>" stroke-width="18" />
+
+  <%# ④しっぽの付け根のしるし %>
+  <g stroke="<%= dark %>" stroke-width="5">
+    <path d="M45 110 L55 120" />
+    <path d="M55 110 L45 120" />
+  </g>
+</svg>

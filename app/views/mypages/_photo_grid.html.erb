@@ -1,0 +1,21 @@
+<%# にゃんスタの投稿を格子で並べる。マイページの「にゃんスタ」と「保存」で共通して使う %>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+  <% posts.each do |nyansta_post| %>
+    <%= link_to post_path(nyansta_post), class: "group relative block aspect-square rounded-xl overflow-hidden bg-surface-container shadow-sm hover:shadow-md transition-all" do %>
+      <%= image_tag nyansta_post.images.first.variant(resize_to_fill: [ 600, 600 ]), loading: "lazy",
+            alt: "#{nyansta_post.user.username}さんの投稿",
+            class: "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" %>
+
+      <% if nyansta_post.images.size > 1 %>
+        <span class="material-symbols-outlined absolute top-2 right-2 text-white drop-shadow text-[20px]">filter_none</span>
+      <% end %>
+
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2 flex items-center justify-between">
+        <span class="font-label-sm text-label-sm text-white truncate"><%= nyansta_post.user.username %>さん</span>
+        <span class="flex items-center gap-1 font-label-sm text-label-sm text-white shrink-0">
+          <span class="material-symbols-outlined text-[16px]">pets</span><%= nyansta_post.likes.size %>
+        </span>
+      </div>
+    <% end %>
+  <% end %>
+</div>
