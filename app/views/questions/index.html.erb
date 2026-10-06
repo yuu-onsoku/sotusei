@@ -24,7 +24,7 @@
       <%= link_to "お迎え診断", new_diagnosis_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
       <%= link_to "ねこの相談室", questions_path, class: "text-primary border-b-2 border-primary pb-1 transition-opacity" %>
       <%= link_to "にゃんスタ", posts_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-      <%= link_to "マイページ", edit_user_registration_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
+      <%= link_to "マイページ", mypage_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
     </nav>
     <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
           class: "bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:brightness-95 transition-all shadow-sm inline-block" %>
@@ -48,7 +48,7 @@
       <span class="material-symbols-outlined">photo_library</span>
       <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
     <% end %>
-    <%= link_to edit_user_registration_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
+    <%= link_to mypage_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
       <span class="material-symbols-outlined">person</span>
       <span class="font-label-sm text-label-sm mt-1">マイページ</span>
     <% end %>

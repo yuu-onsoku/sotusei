@@ -1,0 +1,27 @@
+<%# 自分がした回答の一覧。どの質問への回答かが分かるようにする %>
+<div class="flex flex-col gap-3">
+  <% items.each do |answer| %>
+    <%= link_to question_path(answer.question), class: "block bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-all" do %>
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="font-label-sm text-label-sm text-on-surface-variant truncate">
+          <span class="material-symbols-outlined text-[14px] align-middle">subdirectory_arrow_right</span>
+          <%= answer.question.title %>
+        </span>
+        <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(answer.created_at) %></span>
+      </div>
+
+      <p class="font-body-md text-body-md text-on-surface line-clamp-3 whitespace-pre-line"><%= answer.content %></p>
+
+      <div class="flex items-center gap-4 mt-3 font-label-sm text-label-sm text-on-surface-variant">
+        <span class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">pets</span><%= answer.likes.size %>
+        </span>
+        <% if answer.image.attached? %>
+          <span class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">image</span>写真あり
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
