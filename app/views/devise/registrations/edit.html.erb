@@ -16,17 +16,11 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-md" }) do |f| %>
-        <div class="space-y-xs">
-          <%= f.label :username, "ユーザー名", class: "font-label-md text-label-md text-on-surface-variant" %>
-          <%= f.text_field :username, autofocus: true,
-                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
-        </div>
-
-        <div class="space-y-xs">
-          <%= f.label :name, "表示名", class: "font-label-md text-label-md text-on-surface-variant" %>
-          <%= f.text_field :name,
-                class: "w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface-bright input-focus-ring font-body-md" %>
-        </div>
+        <%# ユーザー名・表示名・アイコンはプロフィール画面で変更する。
+            この画面はDeviseの仕組み上、変更のたびに現在のパスワードが必要になるため。 %>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">
+          ユーザー名・お名前・アイコンは<%= link_to "プロフィールの編集", edit_profile_path, class: "text-primary hover:underline" %>から変更できます。
+        </p>
 
         <div class="space-y-xs">
           <%= f.label :email, "メールアドレス", class: "font-label-md text-label-md text-on-surface-variant" %>

@@ -1,0 +1,118 @@
+<% content_for :title, "プロフィールの編集 - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[720px] w-full mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-brand-1">pets</span>
+        <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+      </div>
+
+      <%= link_to mypage_path, class: "inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-brand-1 transition-colors" do %>
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        マイページへ
+      <% end %>
+    </div>
+  </header>
+
+  <main class="max-w-[720px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-lg text-headline-lg text-on-background mb-2">プロフィールの編集</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+      ここで変えた内容は、質問・回答・にゃんスタの投稿に表示されます。
+    </p>
+
+    <%= form_with model: @user, url: profile_path, method: :patch, class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6" do |form| %>
+      <% if @user.errors.any? %>
+        <div class="bg-error-container text-on-error-container rounded-lg p-4">
+          <ul class="list-disc pl-5 font-body-sm text-body-sm">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- アイコン -->
+      <div class="space-y-3">
+        <%= form.label :avatar, "アイコン", class: "block font-label-md text-label-md text-on-surface" %>
+
+        <div class="flex items-center gap-4">
+          <%= render "shared/avatar", user: @user, classes: "w-20 h-20" %>
+
+          <div class="min-w-0">
+            <%= form.label :avatar, class: "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md cursor-pointer hover:shadow-md transition-all" do %>
+              <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+              画像をえらぶ
+            <% end %>
+
+            <%= form.file_field :avatar, accept: "image/png,image/jpeg,image/gif,image/webp",
+                  class: "hidden", data: { picker: true } %>
+
+            <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
+              PNG・JPEG・GIF・WEBP / 5MBまで
+            </p>
+          </div>
+        </div>
+
+        <!-- えらんだ画像をその場に出す -->
+        <div data-preview class="hidden">
+          <p class="font-label-sm text-label-sm text-on-surface-variant mb-2">えらんだ画像</p>
+          <img data-preview-image class="w-20 h-20 rounded-full object-cover border border-outline-variant/30" alt="">
+        </div>
+
+        <% if @user.avatar.attached? %>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <%= check_box_tag :remove_avatar, "1", false, class: "w-4 h-4 accent-brand-1 cursor-pointer" %>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">アイコンを外して、ねこのシルエットに戻す</span>
+          </label>
+        <% end %>
+      </div>
+
+      <!-- ユーザー名 -->
+      <div class="space-y-2">
+        <%= form.label :username, "ユーザー名", class: "block font-label-md text-label-md text-on-surface" %>
+        <p class="font-label-sm text-label-sm text-on-surface-variant/70">投稿者名として表示されます（30文字まで）</p>
+        <%= form.text_field :username, maxlength: 30,
+              class: "w-full h-[48px] px-4 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" %>
+      </div>
+
+      <!-- 表示名 -->
+      <div class="space-y-2">
+        <%= form.label :name, "お名前（任意）", class: "block font-label-md text-label-md text-on-surface" %>
+        <%= form.text_field :name, maxlength: 50,
+              class: "w-full h-[48px] px-4 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" %>
+      </div>
+
+      <div class="flex items-center justify-end gap-4">
+        <%= link_to "やめる", mypage_path, class: "font-label-md text-label-md text-on-surface-variant hover:underline" %>
+
+        <%= form.submit "保存する",
+              class: "bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200 cursor-pointer" %>
+      </div>
+    <% end %>
+  </main>
+</div>
+
+<script>
+  // えらんだ画像をその場に表示する。送信前に確認できないと不安なので、ここだけJSで補う。
+  (function () {
+    const picker = document.querySelector("[data-picker]");
+    const preview = document.querySelector("[data-preview]");
+    const image = document.querySelector("[data-preview-image]");
+    if (!picker || !preview || !image) return;
+
+    picker.addEventListener("change", function () {
+      const file = (picker.files || [])[0];
+      if (!file) {
+        preview.classList.add("hidden");
+        return;
+      }
+
+      image.src = URL.createObjectURL(file);
+      image.alt = file.name;
+      image.onload = function () { URL.revokeObjectURL(image.src); };
+      preview.classList.remove("hidden");
+    });
+  })();
+</script>

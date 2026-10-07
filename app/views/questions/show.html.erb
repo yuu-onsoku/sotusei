@@ -59,7 +59,7 @@
           <%= image_tag @question.image, alt: @question.title, class: "js-zoomable cursor-zoom-in mt-sm w-full max-h-80 object-cover rounded-lg border border-outline-variant/30" %>
         <% end %>
         <div class="flex items-center gap-base mt-md">
-          <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-md shrink-0"><%= @question.user.username.first %></div>
+          <%= render "shared/avatar", user: @question.user, classes: "w-8 h-8" %>
           <span class="text-label-md font-label-md text-on-surface-variant truncate">質問者: <%= @question.user.username %>さん</span>
         </div>
 
@@ -84,7 +84,7 @@
             <article class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm">
               <div class="flex items-center justify-between gap-sm mb-sm">
                 <div class="flex items-center gap-base min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md shrink-0"><%= answer.user.username.first %></div>
+                  <%= render "shared/avatar", user: answer.user, classes: "w-8 h-8" %>
                   <span class="font-label-md text-label-md text-on-surface-variant truncate"><%= answer.user.username %>さん</span>
                   <% if answer.user_id == @question.user_id %>
                     <span class="bg-primary-container text-on-primary-container px-2 py-1 rounded-full text-label-sm font-label-sm shrink-0">質問者</span>
