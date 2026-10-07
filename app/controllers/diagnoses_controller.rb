@@ -9,10 +9,16 @@ class DiagnosesController < ApplicationController
   # 回答を受け取って判定し、結果画面へ移動する
   def create
     judge = DiagnosisJudge.new(answers_params)
+
+    # ログイン中なら履歴として残す。未ログインでも今までどおり使える。
+    if user_signed_in?
+      current_user.diagnoses.create(answers: answers_params, score: judge.score, result: judge.result)
+    end
+
     session[:diagnosis] = {
       "score" => judge.score,
       "result" => judge.result,
-      "comments" => judge.cat_comments      # ← 追加
+      "comments" => judge.cat_comments
     }
     redirect_to result_diagnoses_path
   end

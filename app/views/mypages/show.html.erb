@@ -7,7 +7,8 @@
     "questions" => { label: "質問", icon: :cat_tail },
     "answers" => { label: "回答", icon: "forum" },
     "posts" => { label: "にゃんスタ", icon: "photo_camera" },
-    "bookmarks" => { label: "保存", icon: "bookmark" }
+    "bookmarks" => { label: "保存", icon: "bookmark" },
+    "diagnoses" => { label: "診断", icon: "fact_check" }
   }
 %>
 
@@ -84,14 +85,16 @@
           <%= { "questions" => "まだ質問していません。",
                 "answers" => "まだ回答していません。",
                 "posts" => "まだ写真を投稿していません。",
-                "bookmarks" => "まだ保存した投稿がありません。" }[@tab] %>
+                "bookmarks" => "まだ保存した投稿がありません。",
+                "diagnoses" => "まだ診断していません。" }[@tab] %>
         </p>
 
         <%
           go = { "questions" => [ "質問してみる", new_question_path ],
                  "answers" => [ "相談室を見る", questions_path ],
                  "posts" => [ "写真を投稿する", new_post_path ],
-                 "bookmarks" => [ "にゃんスタを見る", posts_path ] }[@tab]
+                 "bookmarks" => [ "にゃんスタを見る", posts_path ],
+                 "diagnoses" => [ "お迎え診断をする", new_diagnosis_path ] }[@tab]
         %>
 
         <%= link_to go[0], go[1],

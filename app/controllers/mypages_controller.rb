@@ -2,7 +2,7 @@ class MypagesController < ApplicationController
   before_action :authenticate_user!
 
   # 表示するタブ。URLの ?tab= で切り替える
-  TABS = %w[questions answers posts bookmarks].freeze
+  TABS = %w[questions answers posts bookmarks diagnoses].freeze
 
   def show
     @tab = TABS.include?(params[:tab]) ? params[:tab] : "questions"
@@ -12,7 +12,8 @@ class MypagesController < ApplicationController
       "questions" => current_user.questions.size,
       "answers" => current_user.answers.size,
       "posts" => current_user.posts.size,
-      "bookmarks" => current_user.bookmarks.size
+      "bookmarks" => current_user.bookmarks.size,
+      "diagnoses" => current_user.diagnoses.size
     }
 
     @items = items_for(@tab)
@@ -33,6 +34,9 @@ class MypagesController < ApplicationController
       current_user.posts.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc)
     when "bookmarks"
       current_user.bookmarks.includes(bookmarkable: [ :user, :likes, { images_attachments: :blob } ]).order(created_at: :desc)
+    when "diagnoses"
+      # 判定とスコアは保存済みなので、追加の読み込みは要らない
+      current_user.diagnoses.order(created_at: :desc)
     end
   end
 end
