@@ -1,0 +1,47 @@
+<%# お迎え診断の履歴。保存した回答から、そのときの猫のコメントも出し直す %>
+<div class="flex flex-col gap-3">
+  <% items.each do |diagnosis| %>
+    <%
+      # 判定ごとの見た目。診断の結果画面と同じ色づかいにそろえる
+      style = case diagnosis.result
+              when "準備万端"     then { bg: "bg-primary-container", cat: "cats/cheer.png", alt: "ポンポンを持って喜ぶ猫" }
+              when "成猫なら可能" then { bg: "bg-secondary-fixed",   cat: "cats/smile.png", alt: "座って笑っている猫" }
+              else                     { bg: "bg-tertiary-fixed",    cat: "cats/relax.png", alt: "寝そべって待っている猫" }
+              end
+    %>
+
+    <div class="<%= style[:bg] %> rounded-xl p-5 shadow-sm">
+      <div class="flex items-center gap-4">
+        <%= image_tag style[:cat], alt: style[:alt], class: "w-14 h-14 object-contain shrink-0 mix-blend-multiply" %>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="font-headline-sm text-headline-sm text-on-background"><%= diagnosis.result %></h2>
+            <span class="font-label-sm text-label-sm text-on-background/70 shrink-0">
+              <%= diagnosis.created_at.strftime("%Y年%-m月%-d日") %>
+            </span>
+          </div>
+
+          <p class="font-label-md text-label-md text-on-background/80 mt-1">
+            スコア <span class="font-headline-sm text-headline-sm"><%= diagnosis.score %></span> 点 / 10点満点
+          </p>
+        </div>
+      </div>
+
+      <%# そのときの回答から、猫のコメントを出し直す %>
+      <details class="mt-4">
+        <summary class="cursor-pointer font-label-sm text-label-sm text-on-background/70 hover:text-on-background">
+          このときのコメントを見る
+        </summary>
+
+        <div class="flex flex-col gap-2 mt-3">
+          <% diagnosis.judge.cat_comments.each do |comment| %>
+            <p class="bg-surface-container-lowest rounded-lg p-3 font-body-sm text-body-sm text-on-surface leading-relaxed">
+              <%= comment %>
+            </p>
+          <% end %>
+        </div>
+      </details>
+    </div>
+  <% end %>
+</div>
