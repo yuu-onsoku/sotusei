@@ -21,7 +21,7 @@
       <!-- 投稿者 -->
       <div class="flex items-center justify-between gap-sm mb-sm">
         <div class="flex items-center gap-base min-w-0">
-          <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md shrink-0"><%= @post.user.username.first %></div>
+          <%= render "shared/avatar", user: @post.user, classes: "w-8 h-8" %>
           <span class="font-label-md text-label-md text-on-surface-variant truncate"><%= @post.user.username %>さん</span>
         </div>
         <span class="font-label-sm text-label-sm text-outline shrink-0"><%= posted_at(@post.created_at) %></span>

@@ -28,17 +28,20 @@
   </header>
 
   <main class="max-w-[960px] mx-auto px-gutter py-12">
-    <!-- プロフィール欄（アイコンは #141 で対応） -->
+    <!-- プロフィール欄 -->
     <div class="flex items-center gap-4 mb-8">
-      <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md text-headline-md shrink-0">
-        <%= current_user.username.first %>
-      </div>
+      <%= render "shared/avatar", user: current_user, classes: "w-16 h-16 md:w-20 md:h-20" %>
 
       <div class="min-w-0">
         <h1 class="font-headline-lg text-headline-lg text-on-background truncate"><%= current_user.username %>さん</h1>
         <p class="font-label-sm text-label-sm text-on-surface-variant/70">
           <%= current_user.created_at.strftime("%Y年%-m月") %>から参加
         </p>
+
+        <%= link_to edit_profile_path, class: "inline-flex items-center gap-1 mt-2 font-label-sm text-label-sm text-brand-1 hover:underline" do %>
+          <span class="material-symbols-outlined text-[16px]">edit</span>
+          プロフィールを編集
+        <% end %>
       </div>
     </div>
 

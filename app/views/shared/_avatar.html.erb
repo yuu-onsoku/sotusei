@@ -1,0 +1,19 @@
+<%# プロフィールのアイコン。アプリ全体でここを通して表示する。
+    設定していない人には、既定のねこの絵を出す。
+    locals: user / classes（大きさなどのCSSクラス） %>
+<%
+  classes = local_assigns.fetch(:classes, "w-8 h-8")
+%>
+
+<% if user.avatar.attached? %>
+  <%= image_tag user.avatar.variant(resize_to_fill: [ 160, 160 ]), loading: "lazy",
+        alt: "#{user.username}さんのアイコン",
+        class: "#{classes} rounded-full object-cover shrink-0" %>
+<% else %>
+  <%# 絵の背景が白なので、丸の中も白にして縁が出ないようにする %>
+  <div class="<%= classes %> bg-white rounded-full border border-outline-variant/40 flex items-center justify-center shrink-0 overflow-hidden"
+       role="img" aria-label="<%= user.username %>さんのアイコン">
+    <%= image_tag "cats/default_avatar.png", alt: "", aria: { hidden: true },
+          class: "w-[88%] h-[88%] object-contain" %>
+  </div>
+<% end %>

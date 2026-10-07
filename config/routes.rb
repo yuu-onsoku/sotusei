@@ -55,6 +55,9 @@ Rails.application.routes.draw do
   # マイページ（自分が書いたもの・保存したものをまとめて見る）
   get "mypage", to: "mypages#show"
 
+  # プロフィール（アイコン・表示名）。パスワード変更を伴わないのでDeviseとは分ける
+  resource :profile, only: %i[edit update]
+
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。
   root "home#index"

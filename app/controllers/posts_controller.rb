@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
   # 投稿の詳細
   def show
-    @post = Post.includes(:user, :likes, { comments: :user }, images_attachments: :blob).find(params[:id])
+    @post = Post.includes(:likes, { user: { avatar_attachment: :blob } }, { comments: :user }, images_attachments: :blob).find(params[:id])
   end
 
   # 投稿する（フォーム）

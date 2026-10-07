@@ -5,15 +5,15 @@ class QuestionsController < ApplicationController
   # ねこの相談室（質問一覧）
   def index
     # 一覧では画像も出すので image_attachment: :blob まで先読みする（Bulletが検出したN+1）
-    @questions = Question.search(params[:q]).includes(:user, :answers, :likes, image_attachment: :blob).order(created_at: :desc)
+    @questions = Question.search(params[:q]).includes(:answers, :likes, user: { avatar_attachment: :blob }, image_attachment: :blob).order(created_at: :desc)
   end
 
   # 質問の詳細と、寄せられた回答の一覧
   def show
     # コメントは投稿者名も出すので、comments: :user までまとめて読み込む。
     # 質問自身のいいねボタンはこの画面に無いため、:likes は先読みしない（Bulletの指摘）。
-    @question = Question.includes(:user, comments: :user).find(params[:id])
-    @answers = @question.answers.includes(:user, :likes, { comments: :user }, image_attachment: :blob).order(created_at: :asc)
+    @question = Question.includes({ user: { avatar_attachment: :blob } }, comments: :user).find(params[:id])
+    @answers = @question.answers.includes(:likes, { user: { avatar_attachment: :blob } }, { comments: :user }, image_attachment: :blob).order(created_at: :asc)
   end
 
   # 質問を投稿する（フォーム）。テンプレートは post.html.erb。

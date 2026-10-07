@@ -79,4 +79,43 @@ RSpec.describe User, type: :model do
       expect(user).to be_valid
     end
   end
+
+  describe "アイコン" do
+    def attach_avatar(user, filename: "test_image.png", content_type: "image/png")
+      user.avatar.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/#{filename}")),
+        filename: filename,
+        content_type: content_type
+      )
+    end
+
+    it "設定しなくても有効（任意のため）" do
+      expect(build(:user)).to be_valid
+    end
+
+    it "画像を設定できる" do
+      user = build(:user)
+      attach_avatar(user)
+
+      expect(user).to be_valid
+    end
+
+    it "画像でないファイルは無効" do
+      user = build(:user)
+      attach_avatar(user, filename: "not_image.txt", content_type: "text/plain")
+
+      expect(user).to be_invalid
+      expect(user.errors[:avatar]).to include("はPNG / JPEG / GIF / WEBP 形式で添付してください")
+    end
+
+    it "5MBを超えると無効" do
+      user = build(:user)
+      attach_avatar(user)
+      # 実際は70バイトだが、6MBということにする
+      user.avatar.blob.byte_size = 6.megabytes
+
+      expect(user).to be_invalid
+      expect(user.errors[:avatar]).to include("は5MB以下にしてください")
+    end
+  end
 end
