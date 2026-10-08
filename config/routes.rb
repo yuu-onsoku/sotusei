@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   # プロフィール（アイコン・表示名）。パスワード変更を伴わないのでDeviseとは分ける
   resource :profile, only: %i[edit update]
 
+  # 病院＆ペットホテル検索（飼う前の下調べにも使えるようログイン不要）
+  get "places", to: "places#index"
+
   # Defines the root path route ("/")
   # 未ログイン時は home#index の authenticate_user! で /users/sign_in へ誘導される。
   root "home#index"

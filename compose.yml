@@ -32,6 +32,8 @@ services: # コンテナの定義開始
       - .:/myapp # ソースコードのマウント
       - bundle_data:/usr/local/bundle:cached # gemの永続化
       - node_modules:/myapp/node_modules # node_modulesの永続化
+    env_file:
+      - .env  # APIキーなど、gitに入れたくない値をここから読む
     environment: # 環境変数の設定
       TZ: Asia/Tokyo # タイムゾーンを日本に設定
     ports: # ポート設定

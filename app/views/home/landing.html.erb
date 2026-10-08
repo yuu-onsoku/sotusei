@@ -39,6 +39,7 @@
   <%# 未ログインの人がここからしかサイトに触れないため、規約・問い合わせへの入口を置く %>
   <footer class="w-full px-gutter py-8 mt-auto border-t border-outline-variant/50">
     <div class="max-w-[1200px] mx-auto flex flex-wrap justify-center gap-6">
+      <%= link_to "病院・ホテルを探す", places_path, class: "font-label-sm text-label-sm text-on-surface-variant hover:text-brand-1 hover:underline transition-colors" %>
       <%= link_to "利用規約", terms_path, class: "font-label-sm text-label-sm text-on-surface-variant hover:text-brand-1 hover:underline transition-colors" %>
       <%= link_to "プライバシーポリシー", privacy_path, class: "font-label-sm text-label-sm text-on-surface-variant hover:text-brand-1 hover:underline transition-colors" %>
       <%= link_to "お問い合わせ", new_contact_path, class: "font-label-sm text-label-sm text-on-surface-variant hover:text-brand-1 hover:underline transition-colors" %>

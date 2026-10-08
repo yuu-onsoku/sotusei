@@ -1,0 +1,35 @@
+<%# 施設の一覧。動物病院とペットホテルで共通して使う。
+    locals: places / empty（1件も無いときの文言） %>
+<% if places.any? %>
+  <div class="flex flex-col gap-3">
+    <% places.each do |place| %>
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="font-body-lg text-body-lg text-on-surface font-semibold"><%= place.name %></h3>
+
+          <% if place.rating %>
+            <span class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant shrink-0">
+              <span class="material-symbols-outlined text-[16px] text-brand-1 fill">star</span>
+              <%= place.rating %>
+              <span class="text-on-surface-variant/70">（<%= place.rating_count %>）</span>
+            </span>
+          <% end %>
+        </div>
+
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-1"><%= place.address %></p>
+
+        <% if place.maps_url.present? %>
+          <%= link_to place.maps_url, target: "_blank", rel: "noopener",
+                class: "inline-flex items-center gap-1 mt-3 font-label-sm text-label-sm text-brand-1 hover:underline" do %>
+            <span class="material-symbols-outlined text-[16px]">map</span>
+            Googleマップで見る
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="font-body-md text-body-md text-on-surface-variant bg-surface-container-lowest rounded-xl p-5">
+    <%= empty %>
+  </p>
+<% end %>
