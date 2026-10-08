@@ -1,0 +1,126 @@
+<% content_for :title, "病院・ペットホテルを探す - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[960px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[960px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-2 flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1 text-[32px] md:text-[40px]">local_hospital</span>
+      病院・ペットホテルを探す
+    </h1>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-8">
+      近くの動物病院とペットホテルを調べられます。<br>
+      迎える前に「通える場所にあるか」を確かめておくと安心です。
+    </p>
+
+    <!-- 検索 -->
+    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm mb-8">
+      <%= form_with url: places_path, method: :get, data: { turbo: false }, class: "flex flex-col sm:flex-row gap-3" do %>
+        <%= text_field_tag :q, @query, placeholder: "住所・駅名を入力（例：名古屋駅）",
+              class: "flex-1 h-[48px] px-4 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" %>
+
+        <%= submit_tag "探す", name: nil,
+              class: "h-[48px] px-8 rounded-full bg-brand-1 text-on-primary font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200 cursor-pointer shrink-0" %>
+      <% end %>
+
+      <div class="mt-3">
+        <button type="button" data-current-location
+                class="inline-flex items-center gap-1 font-label-md text-label-md text-brand-1 hover:underline">
+          <span class="material-symbols-outlined text-[18px]">my_location</span>
+          現在地からさがす
+        </button>
+        <p data-location-error class="hidden font-label-sm text-label-sm text-error mt-2"></p>
+      </div>
+    </div>
+
+    <% if @not_found %>
+      <div class="bg-error-container text-on-error-container rounded-xl p-5 mb-8 font-body-md text-body-md">
+        「<%= @query %>」が見つかりませんでした。駅名や市区町村名で試してみてください。
+      </div>
+    <% end %>
+
+    <% if @center.present? %>
+      <!-- 地図（Maps Embed API。キーはブラウザ用で、リファラーで縛っている） -->
+      <div class="rounded-xl overflow-hidden shadow-sm mb-8 border border-outline-variant/30">
+        <iframe
+          title="近くの動物病院の地図"
+          width="100%" height="360" style="border:0" loading="lazy" allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed/v1/search?key=<%= ENV.fetch("GOOGLE_MAPS_BROWSER_KEY", "") %>&q=<%= u("動物病院") %>&center=<%= @center[0] %>,<%= @center[1] %>&zoom=14&language=ja&region=JP"></iframe>
+      </div>
+
+      <!-- 動物病院 -->
+      <section class="mb-10">
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-brand-1">local_hospital</span>
+          動物病院（<%= @veterinaries.size %>件）
+        </h2>
+
+        <%= render "places/list", places: @veterinaries, empty: "近くに動物病院が見つかりませんでした。" %>
+      </section>
+
+      <!-- ペットホテル -->
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-brand-1">hotel</span>
+          ペットホテル（<%= @pet_hotels.size %>件）
+        </h2>
+
+        <%= render "places/list", places: @pet_hotels, empty: "近くにペットホテルが見つかりませんでした。" %>
+      </section>
+
+      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-8">
+        情報は Google マップから取得しています。診療時間・料金は各施設にご確認ください。
+      </p>
+    <% else %>
+      <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
+        <span class="material-symbols-outlined text-outline text-5xl">travel_explore</span>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-sm">
+          住所や駅名を入れるか、「現在地からさがす」を押してください。
+        </p>
+      </div>
+    <% end %>
+  </main>
+</div>
+
+<script>
+  // 現在地を取ってページを開き直す。許可されなかった場合は入力で探してもらう。
+  (function () {
+    const button = document.querySelector("[data-current-location]");
+    const error = document.querySelector("[data-location-error]");
+    if (!button) return;
+
+    button.addEventListener("click", function () {
+      if (!navigator.geolocation) {
+        error.textContent = "このブラウザでは現在地を使えません。住所を入力してください。";
+        error.classList.remove("hidden");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "現在地を調べています…";
+
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const params = new URLSearchParams({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          window.location.href = "<%= places_path %>?" + params.toString();
+        },
+        function () {
+          button.disabled = false;
+          button.textContent = "現在地からさがす";
+          error.textContent = "現在地を取得できませんでした。住所や駅名を入力してください。";
+          error.classList.remove("hidden");
+        }
+      );
+    });
+  })();
+</script>

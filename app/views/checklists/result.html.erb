@@ -105,6 +105,12 @@
         もう一度チェックする
       <% end %>
 
+      <%# 「長期間 家を空けにくい」を読んだ直後に、預け先を調べられるようにする %>
+      <%= link_to places_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">local_hospital</span>
+        病院・ペットホテルを探す
+      <% end %>
+
       <%= link_to questions_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
         <span class="material-symbols-outlined text-[20px]">forum</span>
         ねこの相談室で聞いてみる

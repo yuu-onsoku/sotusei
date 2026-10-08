@@ -73,6 +73,11 @@
         覚悟のチェックリストへ
       <% end %>
 
+      <%= link_to places_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[20px]">local_hospital</span>
+        近くの病院を探す
+      <% end %>
+
       <%= link_to new_diagnosis_path, class: "border border-outline-variant text-on-surface h-[48px] px-8 rounded-full flex items-center justify-center gap-2 font-label-md text-label-md hover:bg-surface-container transition-all duration-200" do %>
         <span class="material-symbols-outlined text-[20px]">refresh</span>
         もう一度診断する
