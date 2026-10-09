@@ -156,18 +156,31 @@ RSpec.describe Question, type: :model do
       expect(build(:question)).to be_valid
     end
 
-    it "5MBを超える画像は無効になる" do
+    it "20MBを超える画像は無効になる" do
       question = build(:question)
       question.image.attach(
         io: File.open(Rails.root.join("spec/fixtures/files/test_image.png")),
         filename: "big.png",
         content_type: "image/png"
       )
-      # 実際は70バイトだが、6MBということにする（大きなファイルを用意せずに検証するため）
-      question.image.blob.byte_size = 6.megabytes
+      # 実際は70バイトだが、21MBということにする（大きなファイルを用意せずに検証するため）
+      question.image.blob.byte_size = 21.megabytes
 
       expect(question).to be_invalid
-      expect(question.errors[:image]).to include("は5MB以下にしてください")
+      expect(question.errors[:image]).to include("は20MB以下にしてください")
+    end
+
+    # 5MBを超える画像も受け入れる。投稿される前に ImageResizer が縮めるため。
+    it "6MBの画像でも有効" do
+      question = build(:question)
+      question.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/test_image.png")),
+        filename: "big.png",
+        content_type: "image/png"
+      )
+      question.image.blob.byte_size = 6.megabytes
+
+      expect(question).to be_valid
     end
   end
 end

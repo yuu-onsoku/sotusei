@@ -48,13 +48,21 @@ RSpec.describe Post, type: :model do
       expect(post.errors[:images]).to include("はPNG / JPEG / GIF / WEBP 形式で添付してください")
     end
 
-    it "5MBを超える写真があると無効" do
+    it "20MBを超える写真があると無効" do
       post = build(:post)
-      # 実際は70バイトだが、6MBということにする（大きなファイルを用意せずに検証するため）
-      post.images.first.blob.byte_size = 6.megabytes
+      # 実際は70バイトだが、21MBということにする（大きなファイルを用意せずに検証するため）
+      post.images.first.blob.byte_size = 21.megabytes
 
       expect(post).to be_invalid
-      expect(post.errors[:images]).to include("は1枚5MB以下にしてください")
+      expect(post.errors[:images]).to include("は1枚20MB以下にしてください")
+    end
+
+    # 5MBを超える写真も受け入れる。投稿される前に ImageResizer が縮めるため。
+    it "6MBの写真でも有効" do
+      post = build(:post)
+      post.images.first.blob.byte_size = 6.megabytes
+
+      expect(post).to be_valid
     end
   end
 

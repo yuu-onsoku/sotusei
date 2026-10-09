@@ -52,6 +52,8 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:content, :image)
+    permitted = params.require(:answer).permit(:content, :image)
+    permitted[:image] = ImageResizer.call(permitted[:image]) if permitted[:image].present?
+    permitted
   end
 end
