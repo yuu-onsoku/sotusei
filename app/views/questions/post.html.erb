@@ -3,22 +3,7 @@
 <% content_for :title, "#{page_title} - ねこの集会場" %>
 
 <div class="min-h-screen">
-  <!-- TopAppBar -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-sm h-16 border-b border-surface-container-high">
-    <div class="max-w-[1200px] mx-auto flex justify-between items-center px-margin-mobile md:px-lg h-full">
-      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-primary" %>
-      <nav class="hidden md:flex gap-lg items-center">
-        <%= link_to "お迎え診断", new_diagnosis_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-        <%= link_to "ねこの相談室", questions_path, class: "font-label-md text-label-md text-primary border-b-2 border-primary pb-1" %>
-        <%= link_to "マイページ", mypage_path, class: "font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
-              class: "px-md py-xs rounded-full font-label-md hover:opacity-90 transition-opacity bg-primary text-on-primary inline-block" %>
-      </nav>
-      <div class="md:hidden">
-        <span class="material-symbols-outlined text-on-surface-variant">menu</span>
-      </div>
-    </div>
-  </header>
+  <%= render "shared/top_nav" %>
 
   <main class="pt-24 pb-xl px-margin-mobile md:px-lg max-w-[1200px] mx-auto">
     <!-- Breadcrumbs -->
@@ -171,25 +156,6 @@
     </div>
   </footer>
 
-  <!-- BottomNavBar (Mobile only) -->
-  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-surface-container-high shadow-[0_-4px_12px_rgba(249,197,78,0.06)] rounded-t-xl">
-    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" do %>
-      <span class="material-symbols-outlined">home</span>
-      <span class="font-label-sm text-label-sm">ホーム</span>
-    <% end %>
-    <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" do %>
-      <span class="material-symbols-outlined">fact_check</span>
-      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
-    <% end %>
-    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" do %>
-      <span class="material-symbols-outlined fill">forum</span>
-      <span class="font-label-sm text-label-sm">相談室</span>
-    <% end %>
-    <%= link_to mypage_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-low rounded-full" do %>
-      <span class="material-symbols-outlined">person</span>
-      <span class="font-label-sm text-label-sm">マイページ</span>
-    <% end %>
-  </nav>
 </div>
 
 <script>

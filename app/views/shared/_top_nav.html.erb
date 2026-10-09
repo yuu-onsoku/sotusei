@@ -1,0 +1,33 @@
+<%# PC用の上部ナビ。各ページが別々に持っていたため中身がバラバラだったので1か所にまとめた。
+    スマホではナビ部分だけ隠し、ロゴとログアウトは残す（移動は下部タブが担う）。 %>
+<%
+  items = [
+    { label: "お迎え診断",         path: new_diagnosis_path, match: %w[diagnoses] },
+    { label: "覚悟のチェックリスト", path: new_checklist_path, match: %w[checklists] },
+    { label: "病院・ホテル",       path: places_path,        match: %w[places] },
+    { label: "ねこの相談室",       path: questions_path,     match: %w[questions answers] },
+    { label: "にゃんスタ",         path: posts_path,         match: %w[posts bookmarks] },
+    { label: "マイページ",         path: mypage_path,        match: %w[mypages profiles] }
+  ]
+%>
+
+<header class="fixed top-0 left-0 w-full z-50 h-16 bg-surface shadow-sm">
+  <div class="max-w-[1200px] mx-auto h-full flex justify-between items-center gap-4 px-margin-mobile md:px-lg">
+    <%= link_to "ねこの集会場", root_path,
+          class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight shrink-0" %>
+
+    <nav class="hidden md:flex items-center gap-6 font-label-md text-label-md" aria-label="メインメニュー">
+      <% items.each do |item| %>
+        <%# いま見ているページかどうかは、コントローラ名で判断する %>
+        <% current = item[:match].include?(controller_name) %>
+
+        <%= link_to item[:label], item[:path],
+              "aria-current": ("page" if current),
+              class: current ? "text-brand-1 border-b-2 border-brand-1 pb-1" : "text-on-surface-variant hover:text-brand-1 transition-colors duration-200" %>
+      <% end %>
+    </nav>
+
+    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
+          class: "shrink-0 bg-brand-1 text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:bg-brand-2 transition-all duration-200" %>
+  </div>
+</header>

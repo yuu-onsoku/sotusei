@@ -17,42 +17,8 @@
     <span class="material-symbols-outlined fill absolute text-[#f9c54e]/20 text-5xl rotate-[15deg] top-[75%] left-[5%]">pets</span>
   </div>
 
-  <!-- TopAppBar -->
-  <header class="hidden md:flex fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 justify-between items-center px-margin-mobile md:px-lg h-16 max-w-[1200px] bg-surface/80 backdrop-blur-md shadow-sm">
-    <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight" %>
-    <nav class="flex space-x-6 font-label-md text-label-md">
-      <%= link_to "お迎え診断", new_diagnosis_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-      <%= link_to "ねこの相談室", questions_path, class: "text-primary border-b-2 border-primary pb-1 transition-opacity" %>
-      <%= link_to "にゃんスタ", posts_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-      <%= link_to "マイページ", mypage_path, class: "text-on-surface-variant hover:text-primary transition-colors duration-200" %>
-    </nav>
-    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
-          class: "bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:brightness-95 transition-all shadow-sm inline-block" %>
-  </header>
+  <%= render "shared/top_nav" %>
 
-  <!-- BottomNavBar (Mobile) -->
-  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface-container-low border-t border-outline-variant shadow-lg rounded-t-xl">
-    <%= link_to root_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
-      <span class="material-symbols-outlined">home</span>
-      <span class="font-label-sm text-label-sm mt-1">ホーム</span>
-    <% end %>
-    <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
-      <span class="material-symbols-outlined">fact_check</span>
-      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
-    <% end %>
-    <%= link_to questions_path, class: "flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-4 py-1 scale-95 transition-transform duration-150" do %>
-      <span class="material-symbols-outlined fill">forum</span>
-      <span class="font-label-sm text-label-sm mt-1">相談室</span>
-    <% end %>
-    <%= link_to posts_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
-      <span class="material-symbols-outlined">photo_library</span>
-      <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
-    <% end %>
-    <%= link_to mypage_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors duration-200" do %>
-      <span class="material-symbols-outlined">person</span>
-      <span class="font-label-sm text-label-sm mt-1">マイページ</span>
-    <% end %>
-  </nav>
 
   <!-- Main Content Canvas -->
   <main class="max-w-[1200px] mx-auto px-margin-mobile md:px-lg py-lg md:py-xl space-y-xl">
