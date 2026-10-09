@@ -21,25 +21,7 @@
     <span class="material-symbols-outlined absolute top-[85%] left-[76%] text-5xl rotate-[22deg]">pets</span>
   </div>
 
-  <!-- TopAppBar -->
-  <header id="top-nav" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface shadow-sm transition-all duration-300">
-    <div class="max-w-[1200px] w-full mx-auto flex justify-between items-center px-4 md:px-0">
-      <!-- Brand Logo -->
-      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background tracking-tight" %>
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center gap-8">
-        <%= link_to "お迎え診断", new_diagnosis_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <%= link_to "覚悟のチェックリスト", new_checklist_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <%= link_to "病院・ホテル", places_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <%= link_to "ねこの相談室", questions_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <%= link_to "にゃんスタ", posts_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-        <%= link_to "マイページ", mypage_path, class: "text-on-surface-variant hover:text-brand-1 transition-colors duration-200 font-label-md text-label-md" %>
-      </nav>
-      <!-- Trailing Action -->
-      <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete },
-            class: "font-label-md text-label-md bg-brand-1 text-on-primary px-6 py-2 rounded-full hover:bg-brand-2 transition-all duration-200 hidden md:block" %>
-    </div>
-  </header>
+  <%= render "shared/top_nav" %>
 
   <!-- Main Content Canvas -->
   <main class="pt-[80px] md:pt-[100px] flex flex-col gap-xl">
@@ -138,29 +120,6 @@
     </section>
   </main>
 
-  <!-- BottomNavBar (Mobile Only) -->
-  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl">
-    <%= link_to root_path, class: "flex flex-col items-center justify-center bg-brand-2 text-on-secondary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150" do %>
-      <span class="material-symbols-outlined">home</span>
-      <span class="font-label-sm text-label-sm mt-1">ホーム</span>
-    <% end %>
-    <%= link_to new_diagnosis_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
-      <span class="material-symbols-outlined">fact_check</span>
-      <span class="font-label-sm text-label-sm mt-1">お迎え診断</span>
-    <% end %>
-    <%= link_to questions_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
-      <span class="material-symbols-outlined">forum</span>
-      <span class="font-label-sm text-label-sm mt-1">相談室</span>
-    <% end %>
-    <%= link_to posts_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
-      <span class="material-symbols-outlined">camera</span>
-      <span class="font-label-sm text-label-sm mt-1">にゃんスタ</span>
-    <% end %>
-    <%= link_to mypage_path, class: "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high rounded-full transition-colors" do %>
-      <span class="material-symbols-outlined">person</span>
-      <span class="font-label-sm text-label-sm mt-1">マイページ</span>
-    <% end %>
-  </nav>
 
   <!-- Footer -->
   <footer class="w-full py-lg px-margin-mobile flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">

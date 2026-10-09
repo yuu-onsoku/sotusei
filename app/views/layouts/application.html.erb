@@ -41,7 +41,13 @@
       </div>
     <% end %>
 
-    <%= yield %>
+    <%# スマホの下部タブに本文が隠れないよう、その分の余白を空けておく %>
+    <div class="<%= "pb-24 md:pb-0" if user_signed_in? %>">
+      <%= yield %>
+    </div>
+
+    <%# 下部タブ。ログイン中だけ、全ページに出す %>
+    <%= render "shared/bottom_nav" if user_signed_in? %>
 
     <%# 画像ライトボックス（js-zoomable な画像をクリックで全体表示） %>
     <div id="image-lightbox" style="z-index: 100;" class="hidden fixed inset-0 bg-black/80 items-center justify-center p-4 cursor-zoom-out">
