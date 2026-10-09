@@ -1,16 +1,20 @@
 <%# スマートフォン用の下部タブ。レイアウトに置いているので全ページに出る。
-    各ページが同じHTMLを持っていると、足し忘れや中身のズレが起きるため1か所にまとめた。 %>
+    各ページが同じHTMLを持っていると、足し忘れや中身のズレが起きるため1か所にまとめた。
+
+    6つが375pxに収まる限界なので「ホーム」は入れていない。
+    上部ヘッダーのロゴがスマホでも見えており、そちらでトップに戻れるため。 %>
 <%
   items = [
-    { label: "ホーム",     icon: "home",       path: root_path,          match: %w[home] },
-    { label: "お迎え診断", icon: "fact_check", path: new_diagnosis_path, match: %w[diagnoses] },
+    { label: "診断",       icon: "fact_check", path: new_diagnosis_path, match: %w[diagnoses] },
+    { label: "覚悟",       icon: "checklist",  path: new_checklist_path, match: %w[checklists] },
+    { label: "病院",       icon: "local_hospital", path: places_path,    match: %w[places] },
     { label: "相談室",     icon: "forum",      path: questions_path,     match: %w[questions answers] },
     { label: "にゃんスタ", icon: "camera",     path: posts_path,         match: %w[posts bookmarks] },
     { label: "マイページ", icon: "person",     path: mypage_path,        match: %w[mypages profiles] }
   ]
 %>
 
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl"
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-1 py-2 md:hidden bg-surface border-t border-outline-variant shadow-[0_-4px_12px_rgba(249,197,78,0.1)] rounded-t-xl"
      aria-label="メインメニュー">
   <% items.each do |item| %>
     <%# いま見ているページかどうかは、コントローラ名で判断する %>
@@ -18,10 +22,10 @@
 
     <%= link_to item[:path],
           "aria-current": ("page" if current),
-          class: "flex flex-col items-center justify-center px-4 py-1 rounded-full transition-colors
+          class: "flex flex-col items-center justify-center px-2 py-1 rounded-full transition-colors min-w-0
                   #{current ? "bg-brand-2 text-on-secondary-container" : "text-on-surface-variant hover:bg-surface-container-high"}" do %>
       <span class="material-symbols-outlined <%= "fill" if current %>"><%= item[:icon] %></span>
-      <span class="font-label-sm text-label-sm mt-1"><%= item[:label] %></span>
+      <span class="font-label-sm text-label-sm mt-1 whitespace-nowrap"><%= item[:label] %></span>
     <% end %>
   <% end %>
 </nav>
