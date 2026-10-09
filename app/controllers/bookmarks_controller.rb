@@ -7,6 +7,7 @@ class BookmarksController < ApplicationController
     @bookmarks = current_user.bookmarks
                              .includes(bookmarkable: [ :user, :likes, { images_attachments: :blob } ])
                              .order(created_at: :desc)
+                             .page(params[:page])
   end
 
   # 保存する。すでに保存済みなら何もしない（二重送信されても増えない）。

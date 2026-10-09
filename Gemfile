@@ -35,6 +35,8 @@ gem "cloudinary", "~> 2.4"
 # Render の無料プランは外向きSMTPポート（25/465/587）が塞がれているため、
 # SMTPではなくHTTP APIで送る Resend を使う。
 gem "resend"
+# 一覧のページ分け
+gem "kaminari"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"

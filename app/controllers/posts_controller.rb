@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   # にゃんスタ（投稿の一覧）
   def index
-    @posts = Post.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc)
+    @posts = Post.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc).page(params[:page])
   end
 
   # 投稿の詳細
