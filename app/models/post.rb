@@ -5,7 +5,8 @@ class Post < ApplicationRecord
   include Bookmarkable
 
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
-  IMAGE_MAX_SIZE = 5.megabytes
+  # 投稿前に ImageResizer が縮めるので、受け入れる元ファイルの上限として持つ
+  IMAGE_MAX_SIZE = 20.megabytes
   MAX_IMAGES = 4
 
   belongs_to :user
@@ -34,7 +35,7 @@ class Post < ApplicationRecord
       end
 
       if image.byte_size > IMAGE_MAX_SIZE
-        errors.add(:images, "は1枚5MB以下にしてください")
+        errors.add(:images, "は1枚20MB以下にしてください")
       end
     end
   end

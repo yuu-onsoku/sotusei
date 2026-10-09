@@ -60,6 +60,8 @@ class PostsController < ApplicationController
     permitted = params.require(:post).permit(:content, images: [])
     permitted[:images] = permitted[:images].reject(&:blank?) if permitted[:images]
     permitted.delete(:images) if permitted[:images].blank?
+    # 保存する前に長辺1600pxまで縮める
+    permitted[:images] = ImageResizer.call_each(permitted[:images]) if permitted[:images]
     permitted
   end
 end

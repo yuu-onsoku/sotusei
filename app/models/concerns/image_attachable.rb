@@ -4,7 +4,8 @@ module ImageAttachable
   extend ActiveSupport::Concern
 
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
-  IMAGE_MAX_SIZE = 5.megabytes
+  # 投稿前に ImageResizer が縮めるので、受け入れる元ファイルの上限として持つ
+  IMAGE_MAX_SIZE = 20.megabytes
 
   included do
     has_one_attached :image
@@ -22,7 +23,7 @@ module ImageAttachable
     end
 
     if image.byte_size > IMAGE_MAX_SIZE
-      errors.add(:image, "は5MB以下にしてください")
+      errors.add(:image, "は20MB以下にしてください")
     end
   end
 end
