@@ -145,15 +145,8 @@
       <% end %>
     </section>
 
-    <!-- Pagination -->
-    <div class="flex justify-center items-center space-x-4 pt-lg">
-      <button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
-      <button class="w-10 h-10 rounded-full flex items-center justify-center bg-primary text-on-primary font-label-md shadow-sm">1</button>
-      <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md">2</button>
-      <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md">3</button>
-      <span class="text-outline">...</span>
-      <button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
-    </div>
+    <%# ページ送り。検索中は ?q= を保ったまま移動する %>
+    <%= paginate @questions, params: { q: params[:q] } %>
   </main>
 
   <!-- Floating Action Button (Mobile Only) -->

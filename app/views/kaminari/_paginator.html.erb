@@ -1,0 +1,14 @@
+<%# ページ送り全体の入れ物。kaminari が各部品を呼び出す %>
+<%= paginator.render do -%>
+  <nav class="flex justify-center items-center gap-2 pt-lg" aria-label="ページ送り">
+    <%= prev_page_tag %>
+    <% each_page do |page| -%>
+      <% if page.left_outer? || page.right_outer? || page.inside_window? -%>
+        <%= page_tag page %>
+      <% elsif !page.was_truncated? -%>
+        <%= gap_tag %>
+      <% end -%>
+    <% end -%>
+    <%= next_page_tag %>
+  </nav>
+<% end -%>

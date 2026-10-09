@@ -1,0 +1,10 @@
+<%# ページ番号。いま見ているページは色を変える %>
+<% if page.current? %>
+  <span aria-current="page"
+        class="w-10 h-10 rounded-full flex items-center justify-center bg-brand-1 text-on-primary font-label-md text-label-md shadow-sm">
+    <%= page %>
+  </span>
+<% else %>
+  <%= link_to page, url, remote: remote,
+        class: "w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" %>
+<% end %>

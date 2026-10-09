@@ -26,17 +26,15 @@ class MypagesController < ApplicationController
   def items_for(tab)
     case tab
     when "questions"
-      # 投稿者は自分と決まっており画像も出さないので、:user と画像は読み込まない
-      current_user.questions.includes(:answers, :likes).order(created_at: :desc)
+      current_user.questions.includes(:answers, :likes).order(created_at: :desc).page(params[:page])
     when "answers"
-      current_user.answers.includes(:question, :likes, image_attachment: :blob).order(created_at: :desc)
+      current_user.answers.includes(:question, :likes, image_attachment: :blob).order(created_at: :desc).page(params[:page])
     when "posts"
-      current_user.posts.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc)
+      current_user.posts.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc).page(params[:page])
     when "bookmarks"
-      current_user.bookmarks.includes(bookmarkable: [ :user, :likes, { images_attachments: :blob } ]).order(created_at: :desc)
+      current_user.bookmarks.includes(bookmarkable: [ :user, :likes, { images_attachments: :blob } ]).order(created_at: :desc).page(params[:page])
     when "diagnoses"
-      # 判定とスコアは保存済みなので、追加の読み込みは要らない
-      current_user.diagnoses.order(created_at: :desc)
+      current_user.diagnoses.order(created_at: :desc).page(params[:page])
     end
   end
 end

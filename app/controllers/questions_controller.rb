@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   # ねこの相談室（質問一覧）
   def index
     # 一覧では画像も出すので image_attachment: :blob まで先読みする（Bulletが検出したN+1）
-    @questions = Question.search(params[:q]).includes(:answers, :likes, user: { avatar_attachment: :blob }, image_attachment: :blob).order(created_at: :desc)
+    @questions = Question.search(params[:q]).includes(:answers, :likes, user: { avatar_attachment: :blob }, image_attachment: :blob).order(created_at: :desc).page(params[:page])
   end
 
   # 質問の詳細と、寄せられた回答の一覧

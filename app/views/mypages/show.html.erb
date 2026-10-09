@@ -71,6 +71,9 @@
     <!-- 中身 -->
     <% if @items.any? %>
       <%= render "mypages/#{@tab}", items: @items %>
+
+      <%# ページを移動しても、いま見ているタブを保つ %>
+      <%= paginate @items, params: { tab: @tab } %>
     <% else %>
       <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
         <% if tabs[@tab][:icon] == :cat_tail %>
