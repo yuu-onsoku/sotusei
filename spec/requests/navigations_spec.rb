@@ -28,6 +28,16 @@ RSpec.describe "ナビゲーション", type: :request do
       end
     end
 
+    # スマホはこのタブが唯一の移動手段。行き先が欠けると、その機能に辿り着けなくなる。
+    it "下部タブに6つの行き先がすべて出る" do
+      get questions_path
+
+      [ new_diagnosis_path, new_checklist_path, places_path,
+        questions_path, posts_path, mypage_path ].each do |link|
+        expect(response.body).to include(link), "下部タブに #{link} が無い"
+      end
+    end
+
     it "どのページからでもログアウトできる" do
       get questions_path
       expect(response.body).to include(destroy_user_session_path)
