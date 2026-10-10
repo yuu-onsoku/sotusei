@@ -22,11 +22,12 @@
       ここで変えた内容は、質問・回答・にゃんスタの投稿に表示されます。
     </p>
 
-    <%= form_with model: @user, url: profile_path, method: :patch, class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6" do |form| %>
-      <% if @user.errors.any? %>
+    <%# 送る名前は user[...] のまま。中身を受け持つのは ProfileForm %>
+    <%= form_with model: @form, url: profile_path, method: :patch, scope: :user, class: "bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6" do |form| %>
+      <% if @form.errors.any? %>
         <div class="bg-error-container text-on-error-container rounded-lg p-4">
           <ul class="list-disc pl-5 font-body-sm text-body-sm">
-            <% @user.errors.full_messages.each do |message| %>
+            <% @form.errors.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
           </ul>
@@ -38,7 +39,7 @@
         <%= form.label :avatar, "アイコン", class: "block font-label-md text-label-md text-on-surface" %>
 
         <div class="flex items-center gap-4">
-          <%= render "shared/avatar", user: @user, classes: "w-20 h-20" %>
+          <%= render "shared/avatar", user: @form.user, classes: "w-20 h-20" %>
 
           <div class="min-w-0">
             <%= form.label :avatar, class: "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md cursor-pointer hover:shadow-md transition-all" do %>
@@ -61,7 +62,7 @@
           <img data-preview-image class="w-20 h-20 rounded-full object-cover border border-outline-variant/30" alt="">
         </div>
 
-        <% if @user.avatar.attached? %>
+        <% if @form.user.avatar.attached? %>
           <label class="flex items-center gap-2 cursor-pointer">
             <%= check_box_tag :remove_avatar, "1", false, class: "w-4 h-4 accent-brand-1 cursor-pointer" %>
             <span class="font-body-sm text-body-sm text-on-surface-variant">アイコンを外して、ねこのシルエットに戻す</span>
