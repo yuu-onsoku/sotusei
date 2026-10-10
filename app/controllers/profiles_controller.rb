@@ -2,16 +2,13 @@ class ProfilesController < ApplicationController
   before_action :authenticate_user!
 
   def edit
-    @user = current_user
+    @form = ProfileForm.from(current_user)
   end
 
   def update
-    @user = current_user
+    @form = ProfileForm.new(profile_params)
 
-    # アイコンを外す指示があれば先に外す
-    @user.avatar.purge if params[:remove_avatar] == "1"
-
-    if @user.update(profile_params)
+    if @form.save
       redirect_to mypage_path, notice: "プロフィールを更新しました。"
     else
       render :edit, status: :unprocessable_entity
@@ -20,10 +17,9 @@ class ProfilesController < ApplicationController
 
   private
 
-  # ファイルを選ばずに送ると avatar が "" で届くので、そのときは渡さない
+  # 画面から届いた値に、画面には無い2つ（本人と、外す指示）を足して渡す
   def profile_params
-    permitted = params.require(:user).permit(:username, :name, :avatar)
-    permitted.delete(:avatar) if permitted[:avatar].blank?
-    permitted
+    params.require(:user).permit(:username, :name, :avatar).to_h
+          .merge(user: current_user, remove_avatar: params[:remove_avatar])
   end
 end
