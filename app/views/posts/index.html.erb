@@ -32,6 +32,38 @@
       <p class="font-body-md text-body-md text-on-surface-variant">うちの子の写真を見せ合う場所です。</p>
     </div>
 
+    <%# よく使われているタグの帯。写真の格子の中にタグを入れると写真が見えなくなるため、
+        絞り込みの入口はここにまとめている %>
+    <% if @popular_tags.any? %>
+      <div class="mb-6 flex flex-wrap items-center gap-2">
+        <%= link_to "すべて", posts_path,
+              class: "px-4 py-2 rounded-full font-label-md text-label-md transition-colors #{params[:tag].blank? ? "bg-primary text-on-primary shadow-sm" : "bg-surface-container-lowest text-on-surface-variant border border-outline-variant hover:bg-surface-container-low"}" %>
+
+        <% @popular_tags.each do |tag| %>
+          <% current = (tag.name == params[:tag]) %>
+          <%= link_to posts_path(tag: tag.name),
+                "aria-current": ("page" if current),
+                class: "px-4 py-2 rounded-full font-label-md text-label-md transition-colors #{current ? "bg-primary text-on-primary shadow-sm" : "bg-surface-container-lowest text-on-surface-variant border border-outline-variant hover:bg-surface-container-low"}" do %>
+            <span class="text-outline">#</span><%= tag.name %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# 絞り込み中の見出しと、やめるためのリンク %>
+    <% if params[:tag].present? %>
+      <div class="mb-6 flex items-center justify-between gap-sm bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3">
+        <p class="font-body-md text-body-md text-on-surface min-w-0 truncate">
+          <span class="font-label-md text-label-md text-primary">#<%= params[:tag] %></span> の投稿
+        </p>
+
+        <%= link_to posts_path, class: "inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors shrink-0" do %>
+          <span class="material-symbols-outlined text-[18px]">close</span>
+          絞り込みをやめる
+        <% end %>
+      </div>
+    <% end %>
+
     <% if @posts.any? %>
       <!-- 写真の格子。スマホ2列・PC3列 -->
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
@@ -58,14 +90,26 @@
         <% end %>
       </div>
 
-      <%= paginate @posts %>
+      <%# 絞り込んだままページを移動できるよう ?tag= を引き継ぐ。
+          これを忘れると2ページ目で絞り込みが外れる（#148 で同じ失敗をしている） %>
+      <%= paginate @posts, params: { tag: params[:tag] } %>
     <% else %>
       <div class="text-center py-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
-        <span class="material-symbols-outlined text-outline text-5xl">photo_camera</span>
-        <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ投稿がありません。最初のうちの子を見せてみませんか？</p>
+        <% if params[:tag].present? %>
+          <span class="material-symbols-outlined text-outline text-5xl">search_off</span>
+          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">
+            「#<%= params[:tag] %>」の投稿は見つかりませんでした。
+          </p>
 
-        <%= link_to "写真を投稿する", new_post_path,
-              class: "inline-block mt-4 bg-brand-1 text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-brand-2 transition-all duration-200" %>
+          <%= link_to "すべての投稿を見る", posts_path,
+                class: "inline-block mt-sm font-label-md text-label-md text-primary underline underline-offset-4" %>
+        <% else %>
+          <span class="material-symbols-outlined text-outline text-5xl">photo_camera</span>
+          <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ投稿がありません。最初のうちの子を見せてみませんか？</p>
+
+          <%= link_to "写真を投稿する", new_post_path,
+                class: "inline-block mt-4 bg-brand-1 text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-brand-2 transition-all duration-200" %>
+        <% end %>
       </div>
     <% end %>
   </main>

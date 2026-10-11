@@ -1,11 +1,13 @@
-<%# 投稿に付いているタグ。一覧と詳細で共通して使う。
-    まだ絞り込みを作っていないので、この時点ではリンクにしない。
+<%# 投稿に付いているタグ。押すと、そのタグの投稿だけが並ぶ。
     locals: post %>
 <% if post.tags.any? %>
   <ul class="flex flex-wrap items-center gap-1">
     <% post.tags.each do |tag| %>
-      <li class="inline-flex items-center gap-0.5 px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
-        <span class="text-outline">#</span><%= tag.name %>
+      <li>
+        <%= link_to posts_path(tag: tag.name),
+              class: "inline-flex items-center gap-0.5 px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-primary-container hover:text-on-primary-container transition-colors" do %>
+          <span class="text-outline">#</span><%= tag.name %>
+        <% end %>
       </li>
     <% end %>
   </ul>
