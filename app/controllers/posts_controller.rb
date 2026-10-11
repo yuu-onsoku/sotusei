@@ -2,9 +2,15 @@ class PostsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_own_post, only: %i[edit update destroy]
 
-  # にゃんスタ（投稿の一覧）
+  # にゃんスタ（投稿の一覧）。?tag= があればそのタグの投稿だけを出す
   def index
-    @posts = Post.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc).page(params[:page])
+    @posts = Post.tagged_with(params[:tag])
+                 .includes(:user, :likes, images_attachments: :blob)
+                 .order(created_at: :desc)
+                 .page(params[:page])
+
+    # 一覧の上に出す「よく使われているタグ」の帯
+    @popular_tags = Tag.popular
   end
 
   # 投稿の詳細

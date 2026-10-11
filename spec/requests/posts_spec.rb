@@ -141,5 +141,52 @@ RSpec.describe "Posts", type: :request do
         expect(response.body).to include("タグは5個までにしてください")
       end
     end
+
+    describe "タグでの絞り込み" do
+      let!(:kitten) { create(:post, tag_names: "子猫") }
+      let!(:calico) { create(:post, tag_names: "三毛猫") }
+
+      it "タグを指定すると、そのタグの投稿だけが並ぶ" do
+        get posts_path(tag: "子猫")
+
+        expect(response.body).to include(post_path(kitten))
+        expect(response.body).not_to include(post_path(calico))
+      end
+
+      it "指定しなければ全部並ぶ" do
+        get posts_path
+
+        expect(response.body).to include(post_path(kitten))
+        expect(response.body).to include(post_path(calico))
+      end
+
+      it "よく使われているタグの帯が出る" do
+        get posts_path
+
+        expect(response.body).to include(posts_path(tag: "子猫"))
+      end
+
+      it "絞り込みをやめるリンクが出る" do
+        get posts_path(tag: "子猫")
+
+        expect(response.body).to include("絞り込みをやめる")
+      end
+
+      # #148 で、検索したままページを移動できない失敗をしている
+      it "タグがページ送りに引き継がれる" do
+        create_list(:post, 13, tag_names: "子猫")
+
+        get posts_path(tag: "子猫")
+
+        expect(response.body).to include("tag=")
+      end
+
+      it "存在しないタグ名でも画面が壊れない" do
+        get posts_path(tag: "そんなタグはない")
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("見つかりませんでした")
+      end
+    end
   end
 end

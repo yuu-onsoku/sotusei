@@ -24,6 +24,15 @@ class Post < ApplicationRecord
   validate :acceptable_images
   validate :acceptable_tags
 
+  # タグで絞り込む。相談室の Question.search と同じく、指定が無ければ全部返す。
+  # こうしておくと、コントローラ側で if を書かずに繋げられる
+  def self.tagged_with(name)
+    name = name.to_s.strip
+    return all if name.blank?
+
+    joins(:tags).where(tags: { name: name })
+  end
+
   # Tag の行を作るのは、投稿の保存が通ってから。
   # 保存に失敗した投稿のためにタグだけ増やさないため（ProfileForm で purge を
   # 検証のあとに移したのと同じ考え方）

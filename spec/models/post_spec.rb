@@ -175,4 +175,32 @@ RSpec.describe Post, type: :model do
       expect { post.destroy }.to change(PostTag, :count).by(-1).and change(Tag, :count).by(0)
     end
   end
+
+  describe ".tagged_with" do
+    let!(:kitten) { create(:post, tag_names: "子猫") }
+    let!(:calico) { create(:post, tag_names: "三毛猫") }
+    let!(:untagged) { create(:post) }
+
+    it "そのタグが付いた投稿だけを返す" do
+      expect(Post.tagged_with("子猫")).to contain_exactly(kitten)
+    end
+
+    # 指定が無ければ全部返す（コントローラ側で if を書かずに繋げるため）
+    it "指定が無ければ全部返す" do
+      expect(Post.tagged_with(nil)).to contain_exactly(kitten, calico, untagged)
+      expect(Post.tagged_with("")).to contain_exactly(kitten, calico, untagged)
+      expect(Post.tagged_with("   ")).to contain_exactly(kitten, calico, untagged)
+    end
+
+    it "存在しないタグ名なら空になる" do
+      expect(Post.tagged_with("そんなタグはない")).to be_empty
+    end
+
+    it "2つ付いている投稿は、どちらのタグでも見つかる" do
+      both = create(:post, tag_names: "子猫, 三毛猫")
+
+      expect(Post.tagged_with("子猫")).to include(both)
+      expect(Post.tagged_with("三毛猫")).to include(both)
+    end
+  end
 end
