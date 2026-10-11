@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
   # 投稿の詳細
   def show
-    @post = Post.includes(:likes, { user: { avatar_attachment: :blob } }, { comments: :user }, images_attachments: :blob).find(params[:id])
+    @post = Post.includes(:likes, :tags, { user: { avatar_attachment: :blob } }, { comments: :user }, images_attachments: :blob).find(params[:id])
   end
 
   # 投稿する（フォーム）
@@ -57,7 +57,7 @@ class PostsController < ApplicationController
   # ファイルを1つも選ばずに送ると images が [""] の形で届く。
   # そのまま渡すと、編集時に今ある写真が消えてしまうため、空を取り除く。
   def post_params
-    permitted = params.require(:post).permit(:content, images: [])
+    permitted = params.require(:post).permit(:content, :tag_names, images: [])
     permitted[:images] = permitted[:images].reject(&:blank?) if permitted[:images]
     permitted.delete(:images) if permitted[:images].blank?
     # 保存する前に長辺1600pxまで縮める

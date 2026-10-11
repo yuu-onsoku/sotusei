@@ -51,7 +51,7 @@
                   class: "hidden", data: { picker: true } %>
 
             <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
-              PNG・JPEG・GIF・WEBP / 5MBまで
+              PNG・JPEG・GIF・WEBP / <%= User::AVATAR_MAX_SIZE / 1.megabyte %>MBまで
             </p>
           </div>
         </div>

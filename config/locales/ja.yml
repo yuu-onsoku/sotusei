@@ -7,6 +7,11 @@ ja:
       question: 質問
       answer: 回答
       like: いいね
+      post: 投稿
+      comment: コメント
+      bookmark: ブックマーク
+      contact: お問い合わせ
+      tag: タグ
     attributes:
       user:
         username: ユーザー名
@@ -30,3 +35,21 @@ ja:
       like:
         user: ユーザー
         likeable: 対象
+      post:
+        user: 投稿者
+        content: ひとこと
+        images: 写真
+        tags: タグ
+      comment:
+        user: 投稿者
+        commentable: 対象
+        content: コメント
+      bookmark:
+        user: ユーザー
+        bookmarkable: 対象
+      contact:
+        name: お名前
+        email: メールアドレス
+        content: お問い合わせ内容
+      tag:
+        name: タグ名
