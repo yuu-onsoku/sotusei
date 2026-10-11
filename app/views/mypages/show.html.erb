@@ -39,6 +39,16 @@
           <%= current_user.created_at.strftime("%Y年%-m月") %>から参加
         </p>
 
+        <%# 自分の称号。次の称号まであと何件かも出す %>
+        <div class="flex items-center gap-2 mt-2 flex-wrap">
+          <%= render "shared/badge", user: current_user, size: :md %>
+          <% if (remaining = Badge.answers_to_next(current_user)) %>
+            <span class="font-label-sm text-label-sm text-on-surface-variant/70">
+              次の称号まであと<%= remaining %>件
+            </span>
+          <% end %>
+        </div>
+
         <%= link_to edit_profile_path, class: "inline-flex items-center gap-1 mt-2 font-label-sm text-label-sm text-brand-1 hover:underline" do %>
           <span class="material-symbols-outlined text-[16px]">edit</span>
           プロフィールを編集

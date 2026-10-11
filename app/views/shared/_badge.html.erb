@@ -1,0 +1,16 @@
+<%# 回答数に応じた称号。出し方をここに集めてあるので、置きたい場所で render するだけでよい。
+    称号がない人（回答0件）には何も出さない。
+    locals: user / size（:sm か :md。既定は :sm） %>
+<%
+  badge = Badge.for(user)
+  size = local_assigns.fetch(:size, :sm)
+  padding = size == :md ? "px-3 py-1 text-label-md font-label-md" : "px-2 py-1 text-label-sm font-label-sm"
+%>
+
+<% if badge %>
+  <span class="<%= badge.chip_class %> <%= padding %> inline-flex items-center gap-1 rounded-full shrink-0"
+        title="回答<%= user.answers_count %>件">
+    <span class="material-symbols-outlined text-[14px]" aria-hidden="true"><%= badge.icon %></span>
+    <%= badge.name %>
+  </span>
+<% end %>

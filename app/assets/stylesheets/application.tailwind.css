@@ -63,6 +63,16 @@
   --color-brand-4: #f9b1a4;
   --color-brand-5: #f99fb1;
 
+  /* 回答数に応じた称号（バッジ）の色。金はブランドの brand-1 と同じ色を使う。
+     銅と銀はブランド外だが、段階が一目で伝わることを優先した。
+     色の割り当ては app/services/badge.rb で決めている */
+  --color-badge-bronze: #b08d57;
+  --color-badge-silver: #a8a8a8;
+  --color-badge-gold: #f9c54e;
+  --color-on-badge-bronze: #ffffff;
+  --color-on-badge-silver: #3a3a3a;
+  --color-on-badge-gold: #4e3b00;
+
   /* ---- Spacing ---- */
   --spacing-xs: 4px;
   --spacing-sm: 12px;

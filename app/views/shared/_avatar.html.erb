@@ -3,15 +3,18 @@
     locals: user / classes（大きさなどのCSSクラス） %>
 <%
   classes = local_assigns.fetch(:classes, "w-8 h-8")
+  # 称号があれば、アイコンのまわりに色の輪を出す。色は Badge が1か所で決めている
+  badge = Badge.for(user)
+  ring = badge&.ring_class
 %>
 
 <% if user.avatar.attached? %>
   <%= image_tag user.avatar.variant(resize_to_fill: [ 160, 160 ]), loading: "lazy",
         alt: "#{user.username}さんのアイコン",
-        class: "#{classes} rounded-full object-cover shrink-0" %>
+        class: "#{classes} #{ring} rounded-full object-cover shrink-0" %>
 <% else %>
   <%# 絵の背景が白なので、丸の中も白にして縁が出ないようにする %>
-  <div class="<%= classes %> bg-white rounded-full border border-outline-variant/40 flex items-center justify-center shrink-0 overflow-hidden"
+  <div class="<%= classes %> <%= ring %> bg-white rounded-full border border-outline-variant/40 flex items-center justify-center shrink-0 overflow-hidden"
        role="img" aria-label="<%= user.username %>さんのアイコン">
     <%= image_tag "cats/default_avatar.png", alt: "", aria: { hidden: true },
           class: "w-[88%] h-[88%] object-contain" %>
