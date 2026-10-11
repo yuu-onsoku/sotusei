@@ -79,5 +79,23 @@ RSpec.describe "Mypages", type: :request do
       expect(response.body).to include("自分の質問です")
       expect(response.body).not_to include(post_path(own_post))
     end
+
+    describe "バッジ" do
+      it "回答していない人には称号が出ず、最初の称号までの件数が出る" do
+        get mypage_path
+
+        expect(response.body).not_to include(Badge::RANKS.last.name)
+        expect(response.body).to include("次の称号まであと1件")
+      end
+
+      it "回答すると称号が出る" do
+        question = create(:question, user: user)
+        create(:answer, user: user, question: question)
+
+        get mypage_path
+
+        expect(response.body).to include(Badge::RANKS.last.name)
+      end
+    end
   end
 end

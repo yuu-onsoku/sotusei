@@ -192,4 +192,33 @@ RSpec.describe "Questions", type: :request do
       expect(response.body).to include("q=")
     end
   end
+
+  describe "回答者のバッジ" do
+    let(:user) { create(:user) }
+    before { sign_in user }
+
+    it "回答を重ねた人の称号が、回答の横に出る" do
+      veteran = create(:user)
+      question = create(:question, user: user)
+      # 5件答えると真ん中の称号になる
+      create_list(:question, 5).each { |q| create(:answer, user: veteran, question: q) }
+      create(:answer, user: veteran, question: question, content: "こう思いますよ")
+
+      get question_path(question)
+
+      expect(response.body).to include(Badge::RANKS[1].name)
+    end
+
+    it "まだ回答していない人の回答には称号が出ない" do
+      newcomer = create(:user)
+      question = create(:question, user: user)
+      create(:answer, user: newcomer, question: question, content: "はじめて答えます")
+
+      get question_path(question)
+
+      # 1件目の回答なので一番下の称号になり、真ん中の称号は出ない
+      expect(response.body).to include(Badge::RANKS.last.name)
+      expect(response.body).not_to include(Badge::RANKS[1].name)
+    end
+  end
 end
