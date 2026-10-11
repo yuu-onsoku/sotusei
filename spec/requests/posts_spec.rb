@@ -116,5 +116,30 @@ RSpec.describe "Posts", type: :request do
         expect { delete post_path(other) }.not_to change(Post, :count)
       end
     end
+
+    describe "タグ" do
+      it "フォームから送ったタグが付く" do
+        post posts_path, params: { post: { content: "うちの子", tag_names: "三毛猫, 子猫", images: [ image_file ] } }
+
+        expect(Post.last.tags.map(&:name)).to contain_exactly("三毛猫", "子猫")
+      end
+
+      it "詳細画面にタグが出る" do
+        tagged = create(:post, tag_names: "もふもふ")
+
+        get post_path(tagged)
+
+        expect(response.body).to include("もふもふ")
+      end
+
+      it "タグが多すぎると保存されず、フォームに戻る" do
+        expect {
+          post posts_path, params: { post: { content: "うちの子", tag_names: "a,b,c,d,e,f", images: [ image_file ] } }
+        }.not_to change(Post, :count)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include("タグは5個までにしてください")
+      end
+    end
   end
 end

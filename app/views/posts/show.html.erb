@@ -61,6 +61,11 @@
         <p class="font-body-md text-body-md text-on-surface whitespace-pre-line leading-relaxed mt-sm"><%= @post.content %></p>
       <% end %>
 
+      <!-- タグ -->
+      <div class="mt-sm">
+        <%= render "posts/tags", post: @post %>
+      </div>
+
       <!-- コメント -->
       <%= render "comments/section", commentable: @post %>
 

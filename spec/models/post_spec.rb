@@ -103,4 +103,76 @@ RSpec.describe Post, type: :model do
       expect { post.destroy }.to change(Like, :count).by(-1).and change(Comment, :count).by(-1)
     end
   end
+
+  describe "タグ" do
+    it "カンマ区切りの文字列からタグを作って付ける" do
+      post = create(:post, tag_names: "三毛猫, 子猫")
+
+      expect(post.tags.map(&:name)).to contain_exactly("三毛猫", "子猫")
+    end
+
+    it "タグなしでも投稿できる" do
+      expect(build(:post, tag_names: "")).to be_valid
+      expect(create(:post).tags).to be_empty
+    end
+
+    it "すでにあるタグ名は作り直さず使い回す" do
+      create(:post, tag_names: "子猫")
+
+      expect { create(:post, tag_names: "子猫, 寝顔") }.to change(Tag, :count).by(1)
+    end
+
+    it "6個以上は保存できない" do
+      post = build(:post, tag_names: "a,b,c,d,e,f")
+
+      expect(post).to be_invalid
+      expect(post.errors.full_messages).to include("タグは5個までにしてください")
+    end
+
+    it "1つが20文字を超えると保存できない" do
+      post = build(:post, tag_names: "あ" * 21)
+
+      expect(post).to be_invalid
+      expect(post.errors.full_messages).to include("タグは1つ20文字までにしてください")
+    end
+
+    # 保存に失敗した投稿のためにタグだけ増やさない
+    it "保存に失敗したときはタグも作られない" do
+      post = build(:post, content: "あ" * 1001, tag_names: "まだ無いタグ")
+
+      expect { post.save }.not_to change(Tag, :count)
+    end
+
+    it "編集でタグを入れ替えられる" do
+      post = create(:post, tag_names: "三毛猫, 子猫")
+
+      post.update(tag_names: "寝顔")
+
+      expect(post.reload.tags.map(&:name)).to eq([ "寝顔" ])
+    end
+
+    it "編集でタグを空にできる" do
+      post = create(:post, tag_names: "三毛猫")
+
+      post.update(tag_names: "")
+
+      expect(post.reload.tags).to be_empty
+    end
+
+    # タグに触らない更新で、付いているタグが消えてしまわないこと
+    it "タグを送らない更新ではタグがそのまま残る" do
+      post = create(:post, tag_names: "三毛猫")
+
+      post.update(content: "ひとことだけ直す")
+
+      expect(post.reload.tags.map(&:name)).to eq([ "三毛猫" ])
+    end
+
+    # Tag は他の投稿が使っているかもしれないので消さない
+    it "投稿を削除しても Tag は残り、中間テーブルだけ消える" do
+      post = create(:post, tag_names: "三毛猫")
+
+      expect { post.destroy }.to change(PostTag, :count).by(-1).and change(Tag, :count).by(0)
+    end
+  end
 end
