@@ -122,18 +122,7 @@
 
 
   <!-- Footer -->
-  <footer class="w-full py-lg px-margin-mobile flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">
-    <div class="flex flex-col items-center md:items-start gap-xs">
-      <div class="text-headline-sm font-headline-sm text-primary">ねこの集会場</div>
-      <p class="text-label-sm font-label-sm text-on-surface-variant">© 2026 ねこの集会場. 全著作権所有</p>
-    </div>
-    <div class="flex flex-wrap justify-center gap-md">
-      <%= link_to "利用規約", terms_path, class: "text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" %>
-      <%= link_to "プライバシーポリシー", privacy_path, class: "text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" %>
-      <%= link_to "お問い合わせ", new_contact_path, class: "text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" %>
-      <a class="text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" href="#">ブランドメッセージ</a>
-    </div>
-  </footer>
+  <%= render "shared/footer" %>
 </div>
 
 <script>

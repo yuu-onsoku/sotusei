@@ -1,0 +1,24 @@
+<%# フッター。以前は5ページが同じものを別々に持っていたため、
+    リンクを足すたびに貼り忘れが起きていた（ナビを共通部品にしたのと同じ理由）。 %>
+<footer class="w-full py-lg px-margin-mobile md:px-lg flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-high">
+  <div class="flex flex-col items-center md:items-start gap-xs">
+    <div class="text-headline-sm font-headline-sm text-primary">ねこの集会場</div>
+    <p class="text-label-sm font-label-sm text-on-surface-variant">© 2026 ねこの集会場. 猫との暮らしに、共感と責任を。</p>
+  </div>
+
+  <div class="flex flex-wrap justify-center gap-md">
+    <%
+      links = [
+        [ "ブランドメッセージ", brand_path ],
+        [ "ガイドライン",       guideline_path ],
+        [ "利用規約",           terms_path ],
+        [ "プライバシーポリシー", privacy_path ],
+        [ "お問い合わせ",       new_contact_path ]
+      ]
+    %>
+    <% links.each do |label, path| %>
+      <%= link_to label, path,
+            class: "text-on-surface-variant hover:text-primary underline transition-all text-label-sm font-label-sm" %>
+    <% end %>
+  </div>
+</footer>

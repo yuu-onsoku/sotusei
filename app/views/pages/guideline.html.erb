@@ -1,0 +1,156 @@
+<% content_for :title, "ねこの相談室のガイドライン - ねこの集会場" %>
+
+<div class="min-h-screen bg-background">
+  <!-- ヘッダー -->
+  <header class="w-full px-gutter h-16 flex items-center bg-surface shadow-sm">
+    <div class="max-w-[800px] w-full mx-auto flex items-center gap-2">
+      <span class="material-symbols-outlined text-brand-1">pets</span>
+      <%= link_to "ねこの集会場", root_path, class: "font-headline-md text-headline-md font-bold text-on-background" %>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-gutter py-12">
+    <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">ねこの相談室のガイドライン</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">
+      書き込む前に、目を通していただけるとうれしいです
+    </p>
+
+    <div class="bg-tertiary-fixed rounded-xl p-6 mb-10">
+      <p class="font-body-md text-body-md text-on-background leading-relaxed">
+        ここは、<strong>周りに聞ける人がいなくて困っている人のための場所</strong>です。
+        「こんなこと聞いていいのかな」と思うようなことこそ、どうぞ書いてください。
+        そのために、みんなで守りたいことをまとめました。
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-10">
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4">
+          <span class="material-symbols-outlined text-brand-1 align-middle">edit</span>
+          質問するとき
+        </h2>
+
+        <div class="flex flex-col gap-4">
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">どんな小さなことでも大丈夫です</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              初めて猫を迎える人にとっては、すべてが初めてです。
+              「調べてから聞くべき」と我慢する必要はありません。
+            </p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">住所や電話番号は書かないでください</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              投稿は、ログインしている人なら誰でも読めます。
+              かかりつけの病院名やお住まいの地域など、
+              あなたやご家族が特定できる情報は書かないようにしてください。
+            </p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">写真に写り込んでいるものに気をつけて</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              うちの子の写真に、表札・郵便物・窓の外の景色などが入っていないか、
+              送る前に一度見てみてください。
+            </p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">ほかの人が答えやすい形で</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              猫の年齢、迎えてからどのくらいか、いつからその様子なのか。
+              分かる範囲で書いてあると、答える人がぐっと答えやすくなります。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4">
+          <span class="material-symbols-outlined text-brand-1 align-middle">forum</span>
+          答えるとき
+        </h2>
+
+        <div class="flex flex-col gap-4">
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">否定から入らない</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              「そんなことも知らないの」と言われた経験が一度でもあると、
+              人は二度と質問しなくなります。
+              知らなかったことを責めずに、知っていることを分けてあげてください。
+            </p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">「うちの場合は」と添える</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              猫にも、暮らしにも、それぞれ事情があります。
+              自分の経験として書いていただけると、読む人が選びやすくなります。
+            </p>
+          </div>
+
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5">
+            <h3 class="font-label-md text-label-md text-on-surface mb-2">分からないことは、分からないままで</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              無理に答えを出す必要はありません。
+              「うちもそうでした」の一言だけでも、質問した人はずいぶん楽になります。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4">
+          <span class="material-symbols-outlined text-error align-middle">local_hospital</span>
+          病気やけがは、必ず獣医さんへ
+        </h2>
+
+        <div class="bg-error-container rounded-xl p-6">
+          <p class="font-body-md text-body-md text-on-error-container leading-relaxed">
+            ここで得られるのは、あくまで<strong>飼い主どうしの経験</strong>です。
+            診断でも、治療の指示でもありません。
+          </p>
+          <p class="font-body-sm text-body-sm text-on-error-container leading-relaxed mt-3">
+            食欲がない、ぐったりしている、嘔吐が続く、おしっこが出ない——
+            こうしたときは、ここに書く前に動物病院へ連れて行ってください。
+            とくに<strong>おしっこが出ない</strong>のは、命に関わることがあります。
+          </p>
+
+          <%= link_to places_path,
+                class: "inline-flex items-center gap-1 mt-4 font-label-md text-label-md text-on-error-container underline underline-offset-4" do %>
+            <span class="material-symbols-outlined text-[18px]">search</span>
+            近くの動物病院をさがす
+          <% end %>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">書き込めないこと</h2>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>ほかの人を傷つける言葉、決めつけ</li>
+          <li>生き物の売買、譲渡の募集</li>
+          <li>商品やサービスの宣伝</li>
+          <li>ご自身や他人の個人情報</li>
+        </ul>
+        <p class="font-body-sm text-body-sm text-on-surface-variant/70 leading-relaxed mt-4">
+          詳しくは<%= link_to "利用規約", terms_path, class: "text-primary underline underline-offset-4" %>をご覧ください。
+          困ったことがあれば<%= link_to "お問い合わせ", new_contact_path, class: "text-primary underline underline-offset-4" %>からご連絡ください。
+        </p>
+      </section>
+    </div>
+
+    <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+      <%= link_to new_question_path,
+            class: "inline-flex items-center justify-center gap-2 bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200" do %>
+        <span class="material-symbols-outlined text-[18px]">edit</span>
+        質問を投稿する
+      <% end %>
+
+      <%= link_to "相談室にもどる", questions_path,
+            class: "inline-flex items-center justify-center h-[48px] px-8 rounded-full border border-outline-variant font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors" %>
+    </div>
+  </main>
+
+  <%= render "shared/footer" %>
+</div>
