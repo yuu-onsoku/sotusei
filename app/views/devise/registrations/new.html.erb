@@ -52,6 +52,8 @@
           <%= link_to "すでにアカウントをお持ちの方はこちら（ログイン）", new_session_path(resource_name), class: "font-label-md text-label-md text-primary hover:underline" %>
         </div>
       <% end %>
+
+      <%= render "devise/shared/google_button", label: "Googleで登録" %>
     </div>
   </main>
 
