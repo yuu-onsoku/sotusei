@@ -193,6 +193,18 @@ RSpec.describe "Questions", type: :request do
     end
   end
 
+  # 緊急時の導線。ただの <button> で、押しても何も起きない状態だった。
+  # 猫の様子が急変している人が押すボタンなので、ここは落としてはいけない。
+  describe "質問の投稿画面の緊急時の案内" do
+    before { sign_in create(:user) }
+
+    it "病院検索へのリンクがある" do
+      get new_question_path
+
+      expect(response.body).to include(places_path)
+    end
+  end
+
   # 以前、この6つのボタンは ただの <button> で、押しても何も起きなかった。
   # しかも「費用」「お迎え前」など、実際には存在しないカテゴリが並んでいた。
   describe "カテゴリでの絞り込み" do
