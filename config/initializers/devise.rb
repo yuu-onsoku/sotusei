@@ -275,6 +275,18 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
+  # Googleアカウントでのログイン。
+  #
+  # ENV.fetch ではなく ENV[] を使う。キーを設定していない環境（CI など）でも
+  # アプリが起動できるようにしたいため。未設定ならボタンを出さない作りにしている。
+  #
+  # scope は email と profile だけ。この2つは Google の審査が不要で、
+  # 必要以上の情報を預からないためでもある。
+  config.omniauth :google_oauth2,
+                  ENV["GOOGLE_CLIENT_ID"],
+                  ENV["GOOGLE_CLIENT_SECRET"],
+                  scope: "email,profile"
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

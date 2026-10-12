@@ -49,4 +49,12 @@ RSpec.configure do |config|
 
   # deliver_later で裏に回したメールを、テスト中にその場で実行できるようにする
   config.include ActiveJob::TestHelper
+
+  # Googleに実際の通信をしないようにする。
+  # test_mode では、こちらが用意した返事（mock_auth）をそのまま受け取れる
+  config.before(:suite) { OmniAuth.config.test_mode = true }
+  config.after(:each) do
+    OmniAuth.config.mock_auth.clear
+    OmniAuth.config.before_callback_phase = nil
+  end
 end

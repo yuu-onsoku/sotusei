@@ -25,6 +25,11 @@ gem "devise"
 # エラーメッセージなどの日本語化（Rails本体 / Devise）
 gem "rails-i18n"
 gem "devise-i18n"
+# Googleアカウントでのログイン。
+# omniauth-rails_csrf_protection は必須。これが無いと OmniAuth が
+# 「GETでの認証開始は危ない」として弾くため、ボタンを押しても始まらない
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 
 # 本番の画像置き場（Active Storage の保存先を Cloudinary にする）
 # Render のディスクは再起動で消えるため、アップロード画像は外部に保存する。
