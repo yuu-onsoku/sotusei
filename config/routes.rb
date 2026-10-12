@@ -50,6 +50,8 @@ Rails.application.routes.draw do
   # 静的ページ（未ログインでも見られる）
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
+  get "brand", to: "pages#brand"
+  get "guideline", to: "pages#guideline"
 
   # お問い合わせ（ログインできない人からの連絡も受け取るため、ログイン不要）
   resources :contacts, only: %i[new create]

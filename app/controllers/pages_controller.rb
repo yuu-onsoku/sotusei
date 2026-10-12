@@ -6,4 +6,12 @@ class PagesController < ApplicationController
 
   def privacy
   end
+
+  # このアプリを作った理由と、届けたい価値
+  def brand
+  end
+
+  # 相談室に書き込む前に読んでもらうもの
+  def guideline
+  end
 end
