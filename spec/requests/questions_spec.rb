@@ -193,6 +193,72 @@ RSpec.describe "Questions", type: :request do
     end
   end
 
+  # 以前、この6つのボタンは ただの <button> で、押しても何も起きなかった。
+  # しかも「費用」「お迎え前」など、実際には存在しないカテゴリが並んでいた。
+  describe "カテゴリでの絞り込み" do
+    let(:user) { create(:user) }
+    let(:food) { Question::CATEGORIES.first }
+    let(:health) { Question::CATEGORIES.second }
+
+    before { sign_in user }
+
+    it "カテゴリを指定すると、そのカテゴリの質問だけが並ぶ" do
+      food_question = create(:question, category: food, title: "ごはんの質問です")
+      health_question = create(:question, category: health, title: "病院の質問です")
+
+      get questions_path(category: food)
+
+      expect(response.body).to include(food_question.title)
+      expect(response.body).not_to include(health_question.title)
+    end
+
+    it "指定しなければ全部並ぶ" do
+      food_question = create(:question, category: food, title: "ごはんの質問です")
+      health_question = create(:question, category: health, title: "病院の質問です")
+
+      get questions_path
+
+      expect(response.body).to include(food_question.title)
+      expect(response.body).to include(health_question.title)
+    end
+
+    # 画面に直書きしていたせいで、実際のカテゴリとずれていた
+    it "画面のカテゴリが CATEGORIES と一致している" do
+      get questions_path
+
+      Question::CATEGORIES.each do |category|
+        expect(response.body).to include(questions_path(category: category))
+      end
+    end
+
+    it "検索とカテゴリを同時に使える" do
+      hit = create(:question, category: food, title: "カリカリの選び方")
+      create(:question, category: health, title: "カリカリと病院の話")
+
+      get questions_path(q: "カリカリ", category: food)
+
+      expect(response.body).to include(hit.title)
+      expect(response.body).not_to include("カリカリと病院の話")
+    end
+
+    # #148 で、検索したままページを移動できない失敗をしている
+    it "検索語とカテゴリの両方がページ送りに引き継がれる" do
+      create_list(:question, 13, category: food, title: "ねこのごはんについて")
+
+      get questions_path(q: "ごはん", category: food)
+
+      expect(response.body).to include("q=")
+      expect(response.body).to include("category=")
+    end
+
+    it "存在しないカテゴリ名でも画面が壊れない" do
+      get questions_path(category: "費用")
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("見つかりませんでした").or include("まだありません")
+    end
+  end
+
   describe "回答者のバッジ" do
     let(:user) { create(:user) }
     before { sign_in user }

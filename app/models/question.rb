@@ -25,4 +25,12 @@ class Question < ApplicationRecord
 
     where("title ILIKE :pattern OR content ILIKE :pattern", pattern: "%#{sanitize_sql_like(keyword)}%")
   end
+
+  # カテゴリで絞り込む（カテゴリが空なら全件）
+  def self.by_category(name)
+    name = name.to_s.strip
+    return all if name.blank?
+
+    where(category: name)
+  end
 end

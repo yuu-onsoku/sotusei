@@ -108,6 +108,40 @@ RSpec.describe Question, type: :model do
     end
   end
 
+  describe ".by_category" do
+    # カテゴリ名を直書きせず CATEGORIES から取る。
+    # 画面に直書きしていたせいで実際とずれていたので、テストでも同じ間違いをしない
+    let(:food) { Question::CATEGORIES.first }
+    let(:health) { Question::CATEGORIES.second }
+
+    let!(:food_question) { create(:question, category: food) }
+    let!(:health_question) { create(:question, category: health) }
+
+    it "そのカテゴリの質問だけを返す" do
+      expect(Question.by_category(food)).to contain_exactly(food_question)
+    end
+
+    # 指定が無ければ全件（コントローラで if を書かずに繋げるため）
+    it "指定が無ければ全件かえってくる" do
+      expect(Question.by_category(nil)).to contain_exactly(food_question, health_question)
+      expect(Question.by_category("")).to contain_exactly(food_question, health_question)
+      expect(Question.by_category("   ")).to contain_exactly(food_question, health_question)
+    end
+
+    it "存在しないカテゴリ名なら空になる" do
+      expect(Question.by_category("そんなカテゴリはない")).to be_empty
+    end
+
+    it "検索と組み合わせられる" do
+      create(:question, category: food, title: "カリカリの選び方")
+
+      result = Question.search("カリカリ").by_category(food)
+
+      expect(result.count).to eq(1)
+      expect(Question.search("カリカリ").by_category(health)).to be_empty
+    end
+  end
+
   describe "#liked_by?" do
     it "いいねしたユーザーを渡すと true になる" do
       user = create(:user)

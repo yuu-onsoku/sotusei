@@ -42,13 +42,17 @@
           <% end %>
         <% end %>
       <% end %>
+      <%# カテゴリは Question::CATEGORIES から作る。画面に直書きすると、
+          カテゴリを足したときに投稿フォームの選択肢とずれる（実際にずれていた）。
+          検索したままカテゴリを変えられるよう、?q= は保ったまま移動する %>
       <div class="flex flex-wrap justify-center gap-sm">
-        <button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:brightness-95 transition-colors border border-transparent shadow-sm">すべて</button>
-        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">食事</button>
-        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">健康</button>
-        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">しつけ</button>
-        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">費用</button>
-        <button class="px-6 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors border border-outline-variant">お迎え前</button>
+        <% chips = [ [ "すべて", nil ] ] + Question::CATEGORIES.map { |c| [ c, c ] } %>
+        <% chips.each do |label, value| %>
+          <% current = (params[:category].presence == value) %>
+          <%= link_to label, questions_path(q: params[:q], category: value),
+                "aria-current": ("page" if current),
+                class: "px-6 py-2 rounded-full font-label-md text-label-md transition-colors #{current ? "bg-primary text-on-primary border border-transparent shadow-sm hover:brightness-95" : "bg-surface-container-lowest text-on-surface-variant border border-outline-variant hover:bg-surface-container-low"}" %>
+        <% end %>
       </div>
     </section>
 
@@ -99,10 +103,20 @@
           </article>
         <% end %>
       <% else %>
+        <%# 「検索語で絞った」「カテゴリで絞った」「両方で絞った」で、言い方を変える %>
+        <% filtered = params[:q].present? || params[:category].present? %>
         <div class="md:col-span-2 lg:col-span-3 text-center py-xl">
-          <span class="material-symbols-outlined text-[48px] text-outline-variant"><%= params[:q].present? ? "search_off" : "forum" %></span>
-          <% if params[:q].present? %>
-            <p class="font-body-md text-body-md text-on-surface-variant mt-sm">「<%= params[:q] %>」に一致する質問は見つかりませんでした。</p>
+          <span class="material-symbols-outlined text-[48px] text-outline-variant"><%= filtered ? "search_off" : "forum" %></span>
+          <% if filtered %>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-sm">
+              <% if params[:q].present? && params[:category].present? %>
+                「<%= params[:category] %>」の中に「<%= params[:q] %>」に一致する質問は見つかりませんでした。
+              <% elsif params[:q].present? %>
+                「<%= params[:q] %>」に一致する質問は見つかりませんでした。
+              <% else %>
+                「<%= params[:category] %>」の質問はまだありません。
+              <% end %>
+            </p>
             <%= link_to "すべての質問を見る", questions_path, class: "inline-block mt-sm font-label-md text-label-md text-primary underline underline-offset-4" %>
           <% else %>
             <p class="font-body-md text-body-md text-on-surface-variant mt-sm">まだ質問がありません。最初の質問を投稿してみましょう。</p>
@@ -111,8 +125,8 @@
       <% end %>
     </section>
 
-    <%# ページ送り。検索中は ?q= を保ったまま移動する %>
-    <%= paginate @questions, params: { q: params[:q] } %>
+    <%# ページ送り。検索中・絞り込み中は ?q= と ?category= を保ったまま移動する %>
+    <%= paginate @questions, params: { q: params[:q], category: params[:category] } %>
   </main>
 
   <!-- Floating Action Button (Mobile Only) -->
