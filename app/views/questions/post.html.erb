@@ -130,9 +130,15 @@
           <p class="font-body-sm text-body-sm mb-md opacity-90">
             ねこの様子が急変している、ぐったりしている、出血があるなどの緊急時は、掲示板への投稿を待たず、すぐに最寄りの動物病院へ連絡してください。
           </p>
-          <button class="w-full py-sm border border-primary-fixed text-primary-fixed rounded-lg font-label-md hover:bg-white/10 transition-colors">
-            近くの夜間病院を探す
-          </button>
+          <%# 別タブで開く。このページは質問を書いている途中なので、
+              同じタブで移動すると書きかけの文章が消えてしまう。
+              病院検索は夜間かどうかで絞り込めないため、文言も「動物病院」にしている %>
+          <%= link_to places_path, target: "_blank", rel: "noopener",
+                class: "w-full py-sm border border-primary-fixed text-primary-fixed rounded-lg font-label-md hover:bg-white/10 transition-colors flex items-center justify-center gap-1" do %>
+            <span class="material-symbols-outlined text-[18px]">local_hospital</span>
+            近くの動物病院をさがす
+            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+          <% end %>
         </div>
         <!-- Decorative Image -->
         <div class="rounded-xl overflow-hidden aspect-video border border-surface-container-high">
