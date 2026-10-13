@@ -14,26 +14,49 @@ class DiagnosisJudge
   CATEGORY_COMMENTS = {
     "生活リズム" => "ひとりでお留守番する時間が長いと、さみしいにゃ…",
     "住環境"     => "安心して過ごせるおうちかどうか、気になるにゃ",
-    "経済"       => "ごはんや病院代が足りるか、ちょっと心配だにゃ（おやつも欲しいしにゃ～）"
+    "経済"       => "ごはんや病院代が足りるか、ちょっと心配だにゃ（おやつも欲しいしにゃ～）",
+    "将来"       => "この先なにがあっても、そばにいてくれるか心配だにゃ…",
+    "安全"       => "おうちの中に、ぼくが食べちゃいけないものが落ちてないか気になるにゃ"
   }.freeze
+
+  # 「準備万端」とみなす割合。満点の6割以上。
+  # 点数そのものではなく割合にしているので、質問を足しても境目が付いてくる
+  READY_RATIO = 0.6
 
   # 絶対条件に引っかかった場合のひとこと
   BLOCKER_COMMENT = "今のままでは、一緒に暮らすことができないにゃ。まずはそこを整えてほしいにゃ"
 
 
+  # ログイン不要の簡易診断（5問）
   def self.simple_questions
     QUESTIONS["simple"]
   end
 
+  # ログイン後の詳細診断（13問）。簡易診断の5問に、追加の8問を足したもの
+  def self.full_questions
+    QUESTIONS["simple"] + QUESTIONS["additional"]
+  end
+
+  def self.questions_for(kind)
+    kind.to_s == "full" ? full_questions : simple_questions
+  end
+
+  attr_reader :kind
+
   # answers は { "0" => "1", "1" => "0", ... } の形
   # （キーが質問の番号、値が選んだ選択肢の番号）
-  def initialize(answers)
+  def initialize(answers, kind: :simple)
     @answers = answers
+    @kind = kind.to_s == "full" ? "full" : "simple"
+  end
+
+  def questions
+    self.class.questions_for(@kind)
   end
 
   # 選ばれた選択肢を順番に取り出す
   def selected_choices
-    self.class.simple_questions.each_with_index.map do |question, index|
+    questions.each_with_index.map do |question, index|
       choice_index = @answers[index.to_s].to_i
       question["choices"][choice_index]
     end
@@ -46,7 +69,7 @@ class DiagnosisJudge
   # カテゴリごとの合計点を返す
   # => { "生活リズム" => -2, "住環境" => 2, "経済" => 0 }
   def category_scores
-    self.class.simple_questions.zip(selected_choices).each_with_object({}) do |(question, choice), scores|
+    questions.zip(selected_choices).each_with_object({}) do |(question, choice), scores|
       category = question["category"]
       scores[category] = (scores[category] || 0) + choice["score"].to_i
     end
@@ -68,14 +91,22 @@ class DiagnosisJudge
     selected_choices.any? { |choice| choice["blocker"] }
   end
 
-  # 判定結果を返す
+  # 全部いちばん良い選択肢を選んだときの点数。
+  # 簡易診断は10点、詳細診断は26点になる
+  def max_score
+    questions.sum { |question| question["choices"].map { |choice| choice["score"].to_i }.max }
+  end
+
+  # 判定結果を返す。
+  # 境目は点数ではなく満点に対する割合で決めているので、質問を足しても調整が要らない
+  # （5問のときの「6点以上＝準備万端」は、満点10点の6割にあたる）
   def result
     return "今はまだ早い" if blocked?
 
     case score
-    when 6..    then "準備万端"
-    when 0..5   then "成猫なら可能"
-    else             "今はまだ早い"
+    when (max_score * READY_RATIO).. then "準備万端"
+    when 0..                         then "成猫なら可能"
+    else                                  "今はまだ早い"
     end
   end
 

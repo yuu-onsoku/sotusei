@@ -46,7 +46,7 @@
       </h1>
 
       <p class="font-label-md text-label-md text-on-background/80">
-        スコア <span class="font-headline-sm text-headline-sm"><%= @score %></span> 点 / 10点満点
+        スコア <span class="font-headline-sm text-headline-sm"><%= @score %></span> 点 / <%= @max_score %>点満点
       </p>
     </div>
 
@@ -65,6 +65,23 @@
         </div>
       <% end %>
     </div>
+
+    <%# 簡易診断を終えたログイン中の人に、くわしい診断をすすめる。
+        未ログインの人にはこの下に「無料で登録する」の案内がすでにある %>
+    <% if @kind == "simple" && user_signed_in? %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 mb-8 text-center">
+        <p class="font-body-md text-body-md text-on-surface-variant mb-4">
+          もっとくわしく知りたい方へ。実際に猫と暮らしている方々の声をもとに、
+          将来のことやおうちの安全についての質問を足した、<%= DiagnosisJudge.full_questions.size %>問の診断もあります。
+        </p>
+
+        <%= link_to new_diagnosis_path(kind: "full"),
+              class: "inline-flex items-center justify-center gap-2 bg-brand-1 text-on-primary h-[48px] px-8 rounded-full font-label-md text-label-md shadow-[0_4px_16px_rgba(249,197,78,0.25)] hover:bg-brand-2 transition-all duration-200" do %>
+          <span class="material-symbols-outlined text-[20px]">fact_check</span>
+          くわしく診断する
+        <% end %>
+      </div>
+    <% end %>
 
     <!-- 次のアクション -->
     <div class="flex flex-col sm:flex-row gap-4 justify-center">

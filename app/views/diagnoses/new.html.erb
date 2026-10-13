@@ -39,16 +39,29 @@
   <main class="relative z-10 max-w-[800px] mx-auto px-gutter py-12">
     <!-- 導入 -->
     <div class="mb-10">
-      <h1 class="font-headline-xl text-headline-xl text-on-background mb-4">お迎え診断</h1>
+      <h1 class="font-headline-xl text-headline-xl text-on-background mb-4">
+        <%= @kind == "full" ? "お迎え診断（くわしく）" : "お迎え診断" %>
+      </h1>
 
+      <%# 質問の数は @questions から出す。直書きすると、質問を足したときにずれる %>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        5つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。
+        <%= @questions.size %>つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。
       </p>
-      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">所要時間: 約3分</p>
+      <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
+        所要時間: 約<%= @kind == "full" ? 7 : 3 %>分
+      </p>
+
+      <% if @kind == "full" %>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-4 bg-tertiary-fixed rounded-xl p-4">
+          実際に猫と暮らしている方々からいただいた声をもとに、
+          将来のことや、おうちの安全についての質問を足しています。
+        </p>
+      <% end %>
     </div>
 
     <!-- 質問フォーム -->
-    <%= form_with url: diagnoses_path, method: :post do |form| %>
+    <%# どちらの診断かを一緒に送る。送らないと、送信後に簡易診断として採点されてしまう %>
+    <%= form_with url: diagnoses_path(kind: @kind), method: :post do |form| %>
       <div class="flex flex-col gap-6">
         <% @questions.each_with_index do |question, index| %>
           <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">

@@ -129,4 +129,91 @@ RSpec.describe DiagnosisJudge do
       expect(comments).not_to include(DiagnosisJudge::CATEGORY_COMMENTS["住環境"])
     end
   end
+
+  # 利用者アンケートとLINEで寄せられた声をもとに8問を足した詳細診断。
+  # 簡易診断の5問に足す形なので、上のテストはすべてそのまま通る。
+  describe "詳細診断（kind: :full）" do
+    # 全部の質問で、指定した番号の選択肢を選ぶ
+    def answers_all(index, count)
+      (0...count).to_h { |i| [ i.to_s, index.to_s ] }
+    end
+
+    it "簡易診断の5問に、追加の8問を足した13問になる" do
+      expect(DiagnosisJudge.simple_questions.size).to eq(5)
+      expect(DiagnosisJudge.full_questions.size).to eq(13)
+      # 先頭5問は簡易診断と同じもの
+      expect(DiagnosisJudge.full_questions.first(5)).to eq(DiagnosisJudge.simple_questions)
+    end
+
+    it "指定しなければ簡易診断になる" do
+      expect(DiagnosisJudge.new({}).kind).to eq("simple")
+      expect(DiagnosisJudge.new({}, kind: "なにこれ").kind).to eq("simple")
+    end
+
+    # 質問を足すと満点が変わる。境目を点数で持っていると、ここで判定が狂う
+    describe "#max_score" do
+      it "簡易診断は10点、詳細診断は26点" do
+        expect(DiagnosisJudge.new({}).max_score).to eq(10)
+        expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(26)
+      end
+    end
+
+    describe "#result" do
+      it "全部いちばん良い選択肢なら準備万端" do
+        judge = DiagnosisJudge.new(answers_all(0, 13), kind: :full)
+
+        expect(judge.score).to eq(26)
+        expect(judge.result).to eq("準備万端")
+      end
+
+      # 満点の6割が境目。26点の6割は15.6点なので、16点から「準備万端」になる
+      it "満点の6割が境目になっている" do
+        judge = DiagnosisJudge.new({}, kind: :full)
+        border = judge.max_score * DiagnosisJudge::READY_RATIO
+
+        expect(border).to be_within(0.01).of(15.6)
+      end
+
+      it "絶対条件にかかると、点数に関係なく今はまだ早い" do
+        # 他はすべて最良にしたうえで、家族が反対している（最後の質問の3番目）を選ぶ
+        answers = answers_all(0, 13).merge("12" => "2")
+        judge = DiagnosisJudge.new(answers, kind: :full)
+
+        expect(judge.blocked?).to be true
+        expect(judge.result).to eq("今はまだ早い")
+      end
+    end
+
+    describe "新しいカテゴリ" do
+      it "将来と安全のコメントが用意されている" do
+        expect(DiagnosisJudge::CATEGORY_COMMENTS).to have_key("将来")
+        expect(DiagnosisJudge::CATEGORY_COMMENTS).to have_key("安全")
+      end
+
+      # カテゴリを足したのにコメントを書き忘れると、
+      # weak_categories に出てきても画面に何も表示されない
+      it "すべてのカテゴリにコメントがある" do
+        categories = DiagnosisJudge.full_questions.map { |q| q["category"] }.uniq
+
+        expect(categories).to all(satisfy { |c| DiagnosisJudge::CATEGORY_COMMENTS.key?(c) })
+      end
+    end
+
+    describe "質問データそのもの" do
+      it "すべての質問にカテゴリと選択肢がある" do
+        DiagnosisJudge.full_questions.each do |question|
+          expect(question["text"]).to be_present
+          expect(question["category"]).to be_present
+          expect(question["choices"]).to be_present
+        end
+      end
+
+      # score も blocker も無い選択肢は、0点として扱われてしまい、書き忘れに気づけない
+      it "すべての選択肢に score か blocker がある" do
+        DiagnosisJudge.full_questions.flat_map { |q| q["choices"] }.each do |choice|
+          expect(choice.key?("score") || choice["blocker"]).to be_truthy
+        end
+      end
+    end
+  end
 end
