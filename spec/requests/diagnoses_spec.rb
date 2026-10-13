@@ -54,9 +54,14 @@ RSpec.describe "Diagnoses", type: :request do
     end
   end
 
-  describe "詳細診断（13問）" do
+  describe "詳細診断" do
+    # アンケートはまだ受付中で、質問はこれからも増える。
+    # 問題数や満点を書かず、質問データから導くことで、足しても直さずに済むようにする
+    let(:question_count) { DiagnosisJudge.full_questions.size }
+    let(:full_max_score) { DiagnosisJudge.new({}, kind: :full).max_score }
+
     def full_answers(index = 0)
-      (0...13).to_h { |i| [ i.to_s, index.to_s ] }
+      (0...question_count).to_h { |i| [ i.to_s, index.to_s ] }
     end
 
     # 簡易診断は入口機能なのでログイン不要のまま。詳細診断だけログインを求める
@@ -70,11 +75,11 @@ RSpec.describe "Diagnoses", type: :request do
       let(:user) { create(:user) }
       before { sign_in user }
 
-      it "13問が表示される" do
+      it "すべての質問が表示される" do
         get new_diagnosis_path(kind: "full")
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include("13つの質問")
+        expect(response.body).to include("#{question_count}つの質問")
       end
 
       # kind をフォームに入れ忘れると、送信後に簡易診断として採点されてしまう
@@ -91,16 +96,16 @@ RSpec.describe "Diagnoses", type: :request do
 
         diagnosis = Diagnosis.last
         expect(diagnosis.kind).to eq("full")
-        expect(diagnosis.score).to eq(26)
+        expect(diagnosis.score).to eq(full_max_score)
         expect(diagnosis.result).to eq("準備万端")
       end
 
       # 「20点 / 10点満点」のような表示にならないこと
-      it "結果画面の満点が26点になる" do
+      it "結果画面の満点が、詳細診断のものになる" do
         post diagnoses_path(kind: "full"), params: { answers: full_answers }
         follow_redirect!
 
-        expect(response.body).to include("26点満点")
+        expect(response.body).to include("#{full_max_score}点満点")
       end
 
       it "簡易診断の結果画面から、詳細診断への導線がある" do
@@ -124,16 +129,17 @@ RSpec.describe "Diagnoses", type: :request do
     let(:user) { create(:user) }
     before { sign_in user }
 
-    it "簡易診断は10点満点、詳細診断は26点満点と出る" do
+    it "簡易診断と詳細診断で、満点の表示が変わる" do
       create(:diagnosis, user: user, kind: "simple", score: 8)
       get mypage_path(tab: "diagnoses")
-      expect(response.body).to include("10点満点")
+      expect(response.body).to include("#{DiagnosisJudge.new({}).max_score}点満点")
 
       Diagnosis.destroy_all
+      full_max = DiagnosisJudge.new({}, kind: "full").max_score
       create(:diagnosis, user: user, kind: "full",
-             answers: (0...13).to_h { |i| [ i.to_s, "0" ] }, score: 26)
+             answers: (0...DiagnosisJudge.full_questions.size).to_h { |i| [ i.to_s, "0" ] }, score: full_max)
       get mypage_path(tab: "diagnoses")
-      expect(response.body).to include("26点満点")
+      expect(response.body).to include("#{full_max}点満点")
     end
   end
 end

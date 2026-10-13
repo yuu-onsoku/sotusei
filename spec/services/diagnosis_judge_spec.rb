@@ -134,15 +134,41 @@ RSpec.describe DiagnosisJudge do
   # 簡易診断の5問に足す形なので、上のテストはすべてそのまま通る。
   describe "詳細診断（kind: :full）" do
     # 全部の質問で、指定した番号の選択肢を選ぶ
-    def answers_all(index, count)
+    def answers_all(index, count = DiagnosisJudge.full_questions.size)
       (0...count).to_h { |i| [ i.to_s, index.to_s ] }
     end
 
-    it "簡易診断の5問に、追加の8問を足した13問になる" do
+    # 境目の判定だけを見たいので、合計点は差し替える。
+    # 質問の組み合わせでちょうどの点数を作ろうとすると、質問が増えるたびに作り直しになる
+    def judge_with_score(value)
+      judge = DiagnosisJudge.new(answers_all(0), kind: :full)
+      allow(judge).to receive(:score).and_return(value)
+      judge
+    end
+
+    # 絶対条件のある選択肢を、質問データから探す。
+    # 「何問目の何番目」と書くと、質問を足したときにずれる
+    def blocker_answer
+      questions = DiagnosisJudge.full_questions
+      index = questions.index { |q| q["choices"].any? { |c| c["blocker"] } }
+      choice = questions[index]["choices"].index { |c| c["blocker"] }
+
+      { index.to_s => choice.to_s }
+    end
+
+    # アンケートはまだ受付中で、質問はこれからも増える。
+    # そのため「いま何問か」を書くのはこのテストだけにして、他はここから導く。
+    # 質問を足したときに直すのは、このテストの数字だけで済む。
+    it "いまの問題数と満点" do
       expect(DiagnosisJudge.simple_questions.size).to eq(5)
       expect(DiagnosisJudge.full_questions.size).to eq(13)
-      # 先頭5問は簡易診断と同じもの
-      expect(DiagnosisJudge.full_questions.first(5)).to eq(DiagnosisJudge.simple_questions)
+      expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(26)
+    end
+
+    it "詳細診断は、簡易診断の5問を先頭にそのまま含む" do
+      simple = DiagnosisJudge.simple_questions
+
+      expect(DiagnosisJudge.full_questions.first(simple.size)).to eq(simple)
     end
 
     it "指定しなければ簡易診断になる" do
@@ -150,34 +176,32 @@ RSpec.describe DiagnosisJudge do
       expect(DiagnosisJudge.new({}, kind: "なにこれ").kind).to eq("simple")
     end
 
-    # 質問を足すと満点が変わる。境目を点数で持っていると、ここで判定が狂う
-    describe "#max_score" do
-      it "簡易診断は10点、詳細診断は26点" do
-        expect(DiagnosisJudge.new({}).max_score).to eq(10)
-        expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(26)
-      end
-    end
-
     describe "#result" do
       it "全部いちばん良い選択肢なら準備万端" do
-        judge = DiagnosisJudge.new(answers_all(0, 13), kind: :full)
+        judge = DiagnosisJudge.new(answers_all(0), kind: :full)
 
-        expect(judge.score).to eq(26)
+        expect(judge.score).to eq(judge.max_score)
         expect(judge.result).to eq("準備万端")
       end
 
-      # 満点の6割が境目。26点の6割は15.6点なので、16点から「準備万端」になる
-      it "満点の6割が境目になっている" do
-        judge = DiagnosisJudge.new({}, kind: :full)
-        border = judge.max_score * DiagnosisJudge::READY_RATIO
+      # 境目を点数で持っていると、質問を足したときに判定が狂う。
+      # 満点が何点であっても、その6割を超えたら「準備万端」になること。
+      it "満点の6割を境に、判定が切り替わる" do
+        max = DiagnosisJudge.new({}, kind: :full).max_score
+        border = max * DiagnosisJudge::READY_RATIO
 
-        expect(border).to be_within(0.01).of(15.6)
+        expect(judge_with_score(border.ceil).result).to eq("準備万端")
+        expect(judge_with_score(border.ceil - 1).result).to eq("成猫なら可能")
+      end
+
+      it "合計が0点を下回ると今はまだ早い" do
+        expect(judge_with_score(0).result).to eq("成猫なら可能")
+        expect(judge_with_score(-1).result).to eq("今はまだ早い")
       end
 
       it "絶対条件にかかると、点数に関係なく今はまだ早い" do
-        # 他はすべて最良にしたうえで、家族が反対している（最後の質問の3番目）を選ぶ
-        answers = answers_all(0, 13).merge("12" => "2")
-        judge = DiagnosisJudge.new(answers, kind: :full)
+        # 他はすべて最良にしたうえで、絶対条件のある選択肢を1つ選ぶ
+        judge = DiagnosisJudge.new(answers_all(0).merge(blocker_answer), kind: :full)
 
         expect(judge.blocked?).to be true
         expect(judge.result).to eq("今はまだ早い")
