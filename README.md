@@ -15,22 +15,23 @@
 | --- | --- |
 | **お迎え診断** | 生活リズム・住環境・経済状況の5問に答えると「準備万端 / 成猫なら可能 / 今はまだ早い」を判定。猫のキャラクターが足りない点を説明します。**ログイン不要**の入口機能で、ログイン中なら履歴がマイページに残ります |
 | **覚悟のチェックリスト** | 抜け毛・夜鳴き・壁の傷など、猫との暮らしの「大変な現実」16項目。「16個のうち◯個」と、まだチェックしていない項目を見せます。全部チェックしなくても結果は出ます |
-| **ねこの相談室** | 質問と回答の投稿・編集・削除、肉球いいね、コメント、画像添付、キーワード検索、ページ送り |
-| **にゃんスタ** | うちの子の写真投稿（複数枚）、いいね、コメント、ねこ形ブックマークでの保存 |
+| **ねこの相談室** | 質問と回答の投稿・編集・削除、肉球いいね、コメント、画像添付、キーワード検索、カテゴリでの絞り込み、ページ送り |
+| **回答者のバッジ** | 回答を重ねると「はじめての先輩（銅）→ たよれる先輩（銀）→ ねこマスター（金）」の称号が付き、アイコンのまわりの色も変わります |
+| **にゃんスタ** | うちの子の写真投稿（複数枚）、いいね、コメント、ねこ形ブックマークでの保存、タグ付けとタグでの絞り込み |
 | **マイページ** | 自分の質問・回答・投稿・保存した投稿・診断履歴をタブでまとめて見る。プロフィール（表示名・アイコン）の編集 |
 | **病院＆ペットホテル検索** | 住所を入れると、近くの動物病院とペットホテルを地図付きで表示。**ログイン不要** |
 | **お問い合わせ** | 送信すると管理者にメールが届きます。ログインできない人からの連絡も受け取れるよう**ログイン不要** |
-| **ユーザー登録・ログイン** | Devise。パスワードを忘れたときの再設定メールにも対応 |
+| **ユーザー登録・ログイン** | Devise。**Google アカウントでのログイン**と、パスワード再設定メールにも対応 |
+| **ブランドメッセージ / ガイドライン** | このアプリが何のためにあるか。相談室に書き込む前に読んでもらいたいこと |
 | **利用規約・プライバシーポリシー** | |
 
 ### 企画書に書いたが作っていない機能
 
-発表までの時間で優先順位を付け、次の4つは入れていません。
+発表までの時間で優先順位を付け、次の1つだけ入れていません。
 
 - ペットショップ初期費用の計算（と Chart.js による費用グラフ）
-- Google アカウント連携
-- 回答者へのバッジ付与
-- にゃんスタのタグ
+
+企画書に挙げていた Google アカウント連携・回答者へのバッジ・にゃんスタのタグは、すべて実装しました。
 
 ---
 
@@ -65,6 +66,7 @@ docker compose up
 | フレームワーク | Rails 8.0 | |
 | データベース | PostgreSQL | |
 | 認証 | Devise（+ devise-i18n） | パスワード再設定メールあり |
+| 外部アカウント連携 | OmniAuth（omniauth-google-oauth2） | Googleアカウントでのログイン |
 | フロントエンド | Hotwire（Turbo / Stimulus） | |
 | CSS | Tailwind CSS | cssbundling-rails |
 | 画像の保存 | Active Storage + Cloudinary | 本番のみ Cloudinary。開発・テストは Disk |
@@ -77,19 +79,26 @@ docker compose up
 | インフラ | Render | Docker イメージをデプロイ |
 | 開発環境 | Docker Compose | |
 
-企画書（下記 10-1）では Chart.js・Google 認証・Neon を挙げていましたが、
-費用計算機能を作らなかったため Chart.js は不要になり、他の2つも優先順位を下げて入れていません。
+企画書（下記 10-1）では Chart.js と Neon も挙げていましたが、
+費用計算機能を作らなかったため Chart.js は不要になり、Neon は Render の PostgreSQL に置き換えました。
 
 ### 設計で考えたこと
 
 - **判定ロジックは `app/services/` の PORO に置く** — `DiagnosisJudge`（診断）/ `ChecklistJudge`（チェックリスト）/
-  `PlaceSearch`（Google Maps への問い合わせ）/ `ImageResizer`（画像の縮小）。
-  モデルにもコントローラにも属さない「計算する係」として分けました
+  `Badge`（称号）/ `TagList`（タグ文字列の整形）/ `PlaceSearch`（Google Maps への問い合わせ）/
+  `ImageResizer`（画像の縮小）。モデルにもコントローラにも属さない「計算する係」として分けました
 - **いいね・コメント・ブックマークは polymorphic 関連** — 質問・回答・投稿のどれにも同じ仕組みで付けられるよう、
-  `Likeable` / `Commentable` / `Bookmarkable` の concern にまとめました
+  `Likeable` / `Commentable` / `Bookmarkable` の concern にまとめました。
+  一方、**タグはにゃんスタだけで使う**ので polymorphic にせず、素直な中間テーブル（`post_tags`）にしています
 - **フォーム1枚ぶんの受付係は `app/forms/`** — `ProfileForm` は、DB のカラムに無い「アイコンを外す」という入力を扱います
+- **絞り込みは「指定が無ければ `all` を返す」形にそろえる** — `Question.search` / `Question.by_category` /
+  `Post.tagged_with`。こうするとコントローラ側で `if` を書かずに繋げられます
 - **診断・チェックリストの結果はセッションで渡す** — Turbo はフォーム送信にリダイレクトを期待するため、
   `render` では画面が切り替わりません。またセッションには項目番号だけ入れています（Cookie の 4KB 制限）
+- **数えた結果は列に持たせる** — バッジは回答数で決まりますが、毎回 `user.answers.size` と書くと
+  回答の数だけ SQL が飛びます（N+1）。`users.answers_count` を counter_cache で更新しています
+- **見た目の値は定数から作る** — 画像の上限はモデルの定数を、相談室のカテゴリは `Question::CATEGORIES` を
+  画面に表示します。直書きしていたために、**実際には存在しないカテゴリを画面に出していた**ことがありました
 
 ---
 
@@ -97,8 +106,8 @@ docker compose up
 
 | | |
 | --- | --- |
-| テスト | 268本（RSpec） |
-| カバレッジ | 90.26%（SimpleCov） |
+| テスト | 348本（RSpec） |
+| カバレッジ | 91.74%（SimpleCov） |
 | 静的解析 | RuboCop（rails-omakase）・Brakeman ともに指摘なし |
 | N+1 検出 | Bullet を開発環境で有効化 |
 | CI | GitHub Actions（lint / test / scan_ruby） |
@@ -469,5 +478,113 @@ Figma:<BR>
 https://www.figma.com/design/5i9Xnp0VTWW1m2OvhbDRQr/%E7%84%A1%E9%A1%8C?node-id=0-1&t=2pTguVCSqRdiInxP-1
 
 ## ER図
-Mermaid：<br>
-[![Image from Gyazo](https://i.gyazo.com/488964de0a50260d2977060e9ee313ad.png)](https://gyazo.com/488964de0a50260d2977060e9ee313ad)
+
+実線は外部キー、点線は polymorphic 関連（`*_type` と `*_id` の2列で相手を指すもの）です。
+`contacts` はどこにも繋がりません（ログインできない人からの連絡も受け取るため、ユーザーと結び付けていません）。
+Active Storage のテーブルは省いています。
+
+```mermaid
+erDiagram
+    users ||--o{ questions : "質問する"
+    users ||--o{ answers : "回答する"
+    users ||--o{ posts : "写真を投稿する"
+    users ||--o{ diagnoses : "診断を受ける"
+    users ||--o{ likes : ""
+    users ||--o{ comments : ""
+    users ||--o{ bookmarks : ""
+
+    questions ||--o{ answers : "回答が付く"
+
+    posts ||--o{ post_tags : ""
+    tags  ||--o{ post_tags : ""
+
+    questions ||..o{ likes : "likeable"
+    answers   ||..o{ likes : "likeable"
+    posts     ||..o{ likes : "likeable"
+
+    questions ||..o{ comments : "commentable"
+    answers   ||..o{ comments : "commentable"
+    posts     ||..o{ comments : "commentable"
+
+    posts ||..o{ bookmarks : "bookmarkable"
+
+    users {
+        bigint id PK
+        string username "表示名。重複不可"
+        string name "お名前（任意）"
+        string email "重複不可"
+        string encrypted_password
+        integer answers_count "バッジの判定に使う（counter_cache）"
+        string provider "google_oauth2 など"
+        string uid "Google側の識別子"
+    }
+
+    questions {
+        bigint id PK
+        bigint user_id FK
+        string title
+        text content
+        string category "Question::CATEGORIES のいずれか"
+    }
+
+    answers {
+        bigint id PK
+        bigint question_id FK
+        bigint user_id FK
+        text content
+    }
+
+    posts {
+        bigint id PK
+        bigint user_id FK
+        text content "ひとこと（任意）"
+    }
+
+    tags {
+        bigint id PK
+        string name "重複不可"
+    }
+
+    post_tags {
+        bigint id PK
+        bigint post_id FK
+        bigint tag_id FK
+    }
+
+    diagnoses {
+        bigint id PK
+        bigint user_id FK
+        jsonb answers "選んだ番号"
+        integer score
+        string result "準備万端 / 成猫なら可能 / 今はまだ早い"
+    }
+
+    likes {
+        bigint id PK
+        bigint user_id FK
+        string likeable_type "Question / Answer / Post"
+        bigint likeable_id
+    }
+
+    comments {
+        bigint id PK
+        bigint user_id FK
+        string commentable_type "Question / Answer / Post"
+        bigint commentable_id
+        text content
+    }
+
+    bookmarks {
+        bigint id PK
+        bigint user_id FK
+        string bookmarkable_type "Post"
+        bigint bookmarkable_id
+    }
+
+    contacts {
+        bigint id PK
+        string name "お名前（任意）"
+        string email
+        text content
+    }
+```
