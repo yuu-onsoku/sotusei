@@ -11,7 +11,9 @@
 
   <main class="max-w-[800px] mx-auto px-gutter py-12">
     <h1 class="font-headline-xl text-headline-xl text-on-background mb-2">プライバシーポリシー</h1>
-    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">制定日: 2026年10月2日</p>
+    <p class="font-label-sm text-label-sm text-on-surface-variant/70 mb-8">
+      制定日: 2026年10月2日 ／ 最終改定日: 2026年10月14日
+    </p>
 
     <!-- 最初に読んでほしいこと -->
     <div class="bg-tertiary-fixed rounded-xl p-6 mb-10">
@@ -30,20 +32,43 @@
         </p>
         <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
           <li><strong>登録時にご入力いただく情報</strong> — ユーザー名、お名前（表示名）、メールアドレス、パスワード</li>
-          <li><strong>投稿していただく内容</strong> — 質問、回答、添付された画像</li>
-          <li><strong>サービスの利用に伴い発生する情報</strong> — いいねの記録、投稿日時</li>
+          <li><strong>Google アカウントでログインした場合</strong> — Google から提供されるメールアドレス、表示名、および利用者を識別するためのID</li>
+          <li><strong>プロフィールに設定していただく情報</strong> — アイコン画像</li>
+          <li><strong>投稿していただく内容</strong> — 質問、回答、コメント、にゃんスタへの写真とひとこと、タグ、添付された画像</li>
+          <li><strong>サービスの利用に伴い発生する情報</strong> — いいね・ブックマークの記録、投稿日時、回答数</li>
+          <li><strong>お迎え診断の結果</strong> — ログインしている場合のみ（詳しくは次の項目をご覧ください）</li>
+          <li><strong>お問い合わせの内容</strong> — お名前、メールアドレス、お問い合わせ内容</li>
+          <li><strong>アクセス状況</strong> — ご覧になったページや滞在時間など（詳しくは「5. 外部サービスの利用」をご覧ください）</li>
         </ul>
         <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
           パスワードは暗号化（ハッシュ化）して保存しており、運営者が元の文字列を知ることはできません。
+          Google アカウントでログインした場合、本サービスがパスワードを受け取ることはありません。
         </p>
       </section>
 
       <section>
         <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">2. お迎え診断・覚悟のチェックリストの回答について</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-          お迎え診断および覚悟のチェックリストの回答は、<strong>データベースには保存していません。</strong>
-          結果を表示するあいだだけ、ブラウザのセッション（Cookie）に一時的に保持し、
-          ブラウザを閉じると失われます。
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          扱いが2つに分かれます。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>
+            <strong>お迎え診断（ログインしている場合）</strong> —
+            あとからマイページで見返せるよう、選んだ回答・点数・判定結果を<strong>保存します。</strong>
+            保存したくない場合は、ログインせずにご利用ください。
+          </li>
+          <li>
+            <strong>お迎え診断（ログインしていない場合）</strong> —
+            保存しません。結果を表示するあいだだけブラウザのセッションに保持し、ブラウザを閉じると失われます。
+          </li>
+          <li>
+            <strong>覚悟のチェックリスト</strong> —
+            ログインの有無にかかわらず<strong>保存しません。</strong>
+            こちらもブラウザを閉じると失われます。
+          </li>
+        </ul>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
+          保存した診断の結果は、他の利用者に公開されることはありません。
         </p>
       </section>
 
@@ -53,6 +78,8 @@
           <li>本サービスの提供・運営のため</li>
           <li>利用者の本人確認、ログイン状態の維持のため</li>
           <li>パスワードを忘れた際の再設定のため</li>
+          <li>お問い合わせへの回答のため</li>
+          <li>どのページがよく使われているかを把握し、本サービスを改善するため</li>
           <li>規約に違反する行為への対応のため</li>
         </ul>
       </section>
@@ -75,27 +102,64 @@
           <li><strong>Render</strong> — アプリケーションおよびデータベースの設置場所</li>
           <li><strong>Cloudinary</strong> — 投稿された画像の保存</li>
           <li><strong>Google Fonts</strong> — 画面で使用する書体の配信</li>
+          <li><strong>Google アナリティクス</strong> — アクセス状況の把握（下記をご覧ください）</li>
+          <li><strong>Google（アカウント連携）</strong> — Google アカウントでログインする場合の本人確認</li>
+          <li><strong>Google Maps Platform</strong> — 動物病院・ペットホテルの検索と地図の表示。入力された住所が Google に送信されます</li>
+          <li><strong>Resend</strong> — パスワード再設定メールおよびお問い合わせ通知メールの送信</li>
         </ul>
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
-          なお、本サービスではアクセス解析ツール（Google アナリティクス等）を使用していません。
-        </p>
+
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 mt-4">
+          <h3 class="font-label-md text-label-md text-on-surface mb-2">Google アナリティクスについて</h3>
+          <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            本サービスでは、どのページがよく使われているかを把握し改善するために、
+            Google アナリティクス（GA4）を利用しています。
+            Cookie を用いて、閲覧されたページ、滞在時間、おおよその地域、
+            利用された端末やブラウザの種類といった情報が Google に送信されます。
+            <strong>氏名やメールアドレスなど、個人を特定できる情報は送信していません。</strong>
+          </p>
+          <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mt-3">
+            収集を望まない場合は、Google が提供する
+            <a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener"
+               class="text-brand-1 hover:underline">オプトアウト アドオン</a>
+            をご利用いただくか、ブラウザの設定で Cookie を無効にしてください。
+            詳しい取り扱いは
+            <a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener"
+               class="text-brand-1 hover:underline">Google のプライバシーポリシー</a>
+            をご覧ください。
+          </p>
+        </div>
       </section>
 
       <section>
         <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">6. Cookie の使用</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-          ログイン状態の維持と、診断結果の一時的な保持のために Cookie を使用しています。
-          広告や行動の追跡を目的とした Cookie は使用していません。
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          本サービスでは、次の目的で Cookie を使用しています。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>ログイン状態の維持</li>
+          <li>診断・チェックリストの結果を、画面に表示するあいだ一時的に保持するため</li>
+          <li>アクセス状況の把握（Google アナリティクス）</li>
+        </ul>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
+          広告の配信を目的とした Cookie は使用していません。
           ブラウザの設定で Cookie を無効にすると、ログインができなくなります。
         </p>
       </section>
 
       <section>
         <h2 class="font-headline-sm text-headline-sm text-on-surface mb-3">7. 公開される情報</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-          投稿した質問・回答・画像と、お名前（表示名）は、本サービスを利用する他の方が見られる状態になります。
-          <strong>メールアドレスが他の利用者に表示されることはありません。</strong>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-3">
+          次のものは、本サービスにログインしている他の方が見られる状態になります。
+        </p>
+        <ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface-variant leading-relaxed list-disc pl-5">
+          <li>投稿した質問・回答・コメント・写真・タグ</li>
+          <li>ユーザー名（表示名）とプロフィールのアイコン</li>
+          <li>回答数に応じて表示される称号（バッジ）</li>
+        </ul>
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-3">
+          <strong>メールアドレスと、お迎え診断の結果が他の利用者に表示されることはありません。</strong>
           公開したくない情報は投稿しないようご注意ください。
+          写真に表札や郵便物などが写り込んでいないか、送信前にご確認ください。
         </p>
       </section>
 
