@@ -1,0 +1,28 @@
+<%# Google アナリティクス（GA4）。何人が、どのページを見たかを知るために入れている。
+    測定IDは環境変数で渡す。Render にだけ登録してあるので、開発環境では動かない
+    （自分の開発中のアクセスが混ざると、数字が意味を持たなくなるため）。
+
+    ⚠️ このアプリは Turbo を使っており、ページを移動しても読み込み直しが起きない。
+    そのため gtag の自動送信を切り、turbo:load のときだけ page_view を送る。
+    両方そのままにすると、最初の1ページだけ2回数えられる
+    （turbo:load は最初の読み込みでも発火するため）。 %>
+<% if Rails.env.production? && ENV["GOOGLE_ANALYTICS_ID"].present? %>
+  <% measurement_id = ENV["GOOGLE_ANALYTICS_ID"] %>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= measurement_id %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    // send_page_view: false で自動送信を切る。送信は turbo:load に任せる
+    gtag('config', '<%= measurement_id %>', { send_page_view: false });
+
+    document.addEventListener('turbo:load', function () {
+      gtag('event', 'page_view', {
+        page_location: window.location.href,
+        page_title: document.title
+      });
+    });
+  </script>
+<% end %>

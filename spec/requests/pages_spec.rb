@@ -15,6 +15,27 @@ RSpec.describe "Pages", type: :request do
     end
   end
 
+  # 機能を足すたびに、プライバシーポリシーが実装とずれていく。
+  # 「診断の回答は保存していません」と書いたまま保存するようになっていたことがあった。
+  describe "プライバシーポリシーの記載" do
+    before { get privacy_path }
+
+    it "あとから足した外部サービスが書かれている" do
+      [ "Render", "Cloudinary", "Google アナリティクス", "Google Maps Platform", "Resend" ].each do |service|
+        expect(response.body).to include(service)
+      end
+    end
+
+    it "診断の結果を保存することが書かれている" do
+      expect(response.body).to include("保存します")
+    end
+
+    # アクセス解析を入れたので、「使用していません」が残っていると嘘になる
+    it "アクセス解析を使っていないとは書かれていない" do
+      expect(response.body).not_to include("アクセス解析ツール（Google アナリティクス等）を使用していません")
+    end
+  end
+
   describe "GET /brand" do
     it "ログインしていなくてもブランドメッセージが表示される" do
       get brand_path
