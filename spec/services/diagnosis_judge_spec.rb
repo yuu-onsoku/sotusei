@@ -161,8 +161,8 @@ RSpec.describe DiagnosisJudge do
     # 質問を足したときに直すのは、このテストの数字だけで済む。
     it "いまの問題数と満点" do
       expect(DiagnosisJudge.simple_questions.size).to eq(5)
-      expect(DiagnosisJudge.full_questions.size).to eq(13)
-      expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(26)
+      expect(DiagnosisJudge.full_questions.size).to eq(15)
+      expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(30)
     end
 
     it "詳細診断は、簡易診断の5問を先頭にそのまま含む" do
