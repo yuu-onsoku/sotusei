@@ -79,7 +79,7 @@ RSpec.describe "Diagnoses", type: :request do
         get new_diagnosis_path(kind: "full")
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include("#{question_count}つの質問")
+        expect(response.body).to include("#{question_count}問に答えると")
       end
 
       # kind をフォームに入れ忘れると、送信後に簡易診断として採点されてしまう

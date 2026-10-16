@@ -71,8 +71,8 @@
     <% if @kind == "simple" && user_signed_in? %>
       <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 mb-8 text-center">
         <p class="font-body-md text-body-md text-on-surface-variant mb-4">
-          もっとくわしく知りたい方へ。実際に猫と暮らしている方々の声をもとに、
-          将来のことやおうちの安全についての質問を足した、<%= DiagnosisJudge.full_questions.size %>問の診断もあります。
+          もっとくわしく知りたい方へ。実際に猫や犬と暮らしている方々の声をもとに、
+          健康、将来のこと、おうちの安全、毎日のお世話についての質問を足した、<%= DiagnosisJudge.full_questions.size %>問の診断もあります。
         </p>
 
         <%= link_to new_diagnosis_path(kind: "full"),

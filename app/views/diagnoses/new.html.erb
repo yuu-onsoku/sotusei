@@ -43,18 +43,20 @@
         <%= @kind == "full" ? "お迎え診断（くわしく）" : "お迎え診断" %>
       </h1>
 
-      <%# 質問の数は @questions から出す。直書きすると、質問を足したときにずれる %>
+      <%# 質問の数は @questions から出す。直書きすると、質問を足したときにずれる。
+          数え方は「問」にする。「つ」は9までしか使えないため、15問だと「15つ」になってしまう %>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        <%= @questions.size %>つの質問に答えると、今のあなたが猫を迎えられる状態か診断します。
+        <%= @questions.size %>問に答えると、今のあなたが猫を迎えられる状態か診断します。
       </p>
+      <%# 所要時間も質問の数から出す。直書きしていたら、13問のころの「約7分」が残っていた %>
       <p class="font-label-sm text-label-sm text-on-surface-variant/70 mt-2">
-        所要時間: 約<%= @kind == "full" ? 7 : 3 %>分
+        所要時間: 約<%= (@questions.size * 0.5).ceil %>分
       </p>
 
       <% if @kind == "full" %>
         <p class="font-body-sm text-body-sm text-on-surface-variant mt-4 bg-tertiary-fixed rounded-xl p-4">
-          実際に猫と暮らしている方々からいただいた声をもとに、
-          将来のことや、おうちの安全についての質問を足しています。
+          実際に猫や犬と暮らしている方々からいただいた声をもとに、健康、将来のこと、
+          おうちの安全、毎日のお世話についての質問を足しています。
         </p>
       <% end %>
     </div>
