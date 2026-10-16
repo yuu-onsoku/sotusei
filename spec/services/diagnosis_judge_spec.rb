@@ -161,14 +161,32 @@ RSpec.describe DiagnosisJudge do
     # 質問を足したときに直すのは、このテストの数字だけで済む。
     it "いまの問題数と満点" do
       expect(DiagnosisJudge.simple_questions.size).to eq(5)
-      expect(DiagnosisJudge.full_questions.size).to eq(15)
-      expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(30)
+      expect(DiagnosisJudge.full_questions.size).to eq(20)
+      expect(DiagnosisJudge.new({}, kind: :full).max_score).to eq(40)
     end
 
-    it "詳細診断は、簡易診断の5問を先頭にそのまま含む" do
-      simple = DiagnosisJudge.simple_questions
+    it "詳細診断は、簡易診断の質問をすべて含む" do
+      expect(DiagnosisJudge.full_questions).to include(*DiagnosisJudge.simple_questions)
+    end
 
-      expect(DiagnosisJudge.full_questions.first(simple.size)).to eq(simple)
+    it "カテゴリ順に並んでいる" do
+      order = DiagnosisJudge.full_questions.map { |q| DiagnosisJudge::CATEGORY_ORDER.index(q["category"]) }
+
+      expect(order).to eq(order.sort)
+    end
+
+    # sort_by は安定ではないため、元の位置も並べ替えの材料に入れている。
+    # それが無いと、同じカテゴリの中の順番が実行するたびに変わりうる
+    it "同じカテゴリの中の順番が、何度呼んでも変わらない" do
+      texts = 3.times.map { DiagnosisJudge.full_questions.map { |q| q["text"] } }
+
+      expect(texts.uniq.size).to eq(1)
+    end
+
+    it "すべてのカテゴリが CATEGORY_ORDER に載っている" do
+      categories = DiagnosisJudge.full_questions.map { |q| q["category"] }.uniq
+
+      expect(categories - DiagnosisJudge::CATEGORY_ORDER).to be_empty
     end
 
     it "指定しなければ簡易診断になる" do
