@@ -1,12 +1,66 @@
+# gem と GitHub Actions の更新を Dependabot に見てもらう設定。
+#
+# ⚠️ このファイルが決めているのは「定期的な更新PR」だけ。
+# 脆弱性の通知（Dependabot alerts）と、その修正PR（security updates）は
+# GitHub の Settings → Code security で別に有効にする必要がある。
+# 脆弱性の修正PRは、下の interval や open-pull-requests-limit とは別枠で作られる。
+
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      # 毎日だとPRが溜まり、上限に当たって新しいPRが来なくなる。
+      # 個人開発なので週1回、月曜の朝に見る
+      interval: weekly
+      day: monday
+      time: "09:00"
+      # 指定しないと日本時間にならない
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    groups:
+      # minor と patch は1つのPRにまとめる。
+      # major は壊れやすいので、まとめず1件ずつ中身を見て判断する
+      #
+      # 実際に json を 2系 → 3系に上げたとき、quirks_mode 引数の廃止で
+      # Active Storage の画像添付がすべて失敗した（2026-10-22）
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # JavaScript 側（yarn.lock）。この設定が無かったため、
+  # esbuild や Tailwind まわりの更新PRが一度も来ていなかった
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

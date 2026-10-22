@@ -22,6 +22,15 @@ jobs:
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
+      # 使っている gem に既知の脆弱性が無いか調べる。
+      # --update で、実行のたびに脆弱性の一覧を最新にしてから照合する。
+      #
+      # 見つかったものの修正版がまだ公開されていない場合は、ここが赤くなる。
+      # そのときは config/bundler-audit.yml に理由と再評価の時期を書いて一時的に除外する
+      # （brakeman.ignore と同じ考え方）。「よく分からないから無視」はしない
+      - name: Scan gems for known vulnerabilities
+        run: bundle exec bundler-audit check --update
+
   lint:
     runs-on: ubuntu-latest
     steps:
