@@ -63,7 +63,7 @@ gem "image_processing", "~> 1.2"
 # まだそれを渡しているため、上げると画像の添付がすべて失敗する。
 # 2 系の中では、脆弱性（CVE-2026-54696）が直った 2.19.9 以上を使う。
 # Rails 8.1 に上げるとき（#107）に、この縛りを外せるか確認する
-gem "json", "~> 2.19", ">= 2.19.9"
+gem "json", "~> 3.1"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
