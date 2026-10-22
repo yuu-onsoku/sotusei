@@ -59,12 +59,23 @@ gem "bootsnap", require: false
 # にゃんスタで写真の縦横を読み、一覧用の縮小版を作るために使う（libvips が必要）
 gem "image_processing", "~> 1.2"
 
+# json は 3 系で quirks_mode 引数が廃止されたが、Rails 8.0 の Active Storage が
+# まだそれを渡しているため、上げると画像の添付がすべて失敗する。
+# 2 系の中では、脆弱性（CVE-2026-54696）が直った 2.19.9 以上を使う。
+# Rails 8.1 に上げるとき（#107）に、この縛りを外せるか確認する
+gem "json", "~> 2.19", ">= 2.19.9"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
+
+  # 使っている gem に既知の脆弱性が無いか調べる。
+  # brakeman が「自分の書いたコード」を見るのに対して、こちらは「借りている部品」を見る。
+  # Dependabot の通知を待たずに、PRのたびに気づけるようにするため入れた
+  gem "bundler-audit", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
