@@ -9,6 +9,9 @@ on:
   # 手動でも実行できるようにしておく
   workflow_dispatch:
 
+# 外のURLを叩くだけなので、リポジトリには何も要らない
+permissions: {}
+
 jobs:
   ping:
     runs-on: ubuntu-latest

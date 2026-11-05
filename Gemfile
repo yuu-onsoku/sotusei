@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.0"
+gem "rails", "~> 8.1.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use postgresql as the database for Active Record
@@ -59,11 +59,9 @@ gem "bootsnap", require: false
 # にゃんスタで写真の縦横を読み、一覧用の縮小版を作るために使う（libvips が必要）
 gem "image_processing", "~> 1.2"
 
-# json は 3 系で quirks_mode 引数が廃止されたが、Rails 8.0 の Active Storage が
-# まだそれを渡しているため、上げると画像の添付がすべて失敗する。
-# 2 系の中では、脆弱性（CVE-2026-54696）が直った 2.19.9 以上を使う。
-# Rails 8.1 に上げるとき（#107）に、この縛りを外せるか確認する
-gem "json", "~> 2.19", ">= 2.19.9"
+# json は以前 2 系に縛っていた。3 系で quirks_mode 引数が廃止された一方、
+# Rails 8.0 の Active Storage がまだ渡しており、上げると画像の添付が全滅したため。
+# Rails 8.1 では渡さなくなったので、2026-11-05 に縛りを外した（#107）
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
