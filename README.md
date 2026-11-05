@@ -64,7 +64,7 @@ docker compose up
 
 | カテゴリ | 技術 | 備考 |
 | --- | --- | --- |
-| 開発言語 | Ruby 3.4.8 | |
+| 開発言語 | Ruby 3.4.12 | |
 | フレームワーク | Rails 8.0 | |
 | データベース | PostgreSQL | |
 | 認証 | Devise（+ devise-i18n） | パスワード再設定メールあり |
