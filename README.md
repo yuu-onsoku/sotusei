@@ -123,7 +123,7 @@ docker compose up
 
 | | |
 | --- | --- |
-| テスト | 381本（RSpec） |
+| テスト | 384本（RSpec） |
 | カバレッジ | 92.04%（SimpleCov） |
 | 静的解析 | RuboCop（rails-omakase）・Brakeman ともに指摘なし |
 | N+1 検出 | Bullet を開発環境で有効化 |
